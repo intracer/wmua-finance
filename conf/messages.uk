@@ -1,0 +1,19 @@
+application.name=Фінанси ВМ-УА
+operations=Операції
+statistics=Статистика
+
+date=дата
+project=проект
+projects=проекти
+category=категорія
+categories=категорії
+grant=грант
+grants=гранти
+amount=сума
+desc=опис
+
+by.project=За проектом
+by.category=За категорією
+by.grant=За грантом
+
+filter=Фільтрувати

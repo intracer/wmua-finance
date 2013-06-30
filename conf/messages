@@ -1,0 +1,19 @@
+application.name=WM UA finance
+operations=Operations
+statistics=Statistics
+
+date=date
+project=project
+projects=projects
+category=category
+categories=categories
+grant=grant
+grants=grants
+amount=amount
+desc=desc
+
+by.project=By Project
+by.category=By Category
+by.grant=By Grant
+
+filter=Filter

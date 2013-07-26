@@ -12,16 +12,16 @@ import scala.collection.mutable
 
 object AccountMapper {
 
-  var lastDateCell: Cell = _
+  var lastDateCell: Option[Cell] = None
 
   def map(row: Row, cfg: ColumnsConfig): Option[Operation] = {
 
-    val cell1 = Option(row.getCell(0)).flatMap(cell => (cell.getCellType != Cell.CELL_TYPE_BLANK).option(cell)).getOrElse(lastDateCell)
+    val cell1 = Option(row.getCell(0)).flatMap(cell => (cell.getCellType != Cell.CELL_TYPE_BLANK).option({lastDateCell = Some(cell); cell})).orElse(lastDateCell)
 
-    val dateOpt = (cell1.getCellType == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell1)).option(cell1.getDateCellValue)
+    val dateOpt = cell1.flatMap(cell => (cell.getCellType == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)).option(cell.getDateCellValue))
     dateOpt flatMap {
       date =>
-        lastDateCell = cell1
+
         //            val cacheRow = new RowMapping(row, CacheConfig)
         //            val uahRow = new RowMapping(row, UahConfig)
         val wleRow = new RowMapping(row, cfg)
@@ -62,7 +62,7 @@ object AccountMapper {
       val c1 = row.getCell(0)
       val c2 = row.getCell(1)
 
-      if (row.getRowNum == 16 || row.getRowNum == 24) {
+      if (row.getRowNum == 19 || row.getRowNum == 29) {
         maps = maps ++ Seq(map)
         map = new mutable.HashMap[String, String]()
       }
@@ -112,6 +112,12 @@ class RowMapping(val row: Row, val cfg: ColumnsConfig) {
 
   private def description(f: ColumnsConfig => String): Option[String] = {
     val cell = getCell(f)
+
+    if (cell==null){
+
+      val errMsg = s"Empty cell at ${row.getSheet.getSheetName} ${row.getRowNum} ${cfg(f)}}"
+      println(errMsg)
+    }
 
     (cell.getCellType == Cell.CELL_TYPE_STRING).option(cell.getRichStringCellValue.getString)
   }

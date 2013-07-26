@@ -24,7 +24,7 @@ object Global extends GlobalSettings {
 
   def loadFinance(): Seq[Operation] = {
 
-    val wb = XlsTools.load("wmua")
+    val wb = XlsTools.load("wmua2")
     //  val configSheet = wb.getSheetAt(2)
     //
     //  val mapping = AccountMapper.readMapping(configSheet)

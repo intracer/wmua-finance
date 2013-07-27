@@ -1,16 +1,45 @@
 package controllers
 
-import play.api.mvc.{Controller, Action}
+import play.api._
+import play.api.data._
+import play.api.data.Forms._
+import play.api.mvc._
 
 object Operations extends Controller {
 
 
+//  def list = Action {
+//    implicit request =>
+//
+//      val operations = Global.operations.sortBy(_.date.toString()).toSeq
+//
+//      Ok(views.html.operations(operations, Seq("x")))
+//  }
+
   def list = Action {
     implicit request =>
 
-      val operations = Global.operations.sortBy(_.date.toString()).toSeq
+      val map = request.queryString
+      val projects = map.getOrElse("projects", Nil).toSet
+      val categories = map.getOrElse("categories", Nil).toSet
+      val grants = map.getOrElse("grants", Nil).toSet
 
-      Ok(views.html.operations(operations))
+      //      val (projects, categories, grants) = form.bindFromRequest.get
+
+      var operations = Global.operations.sortBy(_.date.toString()).toSeq
+
+      if (!projects.isEmpty) {
+        operations = operations.filter(op => projects.contains(op.to.projectCode.name))
+      }
+      if (!categories.isEmpty) {
+        operations = operations.filter(op => categories.contains(op.to.categoryCode.name))
+      }
+
+      if (!grants.isEmpty) {
+        operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
+      }
+
+      Ok(views.html.operations(operations, projects, categories, grants))
   }
 
   def statistics() = Action {
@@ -27,4 +56,12 @@ object Operations extends Controller {
 
       Ok(views.html.statistics(operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
   }
+
+  val form = Form(
+    tuple(
+      "projects" -> Forms.list(text),
+      "categories" -> Forms.list(text),
+      "grants" -> Forms.list(text)
+    )
+  )
 }

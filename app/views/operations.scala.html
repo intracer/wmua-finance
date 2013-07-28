@@ -1,7 +1,6 @@
-@(operations: Seq[org.intracer.finance.Operation], projects: Set[String], categories: Set[String], grants: Set[String])(implicit flash: Flash, lang: Lang)
+@(user: org.intracer.finance.User, operations: Seq[org.intracer.finance.Operation], projects: Set[String], categories: Set[String], grants: Set[String])(implicit flash: Flash, lang: Lang)
 
-
-    @main(Messages("operations")) {
+    @main(Messages("operations"), user) {
 
 
         <form class="form-inline" action="/operations" method="get">

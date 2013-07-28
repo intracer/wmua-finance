@@ -1,7 +1,12 @@
-@(message: String)
+@(loginForm: Form[(String, String)])(implicit flash: Flash, lang: Lang)
 
 @main("Welcome to Play 2.1") {
     
-    @play20.welcome(message)
+    <div class="span8">
+      <div class="well">
+        @login(loginForm)
+      </div>
+
+    </div>
     
 }

@@ -13,3 +13,7 @@ GET         /operations               controllers.Operations.list
 GET         /statistics               controllers.Operations.statistics
 
 GET         /assets/*file             controllers.Assets.at(path="/public", file)
+
+GET     /logout                     controllers.Application.logout()
+
+GET     /auth                     controllers.Application.auth()

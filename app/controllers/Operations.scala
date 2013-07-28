@@ -4,6 +4,7 @@ import play.api._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
+import org.intracer.finance.User
 
 object Operations extends Controller {
 
@@ -39,7 +40,7 @@ object Operations extends Controller {
         operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
       }
 
-      Ok(views.html.operations(operations, projects, categories, grants))
+      Ok(views.html.operations(new User("Illia Korniiko"), operations, projects, categories, grants))
   }
 
   def statistics() = Action {

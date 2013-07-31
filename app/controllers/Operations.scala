@@ -6,7 +6,7 @@ import play.api.data.Forms._
 import play.api.mvc._
 import org.intracer.finance.User
 
-object Operations extends Controller {
+object Operations extends Controller with Secured {
 
 
 //  def list = Action {
@@ -17,7 +17,7 @@ object Operations extends Controller {
 //      Ok(views.html.operations(operations, Seq("x")))
 //  }
 
-  def list = Action {
+  def list = withAuth { username =>
     implicit request =>
 
       val map = request.queryString

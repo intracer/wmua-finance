@@ -4,6 +4,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
+import org.intracer.finance.User
 
 object Application extends Controller {
 
@@ -38,7 +39,7 @@ object Application extends Controller {
       "email" -> email,
       "password" -> nonEmptyText()
     ) verifying("Invalid user name or password", fields => fields match {
-          case (e, p) => e == "intracer@gmail.com"
+          case (e, p) => User.login(e,p).isDefined
       })
   )
 }

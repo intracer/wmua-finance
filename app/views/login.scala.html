@@ -1,7 +1,7 @@
 @(loginForm: Form[(String, String)])(implicit flash: Flash, lang: Lang)
 
 @import helper._
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render(_, lang)) }
 
 <h3>@Messages("signin.signin")</h3>
 
@@ -9,7 +9,7 @@
 
     @if(loginForm.hasGlobalErrors) {
         <p class="error">
-            <span class="label important">@loginForm.errors.head.message</span>
+            <span class="label important">@Messages(loginForm.errors.head.message)</span>
         </p>
     }
 

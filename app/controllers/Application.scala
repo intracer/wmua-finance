@@ -3,7 +3,6 @@ package controllers
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
-import play.api.data.validation.Constraints._
 import org.intracer.finance.User
 
 object Application extends Controller {
@@ -38,7 +37,7 @@ object Application extends Controller {
     tuple(
       "email" -> email,
       "password" -> nonEmptyText()
-    ) verifying("Invalid user name or password", fields => fields match {
+    ) verifying("invalid.user.or.password", fields => fields match {
           case (e, p) => User.login(e,p).isDefined
       })
   )

@@ -6,6 +6,29 @@
         <form class="form-inline" action="/operations" method="get">
             <fieldset>
 
+                <div class="well">
+
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class="control-group">
+                                <label class="control-label" for="reservation">Reservation dates:</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on"><i class="icon-calendar"></i></span><input type="text" style="width: 200px" name="reservation" id="reservation" value="03/18/2013 - 03/23/2013" />
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                        $('#reservation').daterangepicker();
+                        });
+                    </script>
+
+                </div>
+
                 <div class="bs-docs-grid">
                     <div class="row show-grid">
                         <div class="span3">

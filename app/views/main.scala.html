@@ -14,6 +14,10 @@
         <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.js"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap-select.js")" type="text/javascript"></script>
 
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/moment.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("daterangepicker.js")"></script>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("daterangepicker-bs2.css")" />
+
         <style>
             body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -24,6 +28,10 @@
 
             $('.selectpicker').selectpicker('show');
 
+            });
+
+            $(document).ready(function() {
+            $('input[name="daterange"]').daterangepicker();
             });
         </script>
     </head>

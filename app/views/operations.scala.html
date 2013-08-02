@@ -32,7 +32,7 @@
                 <div class="bs-docs-grid">
                     <div class="row show-grid">
                         <div class="span3">
-                            <label class="control-label" for="project_select" style="width:60pt">@Messages("projects")</label>
+                            <label class="control-label" for="projects_select" style="width:60pt">@Messages("projects")</label>
                             <select id="projects_select" class="selectpicker" multiple name="projects">
                             @for((id, name) <- Global.mapping.project.iterator.toSeq.sortBy(pair => pair._1)) {
                                 <option value="@id" @if(projects.contains(id)){ selected } >@name</option>
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="span3">
-                            <label class="control-label" for="category_select" style="width:60pt">@Messages("categories")</label>
+                            <label class="control-label" for="categories_select" style="width:60pt">@Messages("categories")</label>
                             <select id="categories_select" class="selectpicker" multiple name="categories">
                             @for((id, name) <- Global.mapping.category.iterator.toSeq.sortBy(pair => pair._1)) {
                                 <option value="@id" @if(categories.contains(id)){ selected } >@name</option>
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="span3">
-                            <label class="control-label" for="grant_select" style="width:60pt">@Messages("grants")</label>
+                            <label class="control-label" for="grants_select" style="width:60pt">@Messages("grants")</label>
                             <select id="grants_select" class="selectpicker" multiple name="grants">
                             @for((id, name) <- Global.mapping.grant.iterator.toSeq.sortBy(pair => pair._1)) {
                                 <option value="@id" @if(grants.contains(id)){ selected } >@name</option>

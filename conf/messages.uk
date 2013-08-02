@@ -2,15 +2,15 @@ application.name=Фінанси ВМ-УА
 operations=Операції
 statistics=Статистика
 
-date=дата
-project=проект
-projects=проекти
-category=категорія
-categories=категорії
-grant=грант
-grants=гранти
-amount=сума
-desc=опис
+date=Дата
+project=Проект
+projects=Проекти
+category=Категорія
+categories=Категорії
+grant=Грант
+grants=Гранти
+amount=Сума
+desc=Опис
 
 by.project=За проектом
 by.category=За категорією
@@ -90,3 +90,4 @@ mail.reset.confirm.message=Hello, <br><br> Your password has been reset.
 error.required=Обов'язкове поле
 error.email=Потрібна адреса пошти
 
+dates = Дати

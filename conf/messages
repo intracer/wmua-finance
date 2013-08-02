@@ -2,15 +2,15 @@ application.name=WM UA finance
 operations=Operations
 statistics=Statistics
 
-date=date
-project=project
-projects=projects
-category=category
-categories=categories
-grant=grant
-grants=grants
-amount=amount
-desc=desc
+date=Date
+project=Project
+projects=Projects
+category=Category
+categories=Categories
+grant=Grant
+grants=Grants
+amount=Amount
+desc=Desc
 
 by.project=By Project
 by.category=By Category
@@ -117,3 +117,5 @@ error.minLength=Minimum length is {0}
 error.maxLength=Maximum length is {0}
 error.email=Valid email required
 error.pattern=Must satisfy {0}
+
+dates = Dates

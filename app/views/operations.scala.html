@@ -3,21 +3,57 @@
     @main(Messages("operations"), user) {
 
 
-        <form class="form-inline" action="/operations" method="get">
-            <fieldset>
-
                 <div class="well">
 
-                    <form class="form-horizontal">
+                    <form class="form-vertical" action="/operations" method="get">
                         <fieldset>
-                            <div class="control-group">
-                                <label class="control-label" for="reservation">Reservation dates:</label>
-                                <div class="controls">
-                                    <div class="input-prepend">
-                                        <span class="add-on"><i class="icon-calendar"></i></span><input type="text" style="width: 200px" name="reservation" id="reservation" value="03/18/2013 - 03/23/2013" />
+
+                            <div class="bs-docs-grid">
+                                <div class="row show-grid">
+
+                                    <div class="span3">
+                                        <label class="control-label" for="projects_select" style="width:60pt">@Messages("projects")</label>
+                                        <select id="projects_select" class="selectpicker" multiple name="projects">
+                                        @for((id, name) <- Global.mapping.project.iterator.toSeq.sortBy(pair => pair._1)) {
+                                            <option value="@id" @if(projects.contains(id)){ selected } >@name</option>
+                                        }
+                                        </select>
+                                    </div>
+
+                                    <div class="span3">
+                                        <label class="control-label" for="categories_select" style="width:60pt">@Messages("categories")</label>
+                                        <select id="categories_select" class="selectpicker" multiple name="categories">
+                                        @for((id, name) <- Global.mapping.category.iterator.toSeq.sortBy(pair => pair._1)) {
+                                            <option value="@id" @if(categories.contains(id)){ selected } >@name</option>
+                                        }
+                                        </select>
+                                    </div>
+
+                                    <div class="span3">
+                                        <label class="control-label" for="grants_select" style="width:60pt">@Messages("grants")</label>
+                                        <select id="grants_select" class="selectpicker" multiple name="grants">
+                                        @for((id, name) <- Global.mapping.grant.iterator.toSeq.sortBy(pair => pair._1)) {
+                                            <option value="@id" @if(grants.contains(id)){ selected } >@name</option>
+                                        }
+                                        </select>
+                                    </div>
+
+                                    <div class="span3">
+                                        <label class="control-label" for="reservation">@Messages("dates")</label>
+                                        <div class="controls">
+                                            <div class="input-prepend">
+                                                <span class="add-on"><i class="icon-calendar"></i></span><input type="text" style="width: 180px" name="reservation" id="reservation" value="01/01/2012 - 01/01/2013" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="span3">
+                                        <button type="submit" class="btn btn-primary" style="margin-top: 18pt">@Messages("filter")</button>
                                     </div>
                                 </div>
+
                             </div>
+
                         </fieldset>
                     </form>
 
@@ -28,45 +64,6 @@
                     </script>
 
                 </div>
-
-                <div class="bs-docs-grid">
-                    <div class="row show-grid">
-                        <div class="span3">
-                            <label class="control-label" for="projects_select" style="width:60pt">@Messages("projects")</label>
-                            <select id="projects_select" class="selectpicker" multiple name="projects">
-                            @for((id, name) <- Global.mapping.project.iterator.toSeq.sortBy(pair => pair._1)) {
-                                <option value="@id" @if(projects.contains(id)){ selected } >@name</option>
-                            }
-                            </select>
-                        </div>
-
-                        <div class="span3">
-                            <label class="control-label" for="categories_select" style="width:60pt">@Messages("categories")</label>
-                            <select id="categories_select" class="selectpicker" multiple name="categories">
-                            @for((id, name) <- Global.mapping.category.iterator.toSeq.sortBy(pair => pair._1)) {
-                                <option value="@id" @if(categories.contains(id)){ selected } >@name</option>
-                            }
-                            </select>
-                        </div>
-
-                        <div class="span3">
-                            <label class="control-label" for="grants_select" style="width:60pt">@Messages("grants")</label>
-                            <select id="grants_select" class="selectpicker" multiple name="grants">
-                            @for((id, name) <- Global.mapping.grant.iterator.toSeq.sortBy(pair => pair._1)) {
-                                <option value="@id" @if(grants.contains(id)){ selected } >@name</option>
-                            }
-                            </select>
-                        </div>
-                        <div class="span3">
-                            <button type="submit" class="btn" style="margin-top: 18pt">@Messages("filter")</button>
-                        </div>
-                    </div>
-
-                </div>
-
-            </fieldset>
-        </form>
-
 
         <table class="table table-striped table-bordered">
             <tr>

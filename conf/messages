@@ -10,7 +10,7 @@ categories=Categories
 grant=Grant
 grants=Grants
 amount=Amount
-desc=Desc
+desc=Description
 
 by.project=By Project
 by.category=By Category

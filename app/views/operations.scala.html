@@ -1,4 +1,9 @@
-@(user: org.intracer.finance.User, operations: Seq[org.intracer.finance.Operation], projects: Set[String], categories: Set[String], grants: Set[String])(implicit flash: Flash, lang: Lang)
+@(user: org.intracer.finance.User,
+        operations: Seq[org.intracer.finance.Operation],
+        projects: Set[String],
+        categories: Set[String],
+        grants: Set[String],
+        daterange: String)(implicit flash: Flash, lang: Lang)
 
     @main(Messages("operations"), user) {
 
@@ -42,7 +47,8 @@
                                         <label class="control-label" for="reservation">@Messages("dates")</label>
                                         <div class="controls">
                                             <div class="input-prepend">
-                                                <span class="add-on"><i class="icon-calendar"></i></span><input type="text" style="width: 180px" name="daterange" id="daterange" value="01/01/2012 - 01/01/2013" />
+                                                <span class="add-on"><i class="icon-calendar"></i></span>
+                                                <input type="text" style="width: 180px" name="daterange" id="daterange" value="@daterange" />
                                             </div>
                                         </div>
                                     </div>

@@ -14,7 +14,7 @@ object ApplicationBuild extends Build {
     "org.apache.poi" % "poi" % "3.9",
     "org.apache.poi" % "poi-ooxml" % "3.9",
     "org.scalaz" % "scalaz-core_2.10" % "7.0.0",
-    "org.scalaj" % "scalaj-time_2.10.0-M7" % "0.6"
+    "com.github.nscala-time" %% "nscala-time" % "0.4.2"
   )
 
 

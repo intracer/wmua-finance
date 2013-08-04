@@ -5,42 +5,65 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
 import org.intracer.finance.User
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.DateTime
+import com.github.nscala_time.time.Imports._
 
 object Operations extends Controller with Secured {
 
 
-//  def list = Action {
-//    implicit request =>
-//
-//      val operations = Global.operations.sortBy(_.date.toString()).toSeq
-//
-//      Ok(views.html.operations(operations, Seq("x")))
-//  }
+  //  def list = Action {
+  //    implicit request =>
+  //
+  //      val operations = Global.operations.sortBy(_.date.toString()).toSeq
+  //
+  //      Ok(views.html.operations(operations, Seq("x")))
+  //  }
 
-  def list = withAuth { username =>
-    implicit request =>
+  def list = withAuth {
+    username =>
+      implicit request =>
 
-      val map = request.queryString
-      val projects = map.getOrElse("projects", Nil).toSet
-      val categories = map.getOrElse("categories", Nil).toSet
-      val grants = map.getOrElse("grants", Nil).toSet
+        val map = request.queryString
+        val projects = map.getOrElse("projects", Nil).toSet
+        val categories = map.getOrElse("categories", Nil).toSet
+        val grants = map.getOrElse("grants", Nil).toSet
 
-      //      val (projects, categories, grants) = form.bindFromRequest.get
+        val daterange = map.get("daterange")
 
-      var operations = Global.operations.sortBy(_.date.toString()).toSeq
+        //      val (projects, categories, grants) = form.bindFromRequest.get
 
-      if (!projects.isEmpty) {
-        operations = operations.filter(op => projects.contains(op.to.projectCode.name))
-      }
-      if (!categories.isEmpty) {
-        operations = operations.filter(op => categories.contains(op.to.categoryCode.name))
-      }
+        var operations = Global.operations.sortBy(_.date.toString()).toSeq
 
-      if (!grants.isEmpty) {
-        operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
-      }
+        if (!projects.isEmpty) {
+          operations = operations.filter(op => projects.contains(op.to.projectCode.name))
+        }
+        if (!categories.isEmpty) {
+          operations = operations.filter(op => categories.contains(op.to.categoryCode.name))
+        }
 
-      Ok(views.html.operations(new User("Illia Korniiko"), operations, projects, categories, grants))
+        if (!grants.isEmpty) {
+          operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
+        }
+
+        daterange.foreach {
+          range =>
+            val head: String = range.head
+
+            if (!head.trim.isEmpty) {
+              val arr = head.split("-")
+              val pattern = "MM/dd/yyyy";
+
+              val dates = arr.map(entry =>
+                DateTime.parse(entry.trim, DateTimeFormat.forPattern(pattern))
+              )
+
+              operations = operations.filter(op => op.date >= dates(0) && op.date <= dates(1))
+            }
+
+        }
+
+        Ok(views.html.operations(new User("Illia Korniiko"), operations, projects, categories, grants, daterange.map(_.head).getOrElse("")))
   }
 
   def statistics() = Action {

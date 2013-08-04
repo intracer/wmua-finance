@@ -1,6 +1,6 @@
 package org.intracer.finance
 
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import org.apache.poi.ss.util.CellReference
 import controllers.Global
 

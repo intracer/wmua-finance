@@ -1,4 +1,8 @@
-@(
+@(        operations: Seq[org.intracer.finance.Operation],
+        projects: Set[String],
+        categories: Set[String],
+        grants: Set[String],
+        daterange: String,
         operationsByProject: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByCategory: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByGrant: Map[String, Iterable[org.intracer.finance.Operation]],
@@ -7,6 +11,8 @@
 
 @import org.intracer.finance.Operation
 @import scala.collection.mutable.HashMap
+
+
 
     @statGrid(tableName: String, groupName: String, mapping: HashMap[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
 
@@ -32,7 +38,7 @@
 
 
 @main(Messages("operations")) {
-
+    @filter(operations, projects, categories, grants, daterange, "/statistics")
     @statGrid(Messages("by.project"), Messages("project"), Global.mapping.project, operationsByProject)
     @statGrid(Messages("by.category"), Messages("category"), Global.mapping.category, operationsByCategory)
     @statGrid(Messages("by.grant"), Messages("grant"), Global.mapping.grant, operationsByGrant)

@@ -2,11 +2,12 @@
         projects: Set[String],
         categories: Set[String],
         grants: Set[String],
-        daterange: String)(implicit flash: Flash, lang: Lang)
+        daterange: String,
+        action: String)(implicit flash: Flash, lang: Lang)
 
 <div class="well">
 
-    <form class="form-vertical" action="/operations" method="get">
+    <form class="form-vertical" action="@action" method="get">
         <fieldset>
 
             <div class="bs-docs-grid">

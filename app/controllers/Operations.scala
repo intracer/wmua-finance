@@ -90,7 +90,8 @@ object Operations extends Controller with Secured {
       val operationsByProjectAndCategory = operations.groupBy(o => o.to.projectCode.name + "." + o.to.categoryCode.name)
 
 
-      Ok(views.html.statistics(operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
+      Ok(views.html.statistics(operations, projects, categories, grants, daterange.map(_.head).getOrElse(""),
+        operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
   }
 
   val form = Form(

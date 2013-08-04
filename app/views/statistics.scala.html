@@ -29,7 +29,7 @@
                     @mapping(groupId)
                     </td>
                     <td>
-                    @groupedOperations(groupId).map(_.amount).sum
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum)
                     </td>
                 </tr>
             }

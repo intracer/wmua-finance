@@ -3,6 +3,7 @@ package org.intracer.finance
 import com.github.nscala_time.time.Imports._
 import org.apache.poi.ss.util.CellReference
 import controllers.Global
+import java.text.DecimalFormat
 
 trait HasName {
   def name: String
@@ -26,6 +27,12 @@ trait OpPoint extends HasName
 
 class Operation(val from: OpPoint, val to: Expenditure, val amount: BigDecimal, val date: DateTime) {
   override def toString: String = s"${date.toString().substring(0,10)}: $from -> $to, amount: $amount"
+
+  def amountString = Formatter.fmt.format(amount.toDouble)
+}
+
+object Formatter {
+  val fmt = new DecimalFormat("0.00")
 }
 
 class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val grantCode: Option[Grant], val desc: String, val ref: CellReference) extends OpPoint {

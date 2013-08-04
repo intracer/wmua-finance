@@ -19,10 +19,10 @@
         <table class="table table-striped table-bordered">
             <caption>@tableName</caption>
             <tr>
-                <th>@groupName</th>
+                <th width="50%">@groupName</th>
                 <th>@Messages("amount")</th>
             </tr>
-            @for(groupId <- groupedOperations.keys.toSeq.sorted) {
+            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping(key).toLowerCase)) {
 
                 <tr>
                     <td>

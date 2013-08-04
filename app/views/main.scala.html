@@ -44,8 +44,42 @@
                 daysOfWeek: moment()._lang._weekdaysMin,
                 monthNames: moment()._lang._monthsShort,
                 firstDay: 0
-                }}
-            });
+                },
+                ranges: {
+                'Цей рік': [moment('01-01-2013', 'MM-DD-YYYY'), moment('12-31-2013', 'MM-DD-YYYY')],
+                'Минулий рік': [moment('01-01-2012', 'MM-DD-YYYY'), moment('12-31-2012', 'MM-DD-YYYY')],
+                'Від Загальних Зборів': [moment('12-15-2012', 'MM-DD-YYYY'), moment('12-31-2013', 'MM-DD-YYYY')],
+                'Між попередніми Загальними Зборами': [moment('12-17-2011', 'MM-DD-YYYY'), moment('12-15-2012', 'MM-DD-YYYY')]
+                }},
+                function(start, end) {
+                console.log("Callback has been called!");
+                $('#daterange').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+                }
+            } else {
+                {locale :
+                {
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                weekLabel: 'W',
+                customRangeLabel: 'Own range',
+                daysOfWeek: moment()._lang._weekdaysMin,
+                monthNames: moment()._lang._monthsShort,
+                firstDay: 0
+                },
+                ranges: {
+                'This year': [moment('01-01-2013', 'MM-DD-YYYY'), moment('12-31-2013', 'MM-DD-YYYY')],
+                'Last year': [moment('01-01-2012', 'MM-DD-YYYY'), moment('12-31-2012', 'MM-DD-YYYY')],
+                'Since the General Meeting': [moment('12-15-2012', 'MM-DD-YYYY'), moment('12-31-2013', 'MM-DD-YYYY')],
+                'Between last two General Meetings': [moment('12-17-2011', 'MM-DD-YYYY'), moment('12-15-2012', 'MM-DD-YYYY')]
+                }},
+                function(start, end) {
+                console.log("Callback has been called!");
+                $('#daterange').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+                }
+            }
+            );
             });
         </script>
     </head>

@@ -1,5 +1,6 @@
 @(user: org.intracer.finance.User,
         operations: Seq[org.intracer.finance.Operation],
+        total: Double,
         projects: Set[String],
         categories: Set[String],
         grants: Set[String],
@@ -10,15 +11,17 @@
     @filter(operations, projects, categories, grants, daterange, "/operations")
 
     <table class="table table-striped table-bordered">
-        <tr>
-            <th style="width:60pt">@Messages("date")</th>
-            <th>@Messages("project")</th>
-            <th>@Messages("category")</th>
-            <th>@Messages("grant")</th>
-            <th>@Messages("amount")</th>
-            <th>@Messages("desc")</th>
-        </tr>
-
+        <thead>
+            <tr>
+                <th style="width:60pt">@Messages("date")</th>
+                <th>@Messages("project")</th>
+                <th>@Messages("category")</th>
+                <th>@Messages("grant")</th>
+                <th>@Messages("amount")</th>
+                <th>@Messages("desc")</th>
+            </tr>
+        </thead>
+        <tbody>
         @for(operation <- operations) {
             <tr>
                 <td> @operation.date.toString().substring(0, 10) </td>
@@ -29,5 +32,12 @@
                 <td> @operation.to.desc </td>
             </tr>
         }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">@Messages("total") </td>
+                <td colspan="2">@org.intracer.finance.Formatter.fmt.format(total) </td>
+            </tr>
+        </tfoot>
     </table>
 }

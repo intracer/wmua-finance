@@ -34,7 +34,9 @@ object Operations extends Controller with Secured {
 
         var operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
-        Ok(views.html.operations(new User("WM UA"), operations, projects, categories, grants, daterange.map(_.head).getOrElse("")))
+        val total = operations.map(_.amount).sum.toDouble
+
+        Ok(views.html.operations(new User("WM UA"), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse("")))
   }
 
 
@@ -89,8 +91,9 @@ object Operations extends Controller with Secured {
 
       val operationsByProjectAndCategory = operations.groupBy(o => o.to.projectCode.name + "." + o.to.categoryCode.name)
 
+      val total = operations.map(_.amount).sum.toDouble
 
-      Ok(views.html.statistics(operations, projects, categories, grants, daterange.map(_.head).getOrElse(""),
+      Ok(views.html.statistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(""),
         operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
   }
 

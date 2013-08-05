@@ -1,4 +1,5 @@
-@(        operations: Seq[org.intracer.finance.Operation],
+@(operations: Seq[org.intracer.finance.Operation],
+        total: Double,
         projects: Set[String],
         categories: Set[String],
         grants: Set[String],
@@ -13,15 +14,17 @@
 @import scala.collection.mutable.HashMap
 
 
-
     @statGrid(tableName: String, groupName: String, mapping: HashMap[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
 
         <table class="table table-striped table-bordered">
-            <caption>@tableName</caption>
-            <tr>
-                <th width="50%">@groupName</th>
-                <th>@Messages("amount")</th>
-            </tr>
+            <caption><b>@tableName</b></caption>
+            <thead>
+                <tr>
+                    <th width="50%">@groupName</th>
+                    <th>@Messages("amount")</th>
+                </tr>
+            </thead>
+            <tbody>
             @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping(key).toLowerCase)) {
 
                 <tr>
@@ -29,10 +32,17 @@
                     @mapping(groupId)
                     </td>
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum)
+                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum)
                     </td>
                 </tr>
             }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>@Messages("total") </td>
+                    <td>@org.intracer.finance.Formatter.fmt.format(total) </td>
+                </tr>
+            </tfoot>
         </table>
     }
 

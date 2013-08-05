@@ -91,3 +91,4 @@ error.required=Обов'язкове поле
 error.email=Потрібна адреса пошти
 
 dates = Дати
+total = Разом

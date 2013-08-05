@@ -119,3 +119,4 @@ error.email=Valid email required
 error.pattern=Must satisfy {0}
 
 dates = Dates
+total = Total

@@ -35,10 +35,10 @@ object Application extends Controller {
 
   val loginForm = Form(
     tuple(
-      "email" -> email,
+      "login" -> nonEmptyText(),
       "password" -> nonEmptyText()
     ) verifying("invalid.user.or.password", fields => fields match {
-          case (e, p) => User.login(e,p).isDefined
+          case (l, p) => User.login(l,p).isDefined
       })
   )
 }

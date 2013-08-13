@@ -36,7 +36,7 @@ object Operations extends Controller with Secured {
 
         val total = operations.map(_.amount).sum.toDouble
 
-        Ok(views.html.operations(new User("WM UA"), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse("")))
+        Ok(views.html.operations(new User(***REMOVED***), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse("")))
   }
 
 

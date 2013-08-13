@@ -22,6 +22,7 @@ title=Play20StartApp
 
 confirm=Confirmation
 email=Пошта
+login=Логін
 fullname=Full Name
 goback=Go Back
 logout=Вийти
@@ -49,6 +50,7 @@ account.settings.password=Enter your new email adress. Click OK to receive instr
 
 signin.signin=Увійти
 signin.your.email=Ваша пошта
+signin.your.login=Ваш логін
 signin.your.password=Ваш пароль
 
 forgot.password=Forgot password ?

@@ -16,4 +16,4 @@ GET         /assets/*file             controllers.Assets.at(path="/public", file
 
 GET     /logout                     controllers.Application.logout()
 
-GET     /auth                     controllers.Application.auth()
+POST     /auth                     controllers.Application.auth()

@@ -33,7 +33,7 @@
                     </td>
                     <td>
                     @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum) =
-                        @groupedOperations(groupId).map(op => org.intracer.finance.Formatter.fmt.format(op.amount)).mkString(" + ")
+                        @groupedOperations(groupId).map(op => "<span title='" + op.to.desc+"' >" +org.intracer.finance.Formatter.fmt.format(op.amount) + "</span>").mkString(" + ")
                     </td>
                 </tr>
             }

@@ -58,17 +58,26 @@ object AccountMapper {
 
     var maps = Seq[mutable.HashMap[String, String]]()
 
-    for (row <- sheet.asScala) {
+    for (row <- sheet.asScala.tail) {
       val c1 = row.getCell(0)
       val c2 = row.getCell(1)
 
-      if (row.getRowNum == 19 || row.getRowNum == 29) {
-        maps = maps ++ Seq(map)
+      if (c2 == null || c2.getCellType == Cell.CELL_TYPE_BLANK) {
+
+        if (!map.isEmpty)
+          maps = maps ++ Seq(map)
+        println("New map, old = " + map)
         map = new mutable.HashMap[String, String]()
       }
 
       if (c2 != null && c2.getCellType != Cell.CELL_TYPE_BLANK) {
-        map(c1.getStringCellValue) = c2.getStringCellValue
+        val c3 = row.getCell(2)
+        val tp = if (c3 != null && c3.getCellType != Cell.CELL_TYPE_BLANK) {
+          c3.getStringCellValue + "/" + c2.getStringCellValue
+        } else c2.getStringCellValue
+        map(c1.getStringCellValue) = tp
+
+        println(c1.getStringCellValue + " = " + tp)
       }
     }
     maps = maps ++ Seq(map)

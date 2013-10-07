@@ -54,13 +54,14 @@ object Operations extends Controller with Secured {
       operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
     }
 
+    val pattern = "MM/dd/yyyy";
+
     daterange.foreach {
       range =>
         val head: String = range.head
 
         if (!head.trim.isEmpty) {
           val arr = head.split("-")
-          val pattern = "MM/dd/yyyy";
 
           val dates = arr.map(entry =>
             DateTime.parse(entry.trim, DateTimeFormat.forPattern(pattern))
@@ -70,6 +71,9 @@ object Operations extends Controller with Secured {
         }
 
     }
+    val max = DateTime.parse("12/15/2012", DateTimeFormat.forPattern(pattern))
+    operations = operations.filter(op => op.date <= max)
+
     operations
   }
 

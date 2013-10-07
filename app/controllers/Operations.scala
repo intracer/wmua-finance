@@ -20,6 +20,7 @@ object Operations extends Controller with Secured {
   //
   //      Ok(views.html.operations(operations, Seq("x")))
   //  }
+  val defaultDateRange: String = "12/17/2011 - 12/15/2012"
 
   def list = withAuth {
     username =>
@@ -36,7 +37,7 @@ object Operations extends Controller with Secured {
 
         val total = operations.map(_.amount).sum.toDouble
 
-        Ok(views.html.operations(new User(***REMOVED***), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse("")))
+        Ok(views.html.operations(new User(***REMOVED***), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange)))
   }
 
 
@@ -97,7 +98,7 @@ object Operations extends Controller with Secured {
 
       val total = operations.map(_.amount).sum.toDouble
 
-      Ok(views.html.statistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(""),
+      Ok(views.html.statistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange),
         operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
   }
 

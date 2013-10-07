@@ -27,7 +27,12 @@
                 <td> @operation.date.toString().substring(0, 10) </td>
                 <td> @operation.to.project </td>
                 <td> @operation.to.category </td>
-                <td> @operation.to.grant </td>
+                <td> @if(operation.to.grantUrl.isDefined) {
+                    <a href="@operation.to.grantUrl.get._1">@operation.to.grantUrl.get._2</a>
+                    } else {
+                        @operation.to.grant
+                    }
+                </td>
                 <td> @operation.amountString </td>
                 <td> @operation.to.desc </td>
             </tr>

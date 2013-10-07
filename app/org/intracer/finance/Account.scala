@@ -44,6 +44,12 @@ class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val gra
   def category = Global.mapping.category(categoryCode.name)
   def grant = grantCode.map(grant => Global.mapping.grant(grant.name)).getOrElse("")
 
+  def grantUrl = {
+    if (grant.startsWith("Grants:WM UA/")) {
+      Some(("https://meta.wikimedia.org/wiki/" + grant, grant.replace("Grants:WM UA/", "")))
+    } else None
+  }
+
 }
 
 class OpLog {

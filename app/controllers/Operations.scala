@@ -31,8 +31,7 @@ object Operations extends Controller with Secured {
         val categories = map.getOrElse("categories", Nil).toSet
         val grants = map.getOrElse("grants", Nil).toSet
 
-        val daterange = map.get("daterange")
-
+        val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
         var operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
         val total = operations.map(_.amount).sum.toDouble

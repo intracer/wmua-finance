@@ -32,11 +32,12 @@
                     @mapping(groupId)
                     </td>
                     <td>
-                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum) =
+                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum)
+                        @if(false) { =
                         @for(op <- groupedOperations(groupId)) {
                     <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
                         }
-
+                        }
                     </td>
                 </tr>
             }

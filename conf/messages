@@ -1,6 +1,7 @@
 application.name=WM UA finance
 operations=Operations
 statistics=Statistics
+resolutions=Resolutions
 
 date=Date
 project=Project

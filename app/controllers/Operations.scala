@@ -71,8 +71,8 @@ object Operations extends Controller with Secured {
         }
 
     }
-    val max = DateTime.parse("12/14/2012", DateTimeFormat.forPattern(pattern))
-    operations = operations.filter(op => op.date <= max)
+//    val max = DateTime.parse("12/14/2012", DateTimeFormat.forPattern(pattern))
+//    operations = operations.filter(op => op.date <= max)
 
     operations
   }

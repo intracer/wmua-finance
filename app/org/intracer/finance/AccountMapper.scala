@@ -147,6 +147,10 @@ object CacheConfig extends ColumnsConfig("C", "D", "E", "F", "G")
 
 object UahConfig extends ColumnsConfig("K", "L", "M", "N", "O")
 
+object UahProgram extends ColumnsConfig("S", "T", "U", "V", "W")
+
+object UahColessa extends ColumnsConfig("AA", "AB", "AC", "AD", "AE")
+
 object WleConfig extends ColumnsConfig("", "", "D", "A", "F")
 
 

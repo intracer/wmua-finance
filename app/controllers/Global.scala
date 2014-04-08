@@ -24,7 +24,8 @@ object Global extends GlobalSettings {
 
   def loadFinance(): Seq[Operation] = {
 
-    val wb = XlsTools.load("wmua7")
+//    val wb = XlsTools.load("wmua7")
+    val wb = XlsTools.load("31-MAR-2014")
     //  val configSheet = wb.getSheetAt(2)
     //
     //  val mapping = AccountMapper.readMapping(configSheet)
@@ -32,17 +33,15 @@ object Global extends GlobalSettings {
     //"wmua2011-2013_revised")
     Main.evaluator = wb.getCreationHelper.createFormulaEvaluator()
 
-    val configSheet = wb.getSheetAt(2)
+    val configSheet = wb.getSheetAt(0)
 
     mapping = AccountMapper.readMapping(configSheet)
 
-    val sheet1 = wb.getSheetAt(0)
-    val sheet2 = wb.getSheetAt(1)
+    val sheet1 = wb.getSheetAt(1)
 
     val year1 = getOperations(sheet1)
-    val year2 = getOperations(sheet2)
 
-    val operations = (year1 ++ year2).toSeq
+    val operations = year1.toSeq
 
     Logger.info("Operations:" + operations.mkString("\n"))
 
@@ -53,8 +52,10 @@ object Global extends GlobalSettings {
   def getOperations(sheet: Sheet) = {
     val cacheOperations = sheet.asScala.flatMap(row => AccountMapper.map(row, CacheConfig))
     val uahOperations = sheet.asScala.flatMap(row => AccountMapper.map(row, UahConfig))
+    val uahOperations1 = sheet.asScala.flatMap(row => AccountMapper.map(row, UahProgram))
+    val uahOperations2 = sheet.asScala.flatMap(row => AccountMapper.map(row, UahColessa))
 
-    cacheOperations ++ uahOperations
+    cacheOperations ++ uahOperations ++ uahOperations1 ++ uahOperations2
   }
 
 

@@ -1,14 +1,12 @@
 package controllers
 
-import play.api._
-import play.api.data._
-import play.api.data.Forms._
-import play.api.mvc._
-import org.intracer.finance.User
-import org.intracer.finance.Operation
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.DateTime
 import com.github.nscala_time.time.Imports._
+import org.intracer.finance.{Operation, User}
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import play.api.data.Forms._
+import play.api.data._
+import play.api.mvc._
 
 object Operations extends Controller with Secured {
 
@@ -43,18 +41,18 @@ object Operations extends Controller with Secured {
   def filterOperations(projects: Set[String], categories: Set[String], grants: Set[String], daterange: Option[Seq[String]]): Seq[Operation] = {
     var operations = Global.operations.sortBy(_.date.toString()).toSeq
 
-    if (!projects.isEmpty) {
+    if (projects.nonEmpty) {
       operations = operations.filter(op => projects.contains(op.to.projectCode.name))
     }
-    if (!categories.isEmpty) {
+    if (categories.nonEmpty) {
       operations = operations.filter(op => categories.contains(op.to.categoryCode.name))
     }
 
-    if (!grants.isEmpty) {
+    if (grants.nonEmpty) {
       operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
     }
 
-    val pattern = "MM/dd/yyyy";
+    val pattern = "MM/dd/yyyy"
 
     daterange.foreach {
       range =>
@@ -87,7 +85,7 @@ object Operations extends Controller with Secured {
 
       val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
 
-      var operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
+      val operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
       val operationsByProject = operations.groupBy(o => o.to.projectCode.name)
       val operationsByCategory = operations.groupBy(o => o.to.categoryCode.name)

@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/wmua -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL} $JAVA_OPTS
+web: target/universal/stage/bin/finance-play -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL} $JAVA_OPTS

@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/foo -Dhttp.port=$PORT $JAVA_OPTS
+web: target/universal/stage/bin/wmua -Dhttp.port=$PORT $JAVA_OPTS

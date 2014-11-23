@@ -45,8 +45,8 @@ class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val gra
   def grant = grantCode.map(grant => Global.mapping.grant(grant.name)).getOrElse("")
 
   def grantUrl = {
-    if (grant.startsWith("Grants:WM UA/")) {
-      Some(("https://meta.wikimedia.org/wiki/" + grant, grant.replace("Grants:WM UA/", "")))
+    if (grant.startsWith("Grants:PEG/WM UA/")) {
+      Some(("https://meta.wikimedia.org/wiki/" + grant.replaceAll(" ", "_"), grant.replace("Grants:PEG/WM UA/", "")))
     } else None
   }
 

@@ -10,14 +10,14 @@ GET         /assets/*file        controllers.Assets.at(path="/public", file)
 
 GET         /operations          controllers.Operations.list
 
-GET         /resolutions          controllers.Resolutions.list
+GET         /resolutions         controllers.Resolutions.list
 
 GET         /statistics          controllers.Operations.statistics
-
-GET         /assets/*file        controllers.Assets.at(path="/public", file)
 
 GET         /logout              controllers.Application.logout()
 
 POST        /auth                controllers.Application.auth()
 
 GET         /auth                controllers.Application.index
+
+GET         /grant/*name         controllers.Grants.stat(name)

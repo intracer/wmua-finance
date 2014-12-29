@@ -110,7 +110,7 @@ class RowMapping(val row: Row, val cfg: ColumnsConfig) {
     Option(getCell(f)).flatMap {
       cell =>
         getCellSimpleNumericValue(cell)
-          .orElse((cell.getCellType == Cell.CELL_TYPE_FORMULA).option(Main.evaluator.evaluate(cell)).flatMap(getCellValueNumericValue(_)))
+          .orElse((cell.getCellType == Cell.CELL_TYPE_FORMULA).option(Main.evaluator.evaluate(cell)).flatMap(getCellValueNumericValue))
     }
   }
 

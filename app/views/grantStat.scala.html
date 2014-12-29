@@ -1,0 +1,48 @@
+@(user: org.intracer.finance.User,
+        name: String,
+        grantItems: Seq[client.finance.GrantItem]
+)(implicit flash: Flash, lang: Lang)
+
+@main(Messages("grant"), user) {
+
+
+    <h3><a href="https://meta.wikimedia.org/wiki/@name">@name</a></h3>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+
+                <th style="width:60pt">@Messages("Number")</th>
+                <th>@Messages("Item description")</th>
+                <th>@Messages("Unit")</th>
+                <th>@Messages("Qty")</th>
+                <th>@Messages("Cost per unit UAH/USD")</th>
+                <th>@Messages("Total cost USD")</th>
+                <th>@Messages("WMF contribution (USD)")</th>
+                <th>@Messages("Other sources (USD)")</th>
+                <th>@Messages("Notes")</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(item <- grantItems) {
+            <tr>
+                <td> @item.number </td>
+                <td> @item.description </td>
+                <td> @item.unit </td>
+                <td> @item.qty </td>
+                <td> @item.costPerUnit </td>
+                <td> @item.totalCost </td>
+                <td> @item.wmfContrib </td>
+                <td> @item.otherSources </td>
+                <td> @item.notes </td>
+            </tr>
+        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">@Messages("total") </td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+}

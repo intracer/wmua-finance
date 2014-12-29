@@ -46,7 +46,7 @@ class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val gra
 
   def grantUrl = {
     if (grant.startsWith("Grants:PEG/WM UA/")) {
-      Some(("https://meta.wikimedia.org/wiki/" + grant.replaceAll(" ", "_"), grant.replace("Grants:PEG/WM UA/", "")))
+      Some(("grant/" + grant.replaceAll(" ", "_"), grant.replace("Grants:PEG/WM UA/", "")))
     } else None
   }
 
@@ -55,6 +55,7 @@ class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val gra
 class OpLog {
   val operations =  Seq[Operation]()
 }
+
 
 object WMUA_12_13 extends Grant("WMUA_12_13")
 object WLEGrant extends Grant("WLE")

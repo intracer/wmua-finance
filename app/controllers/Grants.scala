@@ -1,6 +1,6 @@
 package controllers
 
-import client.finance.GrantReader
+import client.finance.GrantItem
 import org.intracer.finance.User
 import play.api.mvc.Controller
 
@@ -10,8 +10,8 @@ object Grants extends Controller with Secured {
     username =>
       implicit request =>
 
-        val grantItems = GrantReader.grantItems(name)
-        Ok(views.html.grantStat(new User(***REMOVED***), name, grantItems))
+        //GrantReader.grantItems(name)
+        Ok(views.html.grantStat(new User(***REMOVED***), name, Seq.empty[GrantItem]))
   }
 
 }

@@ -8,6 +8,8 @@ version := "1.0"
 
 scalacOptions += "-target:jvm-1.7"
 
+scalaVersion := "2.11.6"
+
 libraryDependencies ++= Seq(
   "org.apache.poi" % "poi" % "3.9",
   "org.apache.poi" % "poi-ooxml" % "3.9",

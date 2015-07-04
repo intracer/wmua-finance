@@ -1,9 +1,11 @@
 package org.intracer.finance
 
+import java.text.NumberFormat
+import java.util.Locale
+
 import com.github.nscala_time.time.Imports._
-import org.apache.poi.ss.util.CellReference
 import controllers.Global
-import java.text.DecimalFormat
+import org.apache.poi.ss.util.CellReference
 
 trait HasName {
   def name: String
@@ -32,7 +34,12 @@ class Operation(val from: OpPoint, val to: Expenditure, val amount: BigDecimal, 
 }
 
 object Formatter {
-  val fmt = new DecimalFormat("0.00")
+  val fmt = {
+    val nf = NumberFormat.getNumberInstance(Locale.forLanguageTag("uk-UA"))
+    nf.setMaximumFractionDigits(2)
+    nf.setGroupingUsed(false)
+    nf
+  }
 }
 
 class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val grantCode: Option[Grant], val desc: String, val ref: CellReference) extends OpPoint {

@@ -1,9 +1,11 @@
 package controllers
 
-import play.api.mvc._
-import play.api.data._
-import play.api.data.Forms._
 import org.intracer.finance.User
+import play.api.Play.current
+import play.api.data.Forms._
+import play.api.data._
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc._
 
 object Application extends Controller {
 

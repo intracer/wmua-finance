@@ -1,14 +1,13 @@
-import play.PlayScala
-import sbt.Keys._
-import sbt._
 
 name := "finance"
 
 version := "1.0"
 
-scalacOptions += "-target:jvm-1.7"
+scalacOptions += "-target:jvm-1.8"
 
 scalaVersion := "2.11.6"
+
+resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
   "org.apache.poi" % "poi" % "3.9",
@@ -19,6 +18,7 @@ libraryDependencies ++= Seq(
   "com.squants"  %% "squants"  % "0.4.2",
   "org.sweble.wikitext" % "swc-engine" % "2.0.0",
   "com.google.gdata" % "core" % "1.47.1"
+  , specs2 % Test
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)

@@ -37,11 +37,17 @@ object AccountMapper {
               mapping =>
                 val desc = wleRow.expenditureDesc.getOrElse("-")
                 val parts = if (mapping.contains(".")) mapping.split("\\.") else mapping.split("-")
+                if (parts.length < 3) {
+                  println("Oops!")
+                }
+
                 val (category, project, grant) = (new CategoryF(parts(1)), new Project(parts(0)), new Grant(parts(2)))
+
+                val grantRow = wleRow.grantRow.getOrElse("")
 
                 val cellRef = new CellReference(/*row.getSheet.getSheetName, */ row.getRowNum, cfg(c => c.expenditure), false, false)
 
-                val to = new Expenditure(category, project, Some(grant), desc, cellRef)
+                val to = new Expenditure(category, project, Some(grant), Some(grantRow), desc, cellRef)
                 new Operation(CacheAccount, to, cost, new DateTime(date))
             }
         }
@@ -99,12 +105,23 @@ class CodeMapping {
 
 }
 
-class ColumnsConfig(val income: String, val incomeDesc: String, val expenditure: String, val expenditureDesc: String, val mapping: String = "") {
-  def apply(f: ColumnsConfig => String) = CellReference.convertColStringToIndex(f(this))
+class ColumnsConfig(
+                     val income: String,
+                     val incomeDesc: String,
+                     val expenditure: String,
+                     val expenditureDesc: String,
+                     val mapping: String = "",
+                     val grantRow: String = ""
+                     ) {
+  def apply(f: ColumnsConfig => String): Int = CellReference.convertColStringToIndex(f(this))
 }
 
 class RowMapping(val row: Row, val cfg: ColumnsConfig) {
-  private def getCell(f: ColumnsConfig => String) = row.getCell(cfg(f))
+  private def getCell(f: ColumnsConfig => String) = {
+    val index: Int = cfg(f)
+    require(index >= 0, "column index not found")
+    row.getCell(index)
+  }
 
   private def amount(f: ColumnsConfig => String): Option[Double] = {
     Option(getCell(f)).flatMap {
@@ -140,18 +157,54 @@ class RowMapping(val row: Row, val cfg: ColumnsConfig) {
   def expenditureDesc = description(c => c.expenditureDesc)
 
   def mapping = description(c => c.mapping)
+  
+  def grantRow = if (!cfg.grantRow.isEmpty) description(c => c.grantRow) else None
 }
 
 
-object CacheConfig extends ColumnsConfig("C", "D", "E", "F", "G")
+object CacheConfig extends ColumnsConfig(
+  income = "C",
+  incomeDesc = "D",
+  expenditure = "E",
+  expenditureDesc = "F",
+  mapping = "G"
+)
 
-object UahConfig extends ColumnsConfig("K", "L", "M", "N", "O")
+object UahConfig extends ColumnsConfig(
+  income = "K",
+  incomeDesc = "L",
+  expenditure = "M",
+  expenditureDesc = "N",
+  grantRow = "O",
+  mapping = "P"
+)
 
-object UahProgram extends ColumnsConfig("S", "T", "U", "V", "W")
+object UahProgram extends ColumnsConfig(
+  income = "T",
+  incomeDesc = "U",
+  expenditure = "V",
+  expenditureDesc = "W",
+  grantRow = "X",
+  mapping = "Y"
+)
 
-object UahColessa extends ColumnsConfig("AA", "AB", "AC", "AD", "AE")
+object UahColessa extends ColumnsConfig(
+  income = "AC",
+  incomeDesc = "AD",
+  expenditure = "AE",
+  expenditureDesc = "AF",
+  grantRow = "AG",
+  mapping = "AH"
+)
 
-object WleConfig extends ColumnsConfig("", "", "D", "A", "F")
+object WleConfig extends ColumnsConfig(
+  income = "",
+  incomeDesc = "",
+  expenditure = "D",
+  expenditureDesc = "A",
+  mapping = "F",
+  grantRow = ""
+)
 
 
 

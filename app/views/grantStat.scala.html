@@ -1,7 +1,7 @@
 @(user: org.intracer.finance.User,
         name: String,
         grantItems: Seq[client.finance.GrantItem]
-)(implicit flash: Flash, lang: Lang)
+)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("grant"), user) {
 

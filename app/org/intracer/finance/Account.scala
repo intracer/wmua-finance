@@ -27,7 +27,11 @@ trait OpPoint extends HasName
 //  def name = detail
 //}
 
-class Operation(val from: OpPoint, val to: Expenditure, val amount: BigDecimal, val date: DateTime) {
+class Operation(
+                 val from: OpPoint,
+                 val to: Expenditure,
+                 val amount: BigDecimal,
+                 val date: DateTime) {
   override def toString: String = s"${date.toString().substring(0,10)}: $from -> $to, amount: $amount"
 
   def amountString = Formatter.fmt.format(amount.toDouble)
@@ -42,7 +46,14 @@ object Formatter {
   }
 }
 
-class Expenditure(val categoryCode: CategoryF, val projectCode: Project, val grantCode: Option[Grant], val desc: String, val ref: CellReference) extends OpPoint {
+class Expenditure(
+                   val categoryCode: CategoryF,
+                   val projectCode: Project,
+                   val grantCode: Option[Grant],
+                   val grantRow: Option[String],
+                   val desc: String,
+                   val ref: CellReference
+                   ) extends OpPoint {
   override def name = desc
 
   override def toString: String = s"""project: $projectCode, category: $categoryCode, grant: ${grantCode.getOrElse("")}, description: + $desc, """

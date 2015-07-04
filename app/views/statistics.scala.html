@@ -8,7 +8,7 @@
         operationsByCategory: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByGrant: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByProjectAndCategory: Map[String, Iterable[org.intracer.finance.Operation]]
-        )(implicit flash: Flash, lang: Lang)
+        )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.Operation
 @import scala.collection.mutable.HashMap

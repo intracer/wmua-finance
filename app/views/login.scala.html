@@ -1,7 +1,7 @@
-@(loginForm: Form[(String, String)])(implicit flash: Flash, lang: Lang)
+@(loginForm: Form[(String, String)])(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import helper._
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render(_, lang)) }
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render(_, lang, messages)) }
 
 <h3>@Messages("signin.signin")</h3>
 

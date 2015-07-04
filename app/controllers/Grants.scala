@@ -3,6 +3,8 @@ package controllers
 import client.finance.GrantItem
 import org.intracer.finance.User
 import play.api.mvc.Controller
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 object Grants extends Controller with Secured {
 

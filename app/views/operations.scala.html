@@ -4,7 +4,7 @@
         projects: Set[String],
         categories: Set[String],
         grants: Set[String],
-        daterange: String)(implicit flash: Flash, lang: Lang)
+        daterange: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("operations"), user) {
 
@@ -16,6 +16,7 @@
                 <th style="width:60pt">@Messages("date")</th>
                 <th>@Messages("project")</th>
                 <th>@Messages("category")</th>
+                <th>@Messages("grant.row")</th>
                 <th>@Messages("grant")</th>
                 <th>@Messages("amount")</th>
                 <th>@Messages("desc")</th>
@@ -27,6 +28,7 @@
                 <td> @operation.date.toString().substring(0, 10) </td>
                 <td> @operation.to.project </td>
                 <td> @operation.to.category </td>
+                <td> @operation.to.grantRow.getOrElse("") </td>
                 <td> @if(operation.to.grantUrl.isDefined) {
                     <a href="@operation.to.grantUrl.get._1">@operation.to.grantUrl.get._2</a>
                     } else {

@@ -3,7 +3,8 @@ logLevel := Level.Warn
 
 // The Typesafe repository 
 resolvers ++= Seq(
-  "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
+//  "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
+  Resolver.typesafeRepo("releases"),
   "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   "Scalaz Bintray Repo"  at "http://dl.bintray.com/scalaz/releases"
 )

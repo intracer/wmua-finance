@@ -2,9 +2,11 @@
 logLevel := Level.Warn
 
 // The Typesafe repository 
-resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
-resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
-
+resolvers ++= Seq(
+  "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
+  "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  "Scalaz Bintray Repo"  at "http://dl.bintray.com/scalaz/releases"
+)
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.9")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.0.0")

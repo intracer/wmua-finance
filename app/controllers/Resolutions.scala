@@ -77,30 +77,6 @@ object Resolutions extends Controller with Secured {
     operations
   }
 
-  def statistics() = Action {
-    implicit request =>
-
-      val map = request.queryString
-      val projects = map.getOrElse("projects", Nil).toSet
-      val categories = map.getOrElse("categories", Nil).toSet
-      val grants = map.getOrElse("grants", Nil).toSet
-
-      val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
-
-      var operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
-
-      val operationsByProject = operations.groupBy(o => o.to.projectCode.name)
-      val operationsByCategory = operations.groupBy(o => o.to.categoryCode.name)
-      val operationsByGrant = operations.groupBy(o => o.to.grantCode.map(_.name).getOrElse("No"))
-
-      val operationsByProjectAndCategory = operations.groupBy(o => o.to.projectCode.name + "." + o.to.categoryCode.name)
-
-      val total = operations.map(_.amount).sum.toDouble
-
-      Ok(views.html.statistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange),
-        operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
-  }
-
   val form = Form(
     tuple(
       "projects" -> Forms.list(text),

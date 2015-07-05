@@ -10,6 +10,8 @@ GET         /assets/*file        controllers.Assets.at(path="/public", file)
 
 GET         /operations          controllers.Operations.list
 
+GET         /bygrantrow          controllers.Operations.byGrantRow
+
 GET         /resolutions         controllers.Resolutions.list
 
 GET         /statistics          controllers.Operations.statistics

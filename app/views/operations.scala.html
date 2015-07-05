@@ -4,11 +4,12 @@
         projects: Set[String],
         categories: Set[String],
         grants: Set[String],
-        daterange: String)(implicit flash: Flash, lang: Lang, messages: Messages)
+        daterange: String,
+        url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("operations"), user) {
 
-    @filter(operations, projects, categories, grants, daterange, "/operations")
+    @filter(operations, projects, categories, grants, daterange, url)
 
     <table class="table table-striped table-bordered">
         <thead>

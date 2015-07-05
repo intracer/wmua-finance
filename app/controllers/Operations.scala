@@ -36,8 +36,35 @@ object Operations extends Controller with Secured {
 
         val total = operations.map(_.amount).sum.toDouble
 
-        Ok(views.html.operations(new User(***REMOVED***), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange)))
+        Ok(views.html.operations(new User(***REMOVED***),
+          operations, total, projects, categories, grants,
+          daterange.map(_.head).getOrElse(defaultDateRange),
+          "/operations"))
   }
+
+  def byGrantRow = withAuth {
+    username =>
+      implicit request =>
+
+        val map = request.queryString
+        val projects = map.getOrElse("projects", Nil).toSet
+        val categories = map.getOrElse("categories", Nil).toSet
+        val grants = map.getOrElse("grants", Nil).toSet
+
+        val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
+        val filtered = filterOperations(projects, categories, grants, daterange)
+        val sorted = filtered.sortBy(o => o.to.grantRow.getOrElse("?????") + o.date.toString())
+
+        val keys = filtered.map(o => o.to.grantRow.getOrElse("?????") + o.date.toString()).sorted
+
+        val total = filtered.map(_.amount).sum.toDouble
+
+        Ok(views.html.operations(
+          new User(***REMOVED***), sorted, total, projects, categories, grants,
+          daterange.map(_.head).getOrElse(defaultDateRange),
+          "/bygrantrow"))
+  }
+
 
 
   def filterOperations(projects: Set[String], categories: Set[String], grants: Set[String], daterange: Option[Seq[String]]): Seq[Operation] = {
@@ -95,10 +122,12 @@ object Operations extends Controller with Secured {
 
       val operationsByProjectAndCategory = operations.groupBy(o => o.to.projectCode.name + "." + o.to.categoryCode.name)
 
+      val operationsByGrantRow = operations.groupBy(o => o.to.grantRow.getOrElse(""))
+
       val total = operations.map(_.amount).sum.toDouble
 
       Ok(views.html.statistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange),
-        operationsByProject, operationsByCategory, operationsByGrant, operationsByProjectAndCategory))
+        operationsByProject, operationsByCategory, operationsByGrant, operationsByGrantRow, operationsByProjectAndCategory))
   }
 
   val form = Form(

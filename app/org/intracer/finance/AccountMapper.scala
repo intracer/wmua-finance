@@ -43,11 +43,11 @@ object AccountMapper {
 
                 val (category, project, grant) = (new CategoryF(parts(1)), new Project(parts(0)), new Grant(parts(2)))
 
-                val grantRow = wleRow.grantRow.getOrElse("")
+                val grantRow = wleRow.grantRow
 
                 val cellRef = new CellReference(/*row.getSheet.getSheetName, */ row.getRowNum, cfg(c => c.expenditure), false, false)
 
-                val to = new Expenditure(category, project, Some(grant), Some(grantRow), desc, cellRef)
+                val to = new Expenditure(category, project, Some(grant), grantRow, desc, cellRef)
                 new Operation(CacheAccount, to, cost, new DateTime(date))
             }
         }

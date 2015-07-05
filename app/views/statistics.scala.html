@@ -7,6 +7,7 @@
         operationsByProject: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByCategory: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByGrant: Map[String, Iterable[org.intracer.finance.Operation]],
+        operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByProjectAndCategory: Map[String, Iterable[org.intracer.finance.Operation]]
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
@@ -14,7 +15,7 @@
 @import scala.collection.mutable.HashMap
 
 
-    @statGrid(tableName: String, groupName: String, mapping: HashMap[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
+    @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
 
         <table class="table table-striped table-bordered">
             <caption><b>@tableName</b></caption>
@@ -54,9 +55,10 @@
 
 @main(Messages("operations")) {
     @filter(operations, projects, categories, grants, daterange, "/statistics")
-    @statGrid(Messages("by.project"), Messages("project"), Global.mapping.project, operationsByProject)
-    @statGrid(Messages("by.category"), Messages("category"), Global.mapping.category, operationsByCategory)
-    @statGrid(Messages("by.grant"), Messages("grant"), Global.mapping.grant, operationsByGrant)
+    @statGrid(Messages("by.project"), Messages("project"), Global.mapping.project.toMap, operationsByProject)
+    @statGrid(Messages("by.category"), Messages("category"), Global.mapping.category.toMap, operationsByCategory)
+    @statGrid(Messages("by.grant"), Messages("grant"), Global.mapping.grant.toMap, operationsByGrant)
+    @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
 
 }
 

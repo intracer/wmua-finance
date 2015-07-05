@@ -1,19 +1,26 @@
 package controllers
 
+import java.io.File
+
 import play.api._
 import org.intracer.finance._
-import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.usermodel.{Cell, Sheet}
 import scala.collection.JavaConverters._
 
 object Global extends GlobalSettings {
 
-  lazy val operations = loadFinance()
+  lazy val operations: Seq[Operation] = loadFinance()
 
   var mapping: CodeMapping = _
+
+  val uahToUsd = 22.0
+
+  lazy val wmf: Map[String, WMF] = loadBudget()
 
   override def onStart(app: Application) {
 
     loadFinance()
+    loadBudget()
     Logger.info("Application has started")
   }
 
@@ -24,7 +31,7 @@ object Global extends GlobalSettings {
 
   def loadFinance(): Seq[Operation] = {
 
-//    val wb = XlsTools.load("wmua7")
+    //    val wb = XlsTools.load("wmua7")
     val wb = XlsTools.load("31-MAY-2015-UPD-UPD2")
     //  val configSheet = wb.getSheetAt(2)
     //
@@ -48,6 +55,31 @@ object Global extends GlobalSettings {
     operations
   }
 
+  def loadBudget() = {
+    val wb = XlsTools.load(new File("conf/resources/PR2014.xlsx"))
+    val sheet = wb.getSheetAt(0)
+
+    val entries = sheet.asScala.flatMap {
+      row =>
+        val cell0 = row.getCell(0)
+
+        if (cell0 != null && cell0.getCellType == Cell.CELL_TYPE_NUMERIC) {
+          val code = cell0.getNumericCellValue.toString
+          val value = row.getCell(5).getNumericCellValue
+          val description = row.getCell(1).getStringCellValue
+          println(s"$code | $description | $value")
+
+          Some(WMF(code, description, value))
+
+        } else {
+          val string = row.cellIterator().asScala.mkString(" | ")
+          println(string)
+          None
+        }
+    }
+
+    entries.map(e => e.code -> e ).toMap
+  }
 
   def getOperations(sheet: Sheet) = {
     val cacheOperations = sheet.asScala.flatMap(row => AccountMapper.map(row, CacheConfig))
@@ -58,5 +90,11 @@ object Global extends GlobalSettings {
     cacheOperations ++ uahOperations ++ uahOperations1 ++ uahOperations2
   }
 
+  def main(args: Array[String]) {
+    loadBudget()
+  }
+
 
 }
+
+case class WMF(code: String, description: String, value: Double)

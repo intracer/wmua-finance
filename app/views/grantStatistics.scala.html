@@ -1,0 +1,73 @@
+@(operations: Seq[org.intracer.finance.Operation],
+        total: Double,
+        projects: Set[String],
+        categories: Set[String],
+        grants: Set[String],
+        daterange: String,
+        operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]]
+        )(implicit flash: Flash, lang: Lang, messages: Messages)
+
+@import org.intracer.finance.Operation
+@import scala.collection.mutable.HashMap
+
+
+    @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
+
+        <table class="table table-striped table-bordered">
+            <caption><b>@tableName</b></caption>
+            <thead>
+                <tr>
+                    <th width="50%">@groupName</th>
+                    <th>@Messages("amount (UAH)")</th>
+                    <th>@Messages("budgeted")</th>
+                    <th>@Messages("amount (USD)")</th>
+                    <th>@Messages("diff")</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping(key).toLowerCase)) {
+
+                <tr>
+                    <td>
+                        @mapping.getOrElse(groupId, "")
+
+                        @Global.wmf.get(groupId).map(_.description).getOrElse("")
+                    </td>
+                    <td>
+                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum)
+                        @if(false) { =
+                        @for(op <- groupedOperations(groupId)) {
+                    <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
+                        }
+                        }
+                    </td>
+                    <td>
+                        @org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0))
+                    </td>
+                    <td>
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum / Global.uahToUsd)
+                    </td>
+
+                    <td>
+                        @org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0.0) - (groupedOperations(groupId).map(_.amount).sum / Global.uahToUsd))
+                    </td>
+                </tr>
+            }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>@Messages("total") </td>
+                    <td>@org.intracer.finance.Formatter.fmt.format(total) </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+
+
+@main(Messages("operations")) {
+    @filter(operations, projects, categories, grants, daterange, "/bygrantrowstat")
+    @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
+}
+
+
+

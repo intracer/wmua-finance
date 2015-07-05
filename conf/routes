@@ -12,6 +12,8 @@ GET         /operations          controllers.Operations.list
 
 GET         /bygrantrow          controllers.Operations.byGrantRow
 
+GET         /bygrantrowstat      controllers.Operations.byGrantRowStat
+
 GET         /resolutions         controllers.Resolutions.list
 
 GET         /statistics          controllers.Operations.statistics

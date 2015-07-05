@@ -66,6 +66,27 @@ object Operations extends Controller with Secured {
   }
 
 
+  def byGrantRowStat = Action {
+    implicit request =>
+
+      val map = request.queryString
+      val projects = map.getOrElse("projects", Nil).toSet
+      val categories = map.getOrElse("categories", Nil).toSet
+      val grants = map.getOrElse("grants", Nil).toSet
+
+      val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
+
+      val operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
+
+      val operationsByGrantRow = operations.groupBy(o => o.to.grantRow.getOrElse(""))
+
+      val total = operations.map(_.amount).sum.toDouble
+
+      Ok(views.html.grantStatistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange),
+        operationsByGrantRow))
+  }
+
+
 
   def filterOperations(projects: Set[String], categories: Set[String], grants: Set[String], daterange: Option[Seq[String]]): Seq[Operation] = {
     var operations = Global.operations.sortBy(_.date.toString()).toSeq

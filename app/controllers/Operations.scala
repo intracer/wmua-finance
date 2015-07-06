@@ -20,7 +20,7 @@ object Operations extends Controller with Secured {
   //
   //      Ok(views.html.operations(operations, Seq("x")))
   //  }
-  val defaultDateRange: String = "12/15/2013 - 12/20/2014"
+  val defaultDateRange: String = "12/15/2013 - 12/20/2015"
 
   def list = withAuth {
     username =>

@@ -58,6 +58,9 @@
                 <tr>
                     <td>@Messages("total") </td>
                     <td>@org.intracer.finance.Formatter.fmt.format(total) </td>
+                    <td>@org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum) </td>
+                    <td>@org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd) </td>
+                    <td>@org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum - (groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd)) </td>
                 </tr>
             </tfoot>
         </table>

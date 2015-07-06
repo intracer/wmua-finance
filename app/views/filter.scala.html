@@ -3,7 +3,8 @@
         categories: Set[String],
         grants: Set[String],
         daterange: String,
-        action: String)(implicit flash: Flash, lang: Lang, messages: Messages)
+        action: String,
+        rate: Option[Double] = None)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 <div class="well" style="border:0; background-color: #ffffff; margin:0; padding:5px;">
 
@@ -49,6 +50,13 @@
                             </div>
                         </div>
                     </div>
+
+            @if(rate.isDefined) {
+                    <div class="span3">
+                        <label class="control-label" for="rate">@Messages("rate")</label>
+                        <input type="text" style="width: 180px" name="rate" id="rate" value="@rate.get" />
+                    </div>
+                }
 
                     <div class="span3">
                         <button type="submit" class="btn btn-primary" style="margin-top: 18pt">@Messages("filter")</button>

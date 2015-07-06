@@ -73,8 +73,11 @@ object Operations extends Controller with Secured {
       val projects = map.getOrElse("projects", Nil).toSet
       val categories = map.getOrElse("categories", Nil).toSet
       val grants = map.getOrElse("grants", Nil).toSet
+      val rate = map.get("rate").map(_.head.toDouble).getOrElse(Global.uahToUsd)
 
       val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
+
+       Global.uahToUsd = rate
 
       val operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
@@ -83,7 +86,7 @@ object Operations extends Controller with Secured {
       val total = operations.map(_.amount).sum.toDouble
 
       Ok(views.html.grantStatistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange),
-        operationsByGrantRow))
+        operationsByGrantRow, Some(rate)))
   }
 
 
@@ -151,11 +154,13 @@ object Operations extends Controller with Secured {
         operationsByProject, operationsByCategory, operationsByGrant, operationsByGrantRow, operationsByProjectAndCategory))
   }
 
+  import play.api.data.format.Formats._
   val form = Form(
     tuple(
       "projects" -> Forms.list(text),
       "categories" -> Forms.list(text),
-      "grants" -> Forms.list(text)
+      "grants" -> Forms.list(text),
+      "rate" -> of(doubleFormat)
     )
   )
 }

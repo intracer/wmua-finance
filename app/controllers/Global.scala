@@ -13,7 +13,7 @@ object Global extends GlobalSettings {
 
   var mapping: CodeMapping = _
 
-  val uahToUsd = 22.0
+  var uahToUsd: Double = 22.0
 
   lazy val wmf: Map[String, WMF] = loadBudget()
 

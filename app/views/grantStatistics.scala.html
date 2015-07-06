@@ -4,7 +4,8 @@
         categories: Set[String],
         grants: Set[String],
         daterange: String,
-        operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]]
+        operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]],
+        rate: Option[Double] = None
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.Operation
@@ -65,7 +66,7 @@
 
 
 @main(Messages("operations")) {
-    @filter(operations, projects, categories, grants, daterange, "/bygrantrowstat")
+    @filter(operations, projects, categories, grants, daterange, "/bygrantrowstat", rate)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
 }
 

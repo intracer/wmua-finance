@@ -26,8 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping(key).toLowerCase)) {
-
+            @for(groupId <- groupedOperations.keys.toSeq.sortBy{key =>  if (key.isEmpty) Integer.MAX_VALUE else key.split("\\.").map(_.toInt).zip(Seq(100, 1)).map(p => p._1 * p._2).sum }) {
                 <tr>
                     <td>
                         @mapping.getOrElse(groupId, "")

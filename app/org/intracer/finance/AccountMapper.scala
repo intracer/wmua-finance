@@ -167,34 +167,35 @@ object CacheConfig extends ColumnsConfig(
   incomeDesc = "D",
   expenditure = "E",
   expenditureDesc = "F",
-  mapping = "G"
+  grantRow = "G",
+  mapping = "H"
 )
 
 object UahConfig extends ColumnsConfig(
-  income = "K",
-  incomeDesc = "L",
-  expenditure = "M",
-  expenditureDesc = "N",
-  grantRow = "O",
-  mapping = "P"
+  income = "L",
+  incomeDesc = "M",
+  expenditure = "N",
+  expenditureDesc = "O",
+  grantRow = "P",
+  mapping = "Q"
 )
 
 object UahProgram extends ColumnsConfig(
-  income = "T",
-  incomeDesc = "U",
-  expenditure = "V",
-  expenditureDesc = "W",
-  grantRow = "X",
-  mapping = "Y"
+  income = "U",
+  incomeDesc = "V",
+  expenditure = "W",
+  expenditureDesc = "X",
+  grantRow = "Y",
+  mapping = "Z"
 )
 
 object UahColessa extends ColumnsConfig(
-  income = "AC",
-  incomeDesc = "AD",
-  expenditure = "AE",
-  expenditureDesc = "AF",
-  grantRow = "AG",
-  mapping = "AH"
+  income = "AD",
+  incomeDesc = "AE",
+  expenditure = "AF",
+  expenditureDesc = "AG",
+  grantRow = "AH",
+  mapping = "AI"
 )
 
 object WleConfig extends ColumnsConfig(

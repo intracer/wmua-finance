@@ -2,9 +2,10 @@ package controllers
 
 import java.io.File
 
-import play.api._
-import org.intracer.finance._
 import org.apache.poi.ss.usermodel.{Cell, Sheet}
+import org.intracer.finance._
+import play.api._
+
 import scala.collection.JavaConverters._
 
 object Global extends GlobalSettings {
@@ -20,7 +21,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
 
     loadFinance()
-    loadBudget()
+    //loadBudget()
     Logger.info("Application has started")
   }
 
@@ -55,6 +56,8 @@ object Global extends GlobalSettings {
     operations
   }
 
+  def isNumber(s: String): Boolean = s.matches("[+-]?\\d+.?\\d+")
+
   def loadBudget() = {
     val wb = XlsTools.load(new File("conf/resources/PR2014.xlsx"))
     val sheet = wb.getSheetAt(0)
@@ -63,13 +66,24 @@ object Global extends GlobalSettings {
       row =>
         val cell0 = row.getCell(0)
 
-        if (cell0 != null && cell0.getCellType == Cell.CELL_TYPE_NUMERIC) {
-          val code = cell0.getNumericCellValue.toString
-          val value = row.getCell(5).getNumericCellValue
-          val description = row.getCell(1).getStringCellValue
-          println(s"$code | $description | $value")
+        if (cell0 != null) {
 
-          Some(WMF(code, description, value))
+          val codeOption = if (cell0.getCellType == Cell.CELL_TYPE_NUMERIC)
+            Some(cell0.getNumericCellValue.toString)
+          else {
+            val value = cell0.getStringCellValue
+            if (isNumber(value))
+              Some(value)
+            else None
+          }
+
+          codeOption.flatMap { code =>
+            val value = row.getCell(5).getNumericCellValue
+            val description = row.getCell(1).getStringCellValue
+            println(s"$code | $description | $value")
+
+            Some(WMF(code, description, value))
+          }
 
         } else {
           val string = row.cellIterator().asScala.mkString(" | ")
@@ -78,7 +92,8 @@ object Global extends GlobalSettings {
         }
     }
 
-    entries.map(e => e.code -> e ).toMap
+    val map = entries.map(e => e.code -> e ).toMap
+    map
   }
 
   def getOperations(sheet: Sheet) = {

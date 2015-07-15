@@ -39,7 +39,7 @@ class Operation(
 
 object Formatter {
   val fmt = {
-    val nf = NumberFormat.getNumberInstance(Locale.forLanguageTag("uk-UA"))
+    val nf = NumberFormat.getNumberInstance(Locale.forLanguageTag("en-US")) // uk-UA
     nf.setMaximumFractionDigits(2)
     nf.setGroupingUsed(false)
     nf

@@ -33,7 +33,7 @@ object Global extends GlobalSettings {
   def loadFinance(): Seq[Operation] = {
 
     //    val wb = XlsTools.load("wmua7")
-    val wb = XlsTools.load("06-AUG-2015-upd")
+    val wb = XlsTools.load("06-AUG-2015-upd-upd")
     //  val configSheet = wb.getSheetAt(2)
     //
     //  val mapping = AccountMapper.readMapping(configSheet)

@@ -7,7 +7,6 @@ import scalaz._
 import Scalaz._
 import org.joda.time.DateTime
 import scala.collection.JavaConverters._
-import scala.collection.mutable
 
 
 object AccountMapper {
@@ -16,7 +15,10 @@ object AccountMapper {
 
   def map(row: Row, cfg: ColumnsConfig): Option[Operation] = {
 
-    val cell1 = Option(row.getCell(0)).flatMap(cell => (cell.getCellType != Cell.CELL_TYPE_BLANK).option({lastDateCell = Some(cell); cell})).orElse(lastDateCell)
+    val cell1 = Option(row.getCell(0)).flatMap(cell => (cell.getCellType != Cell.CELL_TYPE_BLANK).option({
+      lastDateCell = Some(cell)
+      cell
+    })).orElse(lastDateCell)
 
     val dateOpt = cell1.flatMap(cell => (cell.getCellType == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)).option(cell.getDateCellValue))
     dateOpt flatMap {
@@ -29,8 +31,8 @@ object AccountMapper {
         wleRow.expenditure flatMap {
           cost =>
 
-          //            val project = if (desc.contains("ВЛП") || desc.contains("ВЛМ")) WLM else NoProject
-          //            val category = if (desc.contains("транспорт")) Transport else if (desc.contains("накладні втрати")) SPD else NoCategory
+            //            val project = if (desc.contains("ВЛП") || desc.contains("ВЛМ")) WLM else NoProject
+            //            val category = if (desc.contains("транспорт")) Transport else if (desc.contains("накладні втрати")) SPD else NoCategory
 
             val mappingOpt = wleRow.mapping
             mappingOpt.map {
@@ -51,18 +53,15 @@ object AccountMapper {
                 new Operation(CacheAccount, to, cost, new DateTime(date))
             }
         }
-
     }
-
-
   }
 
-  def readMapping(sheet: Sheet) = {
+  def readMapping(sheet: Sheet): CodeMapping = {
     val mapping = new CodeMapping()
 
-    var map = new mutable.HashMap[String, String]()
+    var map = Map.empty[String, String]
 
-    var maps = Seq[mutable.HashMap[String, String]]()
+    var maps = Seq.empty[Map[String, String]]
 
     for (row <- sheet.asScala.tail) {
       val c1 = row.getCell(0)
@@ -70,10 +69,10 @@ object AccountMapper {
 
       if (c2 == null || c2.getCellType == Cell.CELL_TYPE_BLANK) {
 
-        if (!map.isEmpty)
+        if (map.nonEmpty)
           maps = maps ++ Seq(map)
         println("New map, old = " + map)
-        map = new mutable.HashMap[String, String]()
+        map = Map.empty[String, String]
       }
 
       if (c2 != null && c2.getCellType != Cell.CELL_TYPE_BLANK) {
@@ -81,27 +80,28 @@ object AccountMapper {
         val tp = if (c3 != null && c3.getCellType != Cell.CELL_TYPE_BLANK) {
           c3.getStringCellValue + "/" + c2.getStringCellValue
         } else c2.getStringCellValue
-        map(c1.getStringCellValue) = tp
+        map += c1.getStringCellValue -> tp
 
         println(c1.getStringCellValue + " = " + tp)
       }
     }
     maps = maps ++ Seq(map)
 
-    mapping.project = maps(0)
-    mapping.grant = maps(1)
-    mapping.category = maps(2)
+    val mappedMap = maps.zipWithIndex.map{case (m, i) => (i, m)}.toMap
+
+    mapping.project = mappedMap.getOrElse(0, Map.empty)
+    mapping.grant = mappedMap.getOrElse(1, Map.empty)
+    mapping.category = mappedMap.getOrElse(2, Map.empty)
 
     mapping
-
   }
 
 }
 
 class CodeMapping {
-  var project = new mutable.HashMap[String, String]()
-  var category = new mutable.HashMap[String, String]()
-  var grant = new mutable.HashMap[String, String]()
+  var project = Map.empty[String, String]
+  var category = Map.empty[String, String]
+  var grant = Map.empty[String, String]
 
 }
 
@@ -112,53 +112,8 @@ class ColumnsConfig(
                      val expenditureDesc: String,
                      val mapping: String = "",
                      val grantRow: String = ""
-                     ) {
+                   ) {
   def apply(f: ColumnsConfig => String): Int = CellReference.convertColStringToIndex(f(this))
-}
-
-class RowMapping(val row: Row, val cfg: ColumnsConfig) {
-  private def getCell(f: ColumnsConfig => String) = {
-    val index: Int = cfg(f)
-    require(index >= 0, "column index not found")
-    row.getCell(index)
-  }
-
-  private def amount(f: ColumnsConfig => String): Option[Double] = {
-    Option(getCell(f)).flatMap {
-      cell =>
-        getCellSimpleNumericValue(cell)
-          .orElse((cell.getCellType == Cell.CELL_TYPE_FORMULA).option(Main.evaluator.evaluate(cell)).flatMap(getCellValueNumericValue))
-    }
-  }
-
-  def getCellSimpleNumericValue(cell: Cell): Option[Double] =
-    (cell.getCellType == Cell.CELL_TYPE_NUMERIC && !DateUtil.isCellDateFormatted(cell)).option(cell.getNumericCellValue)
-
-  def getCellValueNumericValue(value: CellValue): Option[Double] = (value.getCellType == Cell.CELL_TYPE_NUMERIC).option(value.getNumberValue)
-
-  private def description(f: ColumnsConfig => String): Option[String] = {
-    val cell = getCell(f)
-
-    if (cell==null){
-
-      val errMsg = s"Empty cell at ${row.getSheet.getSheetName} ${row.getRowNum} ${cfg(f)}}"
-      println(errMsg)
-    }
-
-    (cell.getCellType == Cell.CELL_TYPE_STRING).option(cell.getRichStringCellValue.getString)
-  }
-
-  def income = amount(c => c.income)
-
-  def incomeDesc = description(c => c.incomeDesc)
-
-  def expenditure = amount(c => c.expenditure)
-
-  def expenditureDesc = description(c => c.expenditureDesc)
-
-  def mapping = description(c => c.mapping)
-  
-  def grantRow = if (!cfg.grantRow.isEmpty) description(c => c.grantRow) else None
 }
 
 

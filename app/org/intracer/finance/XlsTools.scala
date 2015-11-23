@@ -17,7 +17,7 @@ object XlsTools {
 
   lazy val projectRoot = Play.application().path()
 
-  def load(name: String): Workbook = WorkbookFactory.create(new File(projectRoot.getAbsolutePath + "/conf/resources/" + name + ".xlsx"))
+  def load(name: String): Workbook = WorkbookFactory.create(new File(projectRoot.getAbsolutePath + "/conf/resources/" + name))
   def load(file: File): Workbook = WorkbookFactory.create(file)
 
 }

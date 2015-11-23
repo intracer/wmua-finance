@@ -17,7 +17,7 @@ object Main {
     val mapping = AccountMapper.readMapping(configSheet)
 
     //"wmua2011-2013_revised")
-    evaluator = wb.getCreationHelper.createFormulaEvaluator()
+    initEvaluator(wb)
 
     val sheet1 = wb.getSheetAt(0)
     val sheet2 = wb.getSheetAt(1)
@@ -36,6 +36,10 @@ object Main {
     //    printAll(sheet, evaluator)
   }
 
+
+  def initEvaluator(wb: Workbook): Unit = {
+    evaluator = wb.getCreationHelper.createFormulaEvaluator()
+  }
 
   def updateSheet(sheet: Sheet, mapping: CodeMapping) {
     val cacheOperations = sheet.asScala.flatMap(row => AccountMapper.map(row, CacheConfig))

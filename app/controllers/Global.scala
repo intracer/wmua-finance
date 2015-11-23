@@ -18,6 +18,8 @@ object Global extends GlobalSettings {
 
   lazy val wmf: Map[String, WMF] = loadBudget()
 
+  val fileDate = "13-NOV-2015"
+
   override def onStart(app: Application) {
 
     loadFinance()
@@ -33,7 +35,7 @@ object Global extends GlobalSettings {
   def loadFinance(): Seq[Operation] = {
 
     //    val wb = XlsTools.load("wmua7")
-    val wb = XlsTools.load("13-NOV-2015.xls")
+    val wb = XlsTools.load(fileDate + ".xls")
     //  val configSheet = wb.getSheetAt(2)
     //
     //  val mapping = AccountMapper.readMapping(configSheet)

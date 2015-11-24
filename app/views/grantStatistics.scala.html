@@ -1,3 +1,4 @@
+@import org.intracer.finance.AlphaNumOrdering
 @(operations: Seq[org.intracer.finance.Operation],
         total: Double,
         projects: Set[String],
@@ -27,7 +28,7 @@
                 </tr>
             </thead>
             <tbody>
-            @for(groupId <- groupedOperations.keys.toSeq.sortBy{key =>  if (key.isEmpty) Integer.MAX_VALUE else key.split("\\.").map(_.toInt).zip(Seq(100, 1)).map(p => p._1 * p._2).sum }) {
+            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => if (key.isEmpty) "zzzz" else key)(AlphaNumOrdering)) {
                 <tr>
                     <td>
                         @mapping.getOrElse(groupId, "")

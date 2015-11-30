@@ -24,7 +24,10 @@ object AccountMapper {
     dateOpt flatMap {
       date =>
 
-        //            val cacheRow = new RowMapping(row, CacheConfig)
+        val cell = cell1.get
+        val style = cell.getCellStyle
+        val i: Int = style.getDataFormat
+        val f: String = style.getDataFormatString        //            val cacheRow = new RowMapping(row, CacheConfig)
         //            val uahRow = new RowMapping(row, UahConfig)
         val wleRow = new RowMapping(row, cfg)
 

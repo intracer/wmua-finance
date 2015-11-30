@@ -1,7 +1,8 @@
 package org.intracer.finance
 
-import de.sciss.sheet._
 import org.specs2.mutable.Specification
+import com.norbitltd.spoiwo.model._
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 class RowMappingSpec extends Specification {
 
@@ -9,15 +10,8 @@ class RowMappingSpec extends Specification {
 
   "RowMapping" should {
     "empty row" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set.empty[Cell]
-          })
-        })
-      }
-
-      val poiBook = wb.peer
+      val wb = Workbook(Sheet(Row()))
+      val poiBook = wb.convertAsXlsx
 
       val row = poiBook.getSheetAt(0).getRow(0)
 
@@ -32,15 +26,8 @@ class RowMappingSpec extends Specification {
     }
 
     "income row" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(NumericCell(0, 100.0), StringCell(1, "income"))
-          })
-        })
-      }
-
-      val poiBook = wb.peer
+      val wb = Workbook(Sheet(Row().withCellValues(100.0, "income")))
+      val poiBook = wb.convertAsXlsx
 
       val row = poiBook.getSheetAt(0).getRow(0)
 
@@ -55,15 +42,8 @@ class RowMappingSpec extends Specification {
     }
 
     "income row formula" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(FormulaCell(0, "= 100 + 50"), StringCell(1, "income"))
-          })
-        })
-      }
-
-      val poiBook = wb.peer
+      val wb = Workbook(Sheet(Row().withCellValues("= 100 + 50", "income")))
+      val poiBook = wb.convertAsXlsx
 
       Main.initEvaluator(poiBook)
 
@@ -80,15 +60,11 @@ class RowMappingSpec extends Specification {
     }
 
     "expenditure row" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(NumericCell(2, 200.0), StringCell(3, "expenditure"))
-          })
-        })
-      }
+      val wb = Workbook(Sheet(Row().withCells(
+        Cell(200.0, 2), Cell("expenditure", 3)
+      )))
 
-      val poiBook = wb.peer
+      val poiBook = wb.convertAsXlsx
 
       val row = poiBook.getSheetAt(0).getRow(0)
 
@@ -103,15 +79,12 @@ class RowMappingSpec extends Specification {
     }
 
     "expenditure row formula" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(FormulaCell(2, "= 100 + 150"), StringCell(3, "expenditure"))
-          })
-        })
-      }
+      val wb = Workbook(Sheet(Row().withCells(
+        Cell("= 100 + 150", 2), Cell("expenditure", 3)
+      )))
 
-      val poiBook = wb.peer
+      val poiBook = wb.convertAsXlsx
+
       Main.initEvaluator(poiBook)
 
       val row = poiBook.getSheetAt(0).getRow(0)

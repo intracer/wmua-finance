@@ -10,7 +10,6 @@
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.Operation
-@import scala.collection.mutable.HashMap
 
 
     @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {

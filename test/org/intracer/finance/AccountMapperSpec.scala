@@ -1,65 +1,40 @@
 package org.intracer.finance
 
-import de.sciss.sheet._
-import org.apache.poi.ss.usermodel.{DateUtil}
+import com.norbitltd.spoiwo.model._
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
+import org.apache.poi.ss.usermodel.DateUtil
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
+
 class AccountMapperSpec extends Specification {
 
-  val projects = Set(
-    Row(0) {
-      Set(StringCell(0, "проект"), StringCell(1, "назва проекту"))
-    },
-    Row(1) {
-      Set(StringCell(0, "00"), StringCell(1, "адміністрування"))
-    },
-    Row(2) {
-      Set(StringCell(0, "01"), StringCell(1, "ВЛЗ"))
-    }
+  val projects = Seq(
+    Row().withCellValues("проект", "назва проекту"),
+    Row().withCellValues("00", "адміністрування"),
+    Row().withCellValues("01", "ВЛЗ")
   )
 
-  val grants = Set(
-    Row(3) {
-      Set(StringCell(0, "джерело коштів"))
-    },
-    Row(4) {
-      Set(StringCell(0, "00"), StringCell(1, "власні кошти"))
-    },
-    Row(5) {
-      Set(StringCell(0, "01"), StringCell(1, "Grants:WM UA/Programs in Ukraine 2012"))
-    }
+  val grants = Seq(
+    Row().withCellValues("джерело коштів"),
+    Row().withCellValues("00", "власні кошти"),
+    Row().withCellValues("01", "Grants:WM UA/Programs in Ukraine 2012")
   )
 
-  val categories = Set(
-    Row(6) {
-      Set(StringCell(0, "бюджетна категорія"))
-    },
-    Row(7) {
-      Set(StringCell(0, "00"), StringCell(1, "проїзд"), StringCell(2, "заходи"))
-    },
-    Row(8) {
-      Set(StringCell(0, "01"), StringCell(1, "проживання"), StringCell(2, "заходи"))
-    },
-    Row(9) {
-      Set(StringCell(0, "02"), StringCell(1, "транспорт"), StringCell(2, "відрядження"))
-    },
-    Row(10) {
-      Set(StringCell(0, "03"), StringCell(1, "проживання"), StringCell(2, "відрядження"))
-    }
-  )
+  val categories =
+    Seq(
+      Row().withCellValues("бюджетна категорія"),
+      Row().withCellValues("00", "проїзд", "заходи"),
+      Row().withCellValues("01", "проживання", "заходи"),
+      Row().withCellValues("02", "транспорт", "відрядження"),
+      Row().withCellValues("03", "проживання", "відрядження")
+    )
 
   "readMapping" should {
     "read empty" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set.empty[Cell]
-          })
-        })
-      }
+      val wb = Workbook(Sheet(Row()))
 
-      val poiBook = wb.peer
+      val poiBook = wb.convertAsXlsx()
 
       val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
 
@@ -69,13 +44,9 @@ class AccountMapperSpec extends Specification {
     }
 
     "read projects" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          projects
-        })
-      }
+      val wb = Workbook(Sheet(projects:_*))
 
-      val poiBook = wb.peer
+      val poiBook = wb.convertAsXlsx()
 
       val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
 
@@ -85,13 +56,9 @@ class AccountMapperSpec extends Specification {
     }
 
     "read projects and grants" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          projects ++ grants
-        })
-      }
+      val wb = Workbook(Sheet(projects ++ grants:_*))
 
-      val poiBook = wb.peer
+      val poiBook = wb.convertAsXlsx()
 
       val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
 
@@ -107,13 +74,9 @@ class AccountMapperSpec extends Specification {
     }
 
     "read projects, grants and categories" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          projects ++ grants ++ categories
-        })
-      }
+      val wb = Workbook(Sheet(projects ++ grants ++ categories:_*))
 
-      val poiBook = wb.peer
+      val poiBook = wb.convertAsXlsx()
 
       val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
 
@@ -136,15 +99,8 @@ class AccountMapperSpec extends Specification {
 
   "map" should {
     "map empty" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set.empty[Cell]
-          })
-        })
-      }
-
-      val poiBook = wb.peer
+      val wb = Workbook(Sheet(Row()))
+      val poiBook = wb.convertAsXlsx()
 
       val row = poiBook.getSheetAt(0).getRow(0)
 
@@ -155,15 +111,8 @@ class AccountMapperSpec extends Specification {
     }
 
     "map text" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(StringCell(0, "date"), StringCell(1, "income"))
-          })
-        })
-      }
-
-      val poiBook = wb.peer
+      val wb = Workbook(Sheet(Row().withCellValues("date", "income")))
+      val poiBook = wb.convertAsXlsx
 
       val row = poiBook.getSheetAt(0).getRow(0)
 
@@ -175,15 +124,9 @@ class AccountMapperSpec extends Specification {
     }
 
     "map date and no cells" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(StringCell(0, "01.07.13"))
-          })
-        })
-      }
+      val wb = Workbook(Sheet(Row().withCellValues(new DateTime(2013, 7, 1, 0, 0))))
+      val poiBook = wb.convertAsXlsx
 
-      val poiBook = wb.peer
       val row = poiBook.getSheetAt(0).getRow(0)
 
       val cc = new ColumnsConfig(income = "A", incomeDesc = "B", "C", "D", "E")
@@ -194,15 +137,11 @@ class AccountMapperSpec extends Specification {
     }
 
     "map date and empty cells" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(StringCell(0, "01.07.13"), StringCell(1, ""))
-          })
-        })
-      }
+      val wb = Workbook(Sheet(Row().withCellValues(
+        new DateTime(2013, 7, 1, 0, 0), ""
+      )))
+      val poiBook = wb.convertAsXlsx
 
-      val poiBook = wb.peer
       val row = poiBook.getSheetAt(0).getRow(0)
 
       val cc = new ColumnsConfig(income = "A", incomeDesc = "B", "C", "D", "E")
@@ -213,34 +152,25 @@ class AccountMapperSpec extends Specification {
     }
 
     "map date and full cells" in {
-      val wb = Workbook {
-        Set(Sheet("name") {
-          Set(Row(0) {
-            Set(
-              StyledCell(
-                NumericCell(0, ScDateUtil.jodaToExcel(new DateTime(2013, 7, 1, 0, 0))),
-                CellStyle(CellStyle.Font(), CellStyle.DataFormat("m/d/yy"))
-              ),
-              NumericCell(1, 100.0), StringCell(2, "income"),
-              NumericCell(3, 200.0), StringCell(4, "expenditure"),
-              StringCell(4, "00")
-            )
-          })
-        })
-      }
+      val wb = Workbook(Sheet(Row().withCells(
+        Cell(new DateTime(2013, 7, 1, 0, 0), style = CellStyle(dataFormat = CellDataFormat("dd\\.mm\\.yy;@"))),
+        Cell(100.0),
+        Cell("income"),
+        Cell(200.0),
+        Cell("expenditure")
+      )))
+      val poiBook = wb.convertAsXlsx
 
-      val poiBook = wb.peer
       val row = poiBook.getSheetAt(0).getRow(0)
 
       val cell = row.getCell(0)
 
-
       cell.getCellType === org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC
       cell.getNumericCellValue === 41456
-      val style = cell.getCellStyle
-      style.getDataFormat === 14
+//      val style = cell.getCellStyle
+//      style.getDataFormat === 14
       DateUtil.isCellDateFormatted(cell) === true
-      cell.getDateCellValue.getTime === new DateTime(2013, 7, 1, 0, 0).toDate
+      cell.getDateCellValue.getTime === new DateTime(2013, 7, 1, 0, 0).getMillis
 
       val cc = new ColumnsConfig(income = "B", incomeDesc = "C", expenditure = "D", expenditureDesc =  "E", mapping = "F", grantRow = "G")
       val rm = new RowMapping(row, cc)
@@ -252,6 +182,24 @@ class AccountMapperSpec extends Specification {
       //op.
       op.amount.toDouble === 200.0
       op.date === new DateTime(2013, 7, 1, 0, 0)
+    }
+  }
+
+  "zzz" should { "set cell date style with DateTime same" in {
+      //    val row = Row().withCellValues(new DateTime(2013, 7, 1, 0, 0))
+      //    val model = row.cells.head
+      //    val xlsx = convert(model)
+
+      val wb = Workbook(Sheet(Row().withCellValues(
+        new DateTime(2013, 7, 1, 0, 0), 100.0, "income", 200.0, "expenditure"
+      )))
+      val poiBook = wb.convertAsXlsx
+
+      val row = poiBook.getSheetAt(0).getRow(0)
+
+      val xlsx = row.getCell(0)
+
+      DateUtil.isCellDateFormatted(xlsx) === true
     }
   }
 }

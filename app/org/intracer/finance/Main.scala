@@ -14,7 +14,7 @@ object Main {
     val wb = XlsTools.load("wmua2")
     val configSheet = wb.getSheetAt(2)
 
-    val mapping = AccountMapper.readMapping(configSheet)
+    val mapping = CodeMapping.readMapping(configSheet)
 
     //"wmua2011-2013_revised")
     initEvaluator(wb)
@@ -49,11 +49,11 @@ object Main {
 
     operations.foreach(println)
 
-    val operationsByProject = operations.groupBy(o => o.to.projectCode.name)
-    val operationsByCategory = operations.groupBy(o => o.to.categoryCode.name)
-    val operationsByGrant = operations.groupBy(o => o.to.grantCode.map(_.name).getOrElse("No"))
+    val operationsByProject = operations.groupBy(o => o.to.project.name)
+    val operationsByCategory = operations.groupBy(o => o.to.category.name)
+    val operationsByGrant = operations.groupBy(o => o.to.grant.map(_.name).getOrElse("No"))
 
-    val operationsByProjectAndCategory = operations.groupBy(o => o.to.projectCode.name + "." + o.to.categoryCode.name)
+    val operationsByProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
 
     val obpSheet = sheet //wb.createSheet("operationsByProject")
 

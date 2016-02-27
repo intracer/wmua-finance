@@ -4,8 +4,6 @@ import java.text.NumberFormat
 import java.util.Locale
 
 import com.github.nscala_time.time.Imports._
-import controllers.Global
-import org.apache.poi.ss.util.CellReference
 
 trait HasName {
   def name: String
@@ -15,11 +13,11 @@ trait HasName {
 
 class Account(val name: String) extends OpPoint
 
-class CategoryF(val name:String) extends HasName
+case class CategoryF(id: Option[Long] = None, code: String, name: String = "") extends HasName
 
-class Grant(val name:String) extends HasName
+case class Grant(id: Option[Long] = None, code: String, name: String = "", url: String = "") extends HasName
 
-class Project(val name:String) extends HasName
+case class Project(id: Option[Long] = None, code: String, name: String = "") extends HasName
 
 trait OpPoint extends HasName
 
@@ -32,7 +30,7 @@ class Operation(
                  val to: Expenditure,
                  val amount: BigDecimal,
                  val date: DateTime) {
-  override def toString: String = s"${date.toString().substring(0,10)}: $from -> $to, amount: $amount"
+  override def toString: String = s"${date.toString().substring(0, 10)}: $from -> $to, amount: $amount"
 
   def amountString = Formatter.fmt.format(amount.toDouble)
 }
@@ -46,48 +44,5 @@ object Formatter {
   }
 }
 
-class Expenditure(
-                   val categoryCode: CategoryF,
-                   val projectCode: Project,
-                   val grantCode: Option[Grant],
-                   val grantRow: Option[String],
-                   val desc: String,
-                   val ref: CellReference
-                   ) extends OpPoint {
-  override def name = desc
-
-  override def toString: String = s"""project: $projectCode, category: $categoryCode, grant: ${grantCode.getOrElse("")}, description: + $desc, """
-
-  def project = Global.mapping.project(projectCode.name)
-  def category = Global.mapping.category(categoryCode.name)
-  def grant = grantCode.map(grant => Global.mapping.grant(grant.name)).getOrElse("")
-
-  def grantUrl = {
-    if (grant.startsWith("Grants:PEG/WM UA/")) {
-      Some(("grant/" + grant.replaceAll(" ", "_"), grant.replace("Grants:PEG/WM UA/", "")))
-    } else None
-  }
-
-}
-
-class OpLog {
-  val operations =  Seq[Operation]()
-}
-
-
-object WMUA_12_13 extends Grant("WMUA_12_13")
-object WLEGrant extends Grant("WLE")
 
 object CacheAccount extends Account("Cache")
-object UahAccount extends Account("Hryvnya")
-
-
-object Transport extends CategoryF("Transport")
-object SPD extends CategoryF("SPD")
-object NoCategory extends CategoryF("No category")
-
-object WLM extends Project("WLM")
-object WLE extends Project("WLE")
-object NoProject extends Project("No project")
-
-

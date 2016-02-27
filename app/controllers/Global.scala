@@ -45,7 +45,7 @@ object Global extends GlobalSettings {
 
     val configSheet = wb.getSheetAt(0)
 
-    mapping = AccountMapper.readMapping(configSheet)
+    mapping = CodeMapping.readMapping(configSheet)
 
     val sheet1 = wb.getSheetAt(1)
 

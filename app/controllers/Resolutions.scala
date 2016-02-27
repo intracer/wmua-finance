@@ -44,14 +44,14 @@ object Resolutions extends Controller with Secured {
     var operations = Global.operations.sortBy(_.date.toString()).toSeq
 
     if (!projects.isEmpty) {
-      operations = operations.filter(op => projects.contains(op.to.projectCode.name))
+      operations = operations.filter(op => projects.contains(op.to.project.name))
     }
     if (!categories.isEmpty) {
-      operations = operations.filter(op => categories.contains(op.to.categoryCode.name))
+      operations = operations.filter(op => categories.contains(op.to.category.name))
     }
 
     if (!grants.isEmpty) {
-      operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
+      operations = operations.filter(op => op.to.grant.exists(grant => grants.contains(grant.name)))
     }
 
     val pattern = "MM/dd/yyyy";

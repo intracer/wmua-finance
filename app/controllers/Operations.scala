@@ -100,14 +100,14 @@ object Operations extends Controller with Secured {
     var operations = Global.operations.sortBy(_.date.toString()).toSeq
 
     if (projects.nonEmpty) {
-      operations = operations.filter(op => projects.contains(op.to.projectCode.name))
+      operations = operations.filter(op => projects.contains(op.to.project.name))
     }
     if (categories.nonEmpty) {
-      operations = operations.filter(op => categories.contains(op.to.categoryCode.name))
+      operations = operations.filter(op => categories.contains(op.to.category.name))
     }
 
     if (grants.nonEmpty) {
-      operations = operations.filter(op => op.to.grantCode.exists(grant => grants.contains(grant.name)))
+      operations = operations.filter(op => op.to.grant.exists(grant => grants.contains(grant.name)))
     }
 
     val pattern = "MM/dd/yyyy"
@@ -145,11 +145,11 @@ object Operations extends Controller with Secured {
 
       val operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
-      val operationsByProject = operations.groupBy(o => o.to.projectCode.name)
-      val operationsByCategory = operations.groupBy(o => o.to.categoryCode.name)
-      val operationsByGrant = operations.groupBy(o => o.to.grantCode.map(_.name).getOrElse("No"))
+      val operationsByProject = operations.groupBy(o => o.to.project.name)
+      val operationsByCategory = operations.groupBy(o => o.to.category.name)
+      val operationsByGrant = operations.groupBy(o => o.to.grant.map(_.name).getOrElse("No"))
 
-      val operationsByProjectAndCategory = operations.groupBy(o => o.to.projectCode.name + "." + o.to.categoryCode.name)
+      val operationsByProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
 
       val operationsByGrantRow = operations.groupBy(o => o.to.grantRow.getOrElse(""))
 

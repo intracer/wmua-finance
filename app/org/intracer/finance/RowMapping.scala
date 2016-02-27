@@ -14,7 +14,7 @@ class RowMapping(val row: Row, val cfg: ColumnsConfig) {
 
   def expenditureDesc = string(cfg.expenditureDesc)
 
-  def mapping = string(cfg.mapping)
+  def mappingId = string(cfg.mapping)
 
   def grantRow = (!cfg.grantRow.isEmpty).fold(string(cfg.grantRow), None)
 

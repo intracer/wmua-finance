@@ -25,23 +25,22 @@ object AccountMapper {
     rowDate(row) flatMap {
       date =>
 
-        val wleRow = new RowMapping(row, cfg)
+        val mappedRow = new RowMapping(row, cfg)
 
-        wleRow.expenditure flatMap {
+        mappedRow.expenditure flatMap {
           cost =>
 
-            val mappingOpt = wleRow.mapping
-            mappingOpt.map {
-              mapping =>
-                val desc = wleRow.expenditureDesc.getOrElse("-")
-                val parts = if (mapping.contains(".")) mapping.split("\\.") else mapping.split("-")
+            mappedRow.mappingId.map {
+              mappingId =>
+                val desc = mappedRow.expenditureDesc.getOrElse("-")
+                val parts = if (mappingId.contains(".")) mappingId.split("\\.") else mappingId.split("-")
                 if (parts.length < 3) {
                   println("Oops!")
                 }
 
                 val (category, project, grant) = (new CategoryF(parts(1)), new Project(parts(0)), new Grant(parts(2)))
 
-                val grantRow = wleRow.grantRow
+                val grantRow = mappedRow.grantRow
 
                 val cellRef = new CellReference(/*row.getSheet.getSheetName, */ row.getRowNum, cfg(cfg.expenditure), false, false)
 

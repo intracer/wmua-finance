@@ -6,51 +6,53 @@ import scalaz.Scalaz._
 
 class RowMapping(val row: Row, val cfg: ColumnsConfig) {
 
-  private def getCell(f: ColumnsConfig => String): Option[Cell] = {
-    val index: Int = cfg(f)
+  def income = amount(cfg.income)
+
+  def incomeDesc = string(cfg.incomeDesc)
+
+  def expenditure = amount(cfg.expenditure)
+
+  def expenditureDesc = string(cfg.expenditureDesc)
+
+  def mapping = string(cfg.mapping)
+
+  def grantRow = (!cfg.grantRow.isEmpty).fold(string(cfg.grantRow), None)
+
+  //if (!cfg.grantRow.isEmpty) string(c => c.grantRow) else None
+
+  private def mapCell[T](cellReference: String)(f: Cell => Option[T]): Option[T] =
+    getCell(cellReference).flatMap(f)
+
+  private def getCell(cellReference: String): Option[Cell] = {
+    val index: Int = cfg(cellReference)
     require(index >= 0, "column index not found")
 
     Option(row.getCell(index))
   }
 
-  private def amount(f: ColumnsConfig => String): Option[Double] = {
-    getCell(f).flatMap {
+  private def amount(cellReference: String): Option[Double] = {
+    mapCell(cellReference) {
       cell =>
-        getCellSimpleNumericValue(cell)
-          .orElse(
-            (cell.getCellType == Cell.CELL_TYPE_FORMULA)
-              .option(Main.evaluator.evaluate(cell)).flatMap(getCellValueNumericValue)
-          )
+        simpleNumericValue(cell).orElse(formulaValue(cell))
     }
   }
 
-  def getCellSimpleNumericValue(cell: Cell): Option[Double] =
-    (cell.getCellType == Cell.CELL_TYPE_NUMERIC && !DateUtil.isCellDateFormatted(cell))
-      .option(cell.getNumericCellValue)
-
-  def getCellValueNumericValue(value: CellValue): Option[Double] =
-    (value.getCellType == Cell.CELL_TYPE_NUMERIC)
-      .option(value.getNumberValue)
-
-  private def description(f: ColumnsConfig => String): Option[String] =
-    getCell(f).flatMap {
+  private def string(cellReference: String): Option[String] =
+    mapCell(cellReference) {
       cell => (cell.getCellType == Cell.CELL_TYPE_STRING)
         .option(cell.getRichStringCellValue.getString)
     }
 
+  private def numericValue(value: CellValue): Option[Double] =
+    (value.getCellType == Cell.CELL_TYPE_NUMERIC)
+      .option(value.getNumberValue)
 
-  def income = amount(_.income)
+  private def simpleNumericValue(cell: Cell): Option[Double] =
+    (cell.getCellType == Cell.CELL_TYPE_NUMERIC && !DateUtil.isCellDateFormatted(cell))
+      .option(cell.getNumericCellValue)
 
-  def incomeDesc = description(_.incomeDesc)
-
-  def expenditure = amount(_.expenditure)
-
-  def expenditureDesc = description(_.expenditureDesc)
-
-  def mapping = description(_.mapping)
-
-  def grantRow = (!cfg.grantRow.isEmpty).fold(description(_.grantRow), None)
-
-  //if (!cfg.grantRow.isEmpty) description(c => c.grantRow) else None
+  private def formulaValue(cell: Cell): Option[Double] =
+    (cell.getCellType == Cell.CELL_TYPE_FORMULA)
+      .option(Main.evaluator.evaluate(cell)).flatMap(numericValue)
 
 }

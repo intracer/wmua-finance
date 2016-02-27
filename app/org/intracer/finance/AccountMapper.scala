@@ -1,41 +1,34 @@
 package org.intracer.finance
 
+import java.util.Date
+
 import org.apache.poi.ss.usermodel._
 import org.apache.poi.ss.util.CellReference
-
-import scalaz._
-import Scalaz._
 import org.joda.time.DateTime
+
 import scala.collection.JavaConverters._
 
 
 object AccountMapper {
 
+  //If date is absent in a spreadsheet row, a date from earlier row can be used
   var lastDateCell: Option[Cell] = None
 
+  /**
+    *
+    * @param row spreadsheet row
+    * @param cfg columns configuration
+    * @return optional operation at this spreadsheet row
+    */
   def map(row: Row, cfg: ColumnsConfig): Option[Operation] = {
 
-    val cell1 = Option(row.getCell(0)).flatMap(cell => (cell.getCellType != Cell.CELL_TYPE_BLANK).option({
-      lastDateCell = Some(cell)
-      cell
-    })).orElse(lastDateCell)
-
-    val dateOpt = cell1.flatMap(cell => (cell.getCellType == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell)).option(cell.getDateCellValue))
-    dateOpt flatMap {
+    rowDate(row) flatMap {
       date =>
 
-        val cell = cell1.get
-        val style = cell.getCellStyle
-        val i: Int = style.getDataFormat
-        val f: String = style.getDataFormatString        //            val cacheRow = new RowMapping(row, CacheConfig)
-        //            val uahRow = new RowMapping(row, UahConfig)
         val wleRow = new RowMapping(row, cfg)
 
         wleRow.expenditure flatMap {
           cost =>
-
-            //            val project = if (desc.contains("ВЛП") || desc.contains("ВЛМ")) WLM else NoProject
-            //            val category = if (desc.contains("транспорт")) Transport else if (desc.contains("накладні втрати")) SPD else NoCategory
 
             val mappingOpt = wleRow.mapping
             mappingOpt.map {
@@ -50,7 +43,7 @@ object AccountMapper {
 
                 val grantRow = wleRow.grantRow
 
-                val cellRef = new CellReference(/*row.getSheet.getSheetName, */ row.getRowNum, cfg(c => c.expenditure), false, false)
+                val cellRef = new CellReference(/*row.getSheet.getSheetName, */ row.getRowNum, cfg(cfg.expenditure), false, false)
 
                 val to = new Expenditure(category, project, Some(grant), grantRow, desc, cellRef)
                 new Operation(CacheAccount, to, cost, new DateTime(date))
@@ -58,6 +51,22 @@ object AccountMapper {
         }
     }
   }
+
+
+  private def rowDate(row: Row): Option[Date] = {
+    val cell = row.getCell(0)
+    if (cell != null && cell.getCellType != Cell.CELL_TYPE_BLANK) {
+      lastDateCell = Some(cell)
+    }
+
+    lastDateCell.flatMap { cell =>
+      if (cell.getCellType == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(cell))
+        Some(cell.getDateCellValue)
+      else
+        None
+    }
+  }
+
 
   def readMapping(sheet: Sheet): CodeMapping = {
     val mapping = new CodeMapping()
@@ -90,7 +99,7 @@ object AccountMapper {
     }
     maps = maps ++ Seq(map)
 
-    val mappedMap = maps.zipWithIndex.map{case (m, i) => (i, m)}.toMap
+    val mappedMap = maps.zipWithIndex.map { case (m, i) => (i, m) }.toMap
 
     mapping.project = mappedMap.getOrElse(0, Map.empty)
     mapping.grant = mappedMap.getOrElse(1, Map.empty)
@@ -116,7 +125,7 @@ class ColumnsConfig(
                      val mapping: String = "",
                      val grantRow: String = ""
                    ) {
-  def apply(f: ColumnsConfig => String): Int = CellReference.convertColStringToIndex(f(this))
+  def apply(сellReference: String): Int = CellReference.convertColStringToIndex(сellReference)
 }
 
 

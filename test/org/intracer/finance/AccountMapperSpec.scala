@@ -36,7 +36,7 @@ class AccountMapperSpec extends Specification {
 
       val poiBook = wb.convertAsXlsx()
 
-      val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
+      val mapping = CodeMapping.readMapping(poiBook.getSheetAt(0))
 
       mapping.grant === Map.empty
       mapping.category === Map.empty
@@ -48,7 +48,7 @@ class AccountMapperSpec extends Specification {
 
       val poiBook = wb.convertAsXlsx()
 
-      val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
+      val mapping = CodeMapping.readMapping(poiBook.getSheetAt(0))
 
       mapping.project === Map("00" -> "адміністрування", "01" -> "ВЛЗ")
       mapping.grant === Map.empty
@@ -60,7 +60,7 @@ class AccountMapperSpec extends Specification {
 
       val poiBook = wb.convertAsXlsx()
 
-      val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
+      val mapping = CodeMapping.readMapping(poiBook.getSheetAt(0))
 
       mapping.project === Map(
         "00" -> "адміністрування",
@@ -78,7 +78,7 @@ class AccountMapperSpec extends Specification {
 
       val poiBook = wb.convertAsXlsx()
 
-      val mapping = AccountMapper.readMapping(poiBook.getSheetAt(0))
+      val mapping = CodeMapping.readMapping(poiBook.getSheetAt(0))
 
       mapping.project === Map(
         "00" -> "адміністрування",

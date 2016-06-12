@@ -125,7 +125,7 @@ class DbSpec extends Specification with BeforeAfter {
       val account1 = new Account(code = "01", name = "Account1")
       val account2 = new Account(code = "02", name = "Account2")
       accountDao.insertAll(Seq(account1, account2))
-      val accounts = grantDao.list.groupBy(_.id.get).mapValues(_.head)
+      val accounts = accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
       Expenditures.accounts = accounts
       Expenditures.grants = grants
@@ -133,12 +133,14 @@ class DbSpec extends Specification with BeforeAfter {
       Expenditures.projects = projects
 
       val exp = new Expenditure(
-        amount = BigDecimal(10),
-        from =
-          cats.values.find(_.code == "code1").get,
+        None,
+        "date",
+        BigDecimal(10),
+        accounts.values.find(_.code == "code1").get,
+        cats.values.find(_.code == "code1").get,
         projects.values.find(_.code == "code1").get,
         grants.values.find(_.code == "01"),
-        Some("1.1"), "exp1", date = DateTime.now
+        Some("1.1"), "exp1"
       )
 
       expDao.insert(exp)

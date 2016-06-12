@@ -2,15 +2,19 @@ package org.intracer.finance
 
 import controllers.Global
 import org.apache.poi.ss.util.CellReference
+import org.joda.time.DateTime
 
-class Expenditure(
-                   val category: CategoryF,
-                   val project: Project,
-                   val grant: Option[Grant],
-                   val grantRow: Option[String],
-                   val desc: String,
-                   val ref: CellReference
-                 ) extends OpPoint {
+case class Expenditure(id: Option[Long] = None,
+                       date: String,
+                       amount: BigDecimal,
+                       from: Account,
+                       category: CategoryF,
+                       project: Project,
+                       grant: Option[Grant],
+                       grantRow: Option[String],
+                       desc: String,
+                       ref: CellReference = null
+                      ) extends OpPoint {
   override def name = desc
 
   override def toString: String = s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $desc, """

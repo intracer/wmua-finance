@@ -41,7 +41,10 @@ object AccountMapper {
 
                 val cellRef = new CellReference(/*row.getSheet.getSheetName, */ row.getRowNum, cfg(cfg.expenditure), false, false)
 
-                val to = new Expenditure(category, project, Some(grant), grantRow, desc, cellRef)
+                val to = new Expenditure(None,
+                  date = date.toString, cost, CacheAccount,
+                  category, project, Some(grant), grantRow,
+                  desc, cellRef)
                 new Operation(CacheAccount, to, cost, new DateTime(date))
             }
         }

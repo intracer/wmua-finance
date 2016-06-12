@@ -11,15 +11,16 @@ trait HasName {
   override def toString: String = name
 }
 
-class Account(val name: String) extends OpPoint
 
-case class CategoryF(id: Option[Long] = None, code: String, name: String = "") extends HasName
+case class CategoryF(id: Option[Int] = None, code: String, name: String = "") extends HasName
 
-case class Grant(id: Option[Long] = None, code: String, name: String = "", url: String = "") extends HasName
+case class Grant(id: Option[Int] = None, code: String, name: String = "", url: String = "") extends HasName
 
-case class Project(id: Option[Long] = None, code: String, name: String = "") extends HasName
+case class Project(id: Option[Int] = None, code: String, name: String = "") extends HasName
 
 trait OpPoint extends HasName
+
+case class Account(id: Option[Int] = None, code: String, name: String) extends OpPoint
 
 //class Target(val category: Option[CategoryF], grant: Option[Grant], project: Option[Project], detail: String) extends OpPoint {
 //  def name = detail
@@ -45,4 +46,4 @@ object Formatter {
 }
 
 
-object CacheAccount extends Account("Cache")
+object CacheAccount extends Account(None, "01", "Cache")

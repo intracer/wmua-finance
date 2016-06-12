@@ -27,6 +27,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
   "io.spray" % "spray-util_2.11" % "1.3.3",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
+  "joda-time" % "joda-time" % "2.7",
+  "org.joda" % "joda-convert" % "1.7",
+
 
   "com.google.jimfs" % "jimfs" % "1.0" % "test"
   , specs2 % Test

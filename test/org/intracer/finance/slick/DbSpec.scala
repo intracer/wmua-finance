@@ -1,9 +1,10 @@
 package org.intracer.finance.slick
 
-import org.intracer.finance.{CategoryF, Grant, Project}
+import org.intracer.finance._
+import org.joda.time.DateTime
 import org.specs2.mutable.{BeforeAfter, Specification}
-import slick.backend.DatabaseConfig
-import slick.driver.JdbcProfile
+import _root_.slick.backend.DatabaseConfig
+import _root_.slick.driver.JdbcProfile
 
 class DbSpec extends Specification with BeforeAfter {
 
@@ -12,8 +13,14 @@ class DbSpec extends Specification with BeforeAfter {
   var db: FinDatabase = _
 
   def categoryDao = db.categoryDao
+
   def projectDao = db.projectDao
+
   def grantDao = db.grantDao
+
+  def expDao = db.expDao
+
+  def accountDao = db.accountDao
 
   def createSchema() = {
     db.dropTables()
@@ -75,4 +82,71 @@ class DbSpec extends Specification with BeforeAfter {
       fromDb.copy(id = None) === grant
     }
   }
+
+  "accounts" should {
+    "insert" in {
+      val account = new Account(code = "code", name = "name")
+
+      accountDao.insert(account)
+
+      val list = accountDao.list
+      list.size === 1
+
+      val fromDb = list.head
+
+      fromDb.id.isDefined === true
+      fromDb.copy(id = None) === account
+    }
+  }
+
+
+  "expenditure" should {
+    "insert" in {
+      val category1 = new CategoryF(code = "code1", name = "cat1")
+      val category2 = new CategoryF(code = "code2", name = "cat2")
+
+      categoryDao.insertAll(Seq(category1, category2))
+
+      val cats = categoryDao.list.groupBy(_.id.get).mapValues(_.head)
+      cats.size === 2
+
+      val project1 = new Project(code = "code1", name = "p1")
+      val project2 = new Project(code = "code2", name = "p2")
+      projectDao.insertAll(Seq(project1, project2))
+
+      val projects = projectDao.list.groupBy(_.id.get).mapValues(_.head)
+      projects.size === 2
+
+      val grant1 = new Grant(code = "01", name = "Grant1")
+      val grant2 = new Grant(code = "02", name = "Grant2")
+      grantDao.insertAll(Seq(grant1, grant2))
+      val grants = grantDao.list.groupBy(_.id.get).mapValues(_.head)
+
+      val account1 = new Account(code = "01", name = "Account1")
+      val account2 = new Account(code = "02", name = "Account2")
+      accountDao.insertAll(Seq(account1, account2))
+      val accounts = grantDao.list.groupBy(_.id.get).mapValues(_.head)
+
+      Expenditures.accounts = accounts
+      Expenditures.grants = grants
+      Expenditures.categories = cats
+      Expenditures.projects = projects
+
+      val exp = new Expenditure(
+        amount = BigDecimal(10),
+        from =
+          cats.values.find(_.code == "code1").get,
+        projects.values.find(_.code == "code1").get,
+        grants.values.find(_.code == "01"),
+        Some("1.1"), "exp1", date = DateTime.now
+      )
+
+      expDao.insert(exp)
+
+      val exps = expDao.list
+      exps.size === 1
+      exps.head.copy(id = None) === exp
+    }
+  }
+
 }

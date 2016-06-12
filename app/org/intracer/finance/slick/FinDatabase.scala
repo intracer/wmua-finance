@@ -23,16 +23,26 @@ class FinDatabase(val db: Database, val driver: JdbcProfile = H2Driver) {
   val projects = TableQuery[Projects](
     (tag: Tag) => new Projects(tag))
 
+  val exps = TableQuery[Expenditures](
+    (tag: Tag) => new Expenditures(tag))
+
+  val accounts = TableQuery[Accounts] (
+    (tag: Tag) => new Accounts(tag)
+  )
+
   def tables =
     Seq(
       categories,
       projects,
-      grants
+      grants,
+      accounts
     )
 
   val categoryDao = new CategoryDao(this, categories, driver)
   val grantDao = new GrantDao(this, grants, driver)
   val projectDao = new ProjectDao(this, projects, driver)
+  val expDao = new ExpenditureDao(this, exps, driver)
+  val accountDao = new AccountDao(this, accounts, driver)
 
   def createTables() {
     createIfNotExists()

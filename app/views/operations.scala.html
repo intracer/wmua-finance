@@ -38,8 +38,16 @@
                         @operation.to.grantName
                     }
                 </td>
-                <td> @operation.amountString </td>
-                <td> @operation.to.desc </td>
+                <td>
+                    <a href="#" class="editable" data-type="text" data-pk="@operation.to.id.getOrElse(0)" data-url="/post" data-title="@Messages("amount")">
+                        @operation.amountString
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="editable" data-type="text" data-pk="@operation.to.id.getOrElse(0)" data-url="/post" data-title="@Messages("desc")">
+                        @operation.to.desc
+                    </a>
+                </td>
             </tr>
         }
         </tbody>

@@ -29,6 +29,8 @@
         <script src="https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.1.0/js/responsive.bootstrap.min.js"></script>
 
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
             <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
@@ -49,6 +51,7 @@
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
         <script type="text/javascript">
+
             $(document).ready(function () {
 
                 $('.selectpicker').selectpicker('show');
@@ -71,6 +74,8 @@
 
 
                 $('#operations').DataTable();
+                $.fn.editable.defaults.mode = 'inline';
+                $('.editable').editable();
             });
         </script>
     </head>

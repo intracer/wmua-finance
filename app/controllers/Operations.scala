@@ -32,7 +32,7 @@ object Operations extends Controller with Secured {
         val grants = map.getOrElse("grants", Nil).toSet
 
         val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
-        var operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
+        var operations = filterOperations(projects, categories, grants, daterange)
 
         val total = operations.map(_.amount).sum.toDouble
 
@@ -97,17 +97,17 @@ object Operations extends Controller with Secured {
 
 
   def filterOperations(projects: Set[String], categories: Set[String], grants: Set[String], daterange: Option[Seq[String]]): Seq[Operation] = {
-    var operations = Global.operations.sortBy(_.date.toString()).toSeq
+    var operations = Global.operations.sortBy(_.date.toString())
 
     if (projects.nonEmpty) {
-      operations = operations.filter(op => projects.contains(op.to.project.name))
+      operations = operations.filter(op => projects.contains(op.to.project.code))
     }
     if (categories.nonEmpty) {
-      operations = operations.filter(op => categories.contains(op.to.category.name))
+      operations = operations.filter(op => categories.contains(op.to.category.code))
     }
 
     if (grants.nonEmpty) {
-      operations = operations.filter(op => op.to.grant.exists(grant => grants.contains(grant.name)))
+      operations = operations.filter(op => op.to.grant.exists(grant => grants.contains(grant.code)))
     }
 
     val pattern = "MM/dd/yyyy"

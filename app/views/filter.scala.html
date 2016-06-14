@@ -6,15 +6,12 @@
         action: String,
         rate: Option[Double] = None)(implicit flash: Flash, lang: Lang, messages: Messages)
 
-<div class="well" style="border:0; background-color: #ffffff; margin:0; padding:5px;">
-
     <form class="form-vertical" action="@action" method="get" style="margin-bottom:5px">
         <fieldset>
 
-            <div class="bs-docs-grid">
-                <div class="row show-grid">
+                <div class="row">
 
-                    <div class="span3">
+                    <div class="span9">
                         <label class="control-label" for="projects_select" style="width:60pt">@Messages("projects")</label>
                         <select id="projects_select" class="selectpicker" multiple name="projects">
                         @for((id, name) <- Global.mapping.project.iterator.toSeq.sortBy(pair => pair._2.toLowerCase)) {
@@ -23,7 +20,7 @@
                         </select>
                     </div>
 
-                    <div class="span3">
+                    <div class="span9">
                         <label class="control-label" for="categories_select" style="width:60pt">@Messages("categories")</label>
                         <select id="categories_select" class="selectpicker" multiple name="categories">
                         @for((id, name) <- Global.mapping.category.iterator.toSeq.sortBy(pair => pair._2.toLowerCase)) {
@@ -32,7 +29,7 @@
                         </select>
                     </div>
 
-                    <div class="span3">
+                    <div class="span9">
                         <label class="control-label" for="grants_select" style="width:60pt">@Messages("grants")</label>
                         <select id="grants_select" class="selectpicker" multiple name="grants">
                         @for((id, name) <- Global.mapping.grant.iterator.toSeq.sortBy(pair => pair._2.toLowerCase)) {
@@ -61,8 +58,6 @@
                     <div class="span3">
                         <button type="submit" class="btn btn-primary" style="margin-top: 18pt">@Messages("filter")</button>
                     </div>
-                </div>
-
             </div>
 
         </fieldset>
@@ -74,4 +69,3 @@
         });
     </script>
 
-</div>

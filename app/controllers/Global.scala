@@ -32,6 +32,26 @@ object Global extends GlobalSettings {
   }
 
 
+  def projectsJson: String = {
+    mapping.project.iterator.toSeq.sortBy(pair => pair._2.toLowerCase).map {
+      case (id, name) => s"""{ value: $id, text: "$name"}"""
+    }.mkString(", ")
+  }
+
+  def categoriesJson: String = {
+    mapping.category.iterator.toSeq.sortBy(pair => pair._2.toLowerCase).map {
+      case (id, name) => s"""{ value: $id, text: "$name"}"""
+    }.mkString(", ")
+  }
+
+  def grantsJson: String = {
+    mapping.grant.iterator.toSeq.sortBy(pair => pair._2.toLowerCase).map {
+      case (id, name) => s"""{ value: $id, text: "$name"}"""
+    }.mkString(", ")
+  }
+
+
+
   def loadFinance(): Seq[Operation] = {
 
     //    val wb = XlsTools.load("wmua7")
@@ -94,7 +114,7 @@ object Global extends GlobalSettings {
         }
     }
 
-    val map = entries.map(e => e.code -> e ).toMap
+    val map = entries.map(e => e.code -> e).toMap
     map
   }
 

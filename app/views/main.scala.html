@@ -76,6 +76,25 @@
                 $('#operations').DataTable();
                 $.fn.editable.defaults.mode = 'inline';
                 $('.editable').editable();
+
+                $('.edit_project').editable({
+                    source: [
+                        @Html(Global.projectsJson)
+                    ]
+                });
+
+                $('.edit_category').editable({
+                    source: [
+                        @Html(Global.categoriesJson)
+                    ]
+                });
+
+                $('.edit_grant').editable({
+                    source: [
+                        @Html(Global.grantsJson)
+                    ]
+                });
+
             });
         </script>
     </head>

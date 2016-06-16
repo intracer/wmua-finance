@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   //  "de.sciss" %% "sheet" % "0.1.0",
   "com.norbitltd" % "spoiwo" % "1.0.6",
   "com.typesafe.slick" %% "slick" % "3.1.1",
+//  "com.typesafe.play" %% "play-slick" % "1.1.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.h2database" % "h2" % "1.4.187",
 

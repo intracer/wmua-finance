@@ -36,5 +36,10 @@ CREATE TABLE operation (
 );
 
 
+ALTER TABLE wmua_fin.operation add COLUMN grant_row VARCHAR(20);
+
+ALTER TABLE wmua_fin.operation
+  ADD CONSTRAINT operation_project_id_id_fk
+FOREIGN KEY (proj_id) REFERENCES project (id);
 
 

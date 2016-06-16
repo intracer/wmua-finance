@@ -59,6 +59,7 @@
                 function cb(start, end) {
                     $('#daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
+
                 cb(moment().subtract(29, 'days'), moment());
 
                 $('#daterange').daterangepicker({
@@ -74,25 +75,39 @@
 
 
                 $('#operations').DataTable();
-                $.fn.editable.defaults.mode = 'inline';
+                $.fn.editable.defaults.mode = 'popup';
+
                 $('.editable').editable();
+
+                $('.edit_date').editable({
+                    format: 'yyyy-mm-dd',
+                    viewformat: 'dd/mm/yyyy',
+                    mode: 'popup',
+                    datepicker: {
+                        weekStart: 1
+                    },
+                    combodate: { maxYear: 2016 }
+                });
 
                 $('.edit_project').editable({
                     source: [
                         @Html(Global.projectsJson)
-                    ]
+                    ],
+                    showbuttons: false
                 });
 
                 $('.edit_category').editable({
                     source: [
                         @Html(Global.categoriesJson)
-                    ]
+                    ],
+                    showbuttons: false
                 });
 
                 $('.edit_grant').editable({
                     source: [
                         @Html(Global.grantsJson)
-                    ]
+                    ],
+                    showbuttons: false
                 });
 
             });

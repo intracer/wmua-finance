@@ -6,6 +6,7 @@
         action: String,
         rate: Option[Double] = None)(implicit flash: Flash, lang: Lang, messages: Messages)
 
+@import org.intracer.finance.slick.Expenditures
 <form class="form-vertical" action="@action" method="get" style="margin-bottom: 5px">
     <fieldset>
 
@@ -14,8 +15,8 @@
             <div class="span9">
                 <label class="control-label" for="projects_select" style="width: 60pt">@Messages("projects")</label>
                 <select id="projects_select" class="selectpicker" multiple name="projects">
-                @for((id, name) <- Global.mapping.project.iterator.toSeq.sortBy(pair => pair._2.toLowerCase)) {
-                    <option value="@id" @if(projects.contains(id)) {selected}>@name </option>
+                @for((id, project) <- Expenditures.projects.toSeq.sortBy(_._2.name.toLowerCase)) {
+                    <option value="@id" @if(projects.contains(id)) {selected}>@project.name </option>
                 }
                 </select>
             </div>
@@ -23,8 +24,8 @@
             <div class="span9">
                 <label class="control-label" for="categories_select" style="width: 60pt">@Messages("categories")</label>
                 <select id="categories_select" class="selectpicker" multiple name="categories">
-                @for((id, name) <- Global.mapping.category.iterator.toSeq.sortBy(pair => pair._2.toLowerCase)) {
-                    <option value="@id" @if(categories.contains(id)) {selected}>@name </option>
+                @for((id, category) <- Expenditures.categories.toSeq.sortBy(_._2.name.toLowerCase)) {
+                    <option value="@id" @if(categories.contains(id)) {selected}>@category.name </option>
                 }
                 </select>
             </div>
@@ -32,8 +33,8 @@
             <div class="span9">
                 <label class="control-label" for="grants_select" style="width: 60pt">@Messages("grants")</label>
                 <select id="grants_select" class="selectpicker" multiple name="grants">
-                @for((id, name) <- Global.mapping.grant.iterator.toSeq.sortBy(pair => pair._2.toLowerCase)) {
-                    <option value="@id" @if(grants.contains(id)) {selected}>@name </option>
+                @for((id, grant) <- Expenditures.grants.toSeq.sortBy(_._2.name.toLowerCase)) {
+                    <option value="@id" @if(grants.contains(id)) {selected}>@grant.name </option>
                 }
                 </select>
             </div>

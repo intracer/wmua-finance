@@ -1,11 +1,14 @@
 package org.intracer.finance
 
+import java.sql.Timestamp
+
 import controllers.Global
 import org.apache.poi.ss.util.CellReference
+import org.intracer.finance.slick.Expenditures
 import org.joda.time.DateTime
 
 case class Expenditure(id: Option[Int] = None,
-                       date: String,
+                       date: Timestamp,
                        amount: BigDecimal,
                        from: Account,
                        category: CategoryF,
@@ -19,11 +22,11 @@ case class Expenditure(id: Option[Int] = None,
 
   override def toString: String = s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $desc, """
 
-  def projectName = Global.mapping.project(project.id.get)
+  def projectName = Expenditures.projects(project.id.get).name
 
-  def categoryName = Global.mapping.category(category.id.get)
+  def categoryName = Expenditures.categories(category.id.get).name
 
-  def grantName = grant.map(grant => Global.mapping.grant(grant.id.get)).getOrElse("")
+  def grantName = grant.map(grant => Expenditures.grants(grant.id.get).name).getOrElse("")
 
   def grantUrl = {
     if (grantName.startsWith("Grants:PEG/WM UA/")) {

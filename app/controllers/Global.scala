@@ -2,16 +2,23 @@ package controllers
 
 import java.io.File
 
+import _root_.slick.backend.DatabaseConfig
+import _root_.slick.driver.MySQLDriver
 import org.apache.poi.ss.usermodel.{Cell, Sheet}
 import org.intracer.finance._
+import org.intracer.finance.slick.{Expenditures, FinDatabase}
+import org.joda.time.DateTime
 import play.api._
-import play.api.data.Mapping
 
 import scala.collection.JavaConverters._
 
 object Global extends GlobalSettings {
 
-  lazy val operations: Seq[Operation] = loadFinance()
+  def operations: Seq[Operation] = {
+    db.expDao.list.map{ e =>
+      new Operation(e.from, e, e.amount, new DateTime(e.date.getTime))
+    }
+  }
 
   var mapping = new CodeMapping
 
@@ -20,6 +27,11 @@ object Global extends GlobalSettings {
   lazy val wmf: Map[String, WMF] = loadBudget()
 
   val fileDate = "13-NOV-2015"
+
+  val dbConfig: DatabaseConfig[MySQLDriver] = DatabaseConfig.forConfig("slick.dbs.default")
+
+  val db = new FinDatabase(dbConfig.db)
+
 
   override def onStart(app: Application) {
 
@@ -34,23 +46,22 @@ object Global extends GlobalSettings {
 
 
   def projectsJson: String = {
-    mapping.project.toSeq.sortBy(_._2.toLowerCase).map {
-      case (id, name) => s"""{ value: $id, text: "$name"}"""
+    Expenditures.projects.toSeq.sortBy(_._2.name.toLowerCase).map {
+      case (id, project) => s"""{ value: "$id", text: "${project.name}"}"""
     }.mkString(", ")
   }
 
   def categoriesJson: String = {
-    mapping.category.toSeq.sortBy(_._2.toLowerCase).map {
-      case (id, name) => s"""{ value: $id, text: "$name"}"""
+    Expenditures.categories.toSeq.sortBy(_._2.name.toLowerCase).map {
+      case (id, cat) => s"""{ value: "$id", text: "${cat.name}"}"""
     }.mkString(", ")
   }
 
   def grantsJson: String = {
-    mapping.grant.toSeq.sortBy(pair => pair._2.toLowerCase).map {
-      case (id, name) => s"""{ value: $id, text: "$name"}"""
+    Expenditures.grants.toSeq.sortBy(_._2.name.toLowerCase).map {
+      case (id, grant) => s"""{ value: "$id", text: "${grant.name}"}"""
     }.mkString(", ")
   }
-
 
 
   def loadFinance(): Seq[Operation] = {

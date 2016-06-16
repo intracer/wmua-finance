@@ -1,5 +1,7 @@
 package controllers
 
+import java.sql.Timestamp
+
 import com.github.nscala_time.time.Imports._
 import org.intracer.finance.{Operation, User}
 import org.joda.time.DateTime
@@ -10,6 +12,9 @@ import play.api.data._
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.util.Try
 
 object Operations extends Controller with Secured {
 
@@ -21,7 +26,7 @@ object Operations extends Controller with Secured {
   //
   //      Ok(views.html.operations(operations, Seq("x")))
   //  }
-  val defaultDateRange: String = "12/15/2013 - 12/20/2015"
+  val defaultDateRange: String = "01/01/2016 - 12/20/2016"
 
   def list = withAuth {
     username =>
@@ -163,13 +168,46 @@ object Operations extends Controller with Secured {
         operationsByProject, operationsByCategory, operationsByGrant, operationsByGrantRow, operationsByProjectAndCategory))
   }
 
-  def update() = Action {
+  def update() = Action.async {
     implicit request =>
       updateForm.bindFromRequest.fold(
         formWithErrors => // binding failure, you retrieve the form containing errors,
-          BadRequest(updateForm.errorsAsJson),
-        update => {
-          Ok(update.toString)
+          Future.successful(BadRequest(updateForm.errorsAsJson)),
+        u => {
+
+          import Global.db.expDao.driver.api._
+
+          val q = Global.db.expDao.query
+
+          val db = Global.db.expDao.db
+          val idFilter = q.filter(_.id === u.pk.toInt)
+
+          val cmd = u.name match {
+            case "descr" =>
+              idFilter.map(_.descr).update(u.value)
+
+            case "amount" =>
+              idFilter.map(_.amount).update(new java.math.BigDecimal(u.value))
+
+            case "grant" =>
+              idFilter.map(_.grantId).update(Try(u.value.toInt).toOption)
+
+            case "project" =>
+              idFilter.map(_.projectId).update(u.value.toInt)
+
+            case "category" =>
+              idFilter.map(_.categoryId).update(u.value.toInt)
+
+            case "date" =>
+              val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+              val dt = formatter.parseDateTime(u.value)
+              idFilter.map(_.date).update(new Timestamp(dt.getMillis))
+
+            case "grantRow" =>
+              idFilter.map(_.grantRow).update(Some(u.value))
+          }
+
+          db.run(cmd).map(r => Ok(u.toString)).recover{ case cause => BadRequest(cause.getMessage)}
         })
   }
 

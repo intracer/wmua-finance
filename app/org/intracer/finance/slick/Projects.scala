@@ -3,7 +3,7 @@ package org.intracer.finance.slick
 import org.intracer.finance.Project
 import slick.driver.H2Driver.api._
 
-class Projects(tag: Tag) extends Table[Project](tag, "PROJECT") {
+class Projects(tag: Tag) extends Table[Project](tag, "project") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name")

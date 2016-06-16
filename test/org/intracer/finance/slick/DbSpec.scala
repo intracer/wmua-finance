@@ -1,5 +1,7 @@
 package org.intracer.finance.slick
 
+import java.sql.Timestamp
+
 import org.intracer.finance._
 import org.joda.time.DateTime
 import org.specs2.mutable.{BeforeAfter, Specification}
@@ -127,14 +129,14 @@ class DbSpec extends Specification with BeforeAfter {
       accountDao.insertAll(Seq(account1, account2))
       val accounts = accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
-      Expenditures.accounts = accounts
-      Expenditures.grants = grants
-      Expenditures.categories = cats
-      Expenditures.projects = projects
+//      Expenditures.accounts = accounts
+//      Expenditures.grants = grants
+//      Expenditures.categories = cats
+//      Expenditures.projects = projects
 
       val exp = new Expenditure(
         None,
-        "date",
+        new Timestamp(0L),
         BigDecimal(10),
         accounts.values.find(_.code == "code1").get,
         cats.values.find(_.code == "code1").get,

@@ -22,38 +22,49 @@
                 <th>@Messages("grant.row")</th>
                 <th>@Messages("grant")</th>
                 <th>@Messages("amount")</th>
-                <th>@Messages("desc")</th>
+                <th>@Messages("descr")</th>
             </tr>
         </thead>
         <tbody>
         @for(operation <- operations) {
             @defining(operation.to.id.getOrElse(0)) { id =>
             <tr>
-                <td> @operation.date.toString().substring(0, 10) </td>
                 <td>
-                    <a href="#" class="edit_project" data-type="select" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")">
+                    <a href="#" class="edit_date"
+                    data-type="combodate" data-pk="@id" data-url="/update_op" data-title="Select date" data-name="date"
+                    data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY"
+                    data-value="@operation.date.toString().substring(0, 10)">
+                        @operation.date.toString().substring(0, 10)
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="edit_project" data-type="select" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
                     @operation.to.projectName
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_category" data-type="select" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")">
+                    <a href="#" class="edit_category" data-type="select" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
                     @operation.to.categoryName
                     </a>
                 </td>
-                <td> @operation.to.grantRow.getOrElse("") </td>
                 <td>
-                    <a href="#" class="edit_grant" data-type="select" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")">
+                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("grantRow")" data-name="grantRow">
+                        @operation.to.grantRow.getOrElse("")
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="edit_grant" data-type="select" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
                         @operation.to.grantName
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("amount")">
+                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("amount")" data-name="amount">
                     @operation.amountString
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")">
-                    @operation.to.desc
+                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
+                        @operation.to.desc
                     </a>
                 </td>
             </tr>

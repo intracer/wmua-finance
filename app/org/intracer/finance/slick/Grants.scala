@@ -3,7 +3,7 @@ package org.intracer.finance.slick
 import org.intracer.finance.Grant
 import slick.driver.H2Driver.api._
 
-class Grants(tag: Tag) extends Table[Grant](tag, "GRANT_LIST") {
+class Grants(tag: Tag) extends Table[Grant](tag, "grant_list") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name")

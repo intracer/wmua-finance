@@ -9,6 +9,9 @@ import play.api.data._
 import play.api.mvc._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 
 object Operations extends Controller with Secured {
 
@@ -77,7 +80,7 @@ object Operations extends Controller with Secured {
 
       val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
 
-       Global.uahToUsd = rate
+      Global.uahToUsd = rate
 
       val operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
@@ -93,7 +96,6 @@ object Operations extends Controller with Secured {
         daterange.map(_.head).getOrElse(defaultDateRange),
         withZeros, Some(rate)))
   }
-
 
 
   def filterOperations(projects: Set[String], categories: Set[String], grants: Set[String], daterange: Option[Seq[String]]): Seq[Operation] = {
@@ -127,8 +129,8 @@ object Operations extends Controller with Secured {
         }
 
     }
-//    val max = DateTime.parse("12/14/2012", DateTimeFormat.forPattern(pattern))
-//    operations = operations.filter(op => op.date <= max)
+    //    val max = DateTime.parse("12/14/2012", DateTimeFormat.forPattern(pattern))
+    //    operations = operations.filter(op => op.date <= max)
 
     operations
   }
@@ -159,7 +161,46 @@ object Operations extends Controller with Secured {
         operationsByProject, operationsByCategory, operationsByGrant, operationsByGrantRow, operationsByProjectAndCategory))
   }
 
+  def update() = Action {
+    implicit request =>
+//      implicit def reads: Reads[Update] = (
+//        (__ \ "name").read[String] and
+//          (__ \ "pk").read[Long] and
+//          (__ \ "value").read[String]
+//        ) (Update.apply _)
+
+
+      updateForm.bindFromRequest.fold(
+        formWithErrors => // binding failure, you retrieve the form containing errors,
+          BadRequest(updateForm.errorsAsJson),
+        update => {
+//          ContestJuryJdbc.updateGreeting(contestId, formGreeting)
+          Ok(update.toString)
+        })
+
+//      request.body.asJson.map { json =>
+//        json.validate[Update].map {
+//          case u: Update => Ok(u.toString)
+//        }.recoverTotal {
+//          e => BadRequest("Detected error:" + JsError.toJson(e))
+//        }
+//      }.getOrElse {
+//        BadRequest("Expecting Json data")
+//      }
+  }
+
+
   import play.api.data.format.Formats._
+
+  val updateForm = Form(
+    mapping(
+      "name" -> text,
+      "pk" -> longNumber,
+      "value" -> text
+    )(Update.apply)(Update.unapply)
+  )
+
+
   val form = Form(
     tuple(
       "projects" -> Forms.list(text),
@@ -169,3 +210,5 @@ object Operations extends Controller with Secured {
     )
   )
 }
+
+case class Update(name: String, pk: Long, value: String)

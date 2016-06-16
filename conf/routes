@@ -25,3 +25,5 @@ POST        /auth                controllers.Application.auth()
 GET         /auth                controllers.Application.index
 
 GET         /grant/*name         controllers.Grants.stat(name)
+
+POST        /update_op           controllers.Operations.update()

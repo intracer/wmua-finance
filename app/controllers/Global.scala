@@ -5,6 +5,7 @@ import java.io.File
 import org.apache.poi.ss.usermodel.{Cell, Sheet}
 import org.intracer.finance._
 import play.api._
+import play.api.data.Mapping
 
 import scala.collection.JavaConverters._
 
@@ -12,7 +13,7 @@ object Global extends GlobalSettings {
 
   lazy val operations: Seq[Operation] = loadFinance()
 
-  var mapping: CodeMapping = _
+  var mapping = new CodeMapping
 
   var uahToUsd: Double = 22.0
 
@@ -33,19 +34,19 @@ object Global extends GlobalSettings {
 
 
   def projectsJson: String = {
-    mapping.project.iterator.toSeq.sortBy(pair => pair._2.toLowerCase).map {
+    mapping.project.toSeq.sortBy(_._2.toLowerCase).map {
       case (id, name) => s"""{ value: $id, text: "$name"}"""
     }.mkString(", ")
   }
 
   def categoriesJson: String = {
-    mapping.category.iterator.toSeq.sortBy(pair => pair._2.toLowerCase).map {
+    mapping.category.toSeq.sortBy(_._2.toLowerCase).map {
       case (id, name) => s"""{ value: $id, text: "$name"}"""
     }.mkString(", ")
   }
 
   def grantsJson: String = {
-    mapping.grant.iterator.toSeq.sortBy(pair => pair._2.toLowerCase).map {
+    mapping.grant.toSeq.sortBy(pair => pair._2.toLowerCase).map {
       case (id, name) => s"""{ value: $id, text: "$name"}"""
     }.mkString(", ")
   }

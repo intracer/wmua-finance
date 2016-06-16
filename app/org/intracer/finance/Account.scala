@@ -8,19 +8,23 @@ import com.github.nscala_time.time.Imports._
 trait HasName {
   def name: String
 
+  def id: Option[Int]
+
+  def code = id.map(_.toString).getOrElse("")
+
   override def toString: String = name
 }
 
 
-case class CategoryF(id: Option[Int] = None, code: String, name: String = "") extends HasName
+case class CategoryF(id: Option[Int] = None, name: String = "") extends HasName
 
-case class Grant(id: Option[Int] = None, code: String, name: String = "", url: String = "") extends HasName
+case class Grant(id: Option[Int] = None, name: String = "", url: String = "") extends HasName
 
-case class Project(id: Option[Int] = None, code: String, name: String = "") extends HasName
+case class Project(id: Option[Int] = None, name: String = "") extends HasName
 
 trait OpPoint extends HasName
 
-case class Account(id: Option[Int] = None, code: String, name: String) extends OpPoint
+case class Account(id: Option[Int] = None, name: String) extends OpPoint
 
 //class Target(val category: Option[CategoryF], grant: Option[Grant], project: Option[Project], detail: String) extends OpPoint {
 //  def name = detail
@@ -46,4 +50,4 @@ object Formatter {
 }
 
 
-object CacheAccount extends Account(None, "01", "Cache")
+object CacheAccount extends Account(Some(1), "Cache")

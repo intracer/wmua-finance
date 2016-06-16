@@ -4,7 +4,7 @@ import controllers.Global
 import org.apache.poi.ss.util.CellReference
 import org.joda.time.DateTime
 
-case class Expenditure(id: Option[Long] = None,
+case class Expenditure(id: Option[Int] = None,
                        date: String,
                        amount: BigDecimal,
                        from: Account,
@@ -19,11 +19,11 @@ case class Expenditure(id: Option[Long] = None,
 
   override def toString: String = s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $desc, """
 
-  def projectName = Global.mapping.project(project.code)
+  def projectName = Global.mapping.project(project.id.get)
 
-  def categoryName = Global.mapping.category(category.code)
+  def categoryName = Global.mapping.category(category.id.get)
 
-  def grantName = grant.map(grant => Global.mapping.grant(grant.code)).getOrElse("")
+  def grantName = grant.map(grant => Global.mapping.grant(grant.id.get)).getOrElse("")
 
   def grantUrl = {
     if (grantName.startsWith("Grants:PEG/WM UA/")) {

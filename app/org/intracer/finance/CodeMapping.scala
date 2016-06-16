@@ -4,9 +4,9 @@ import org.apache.poi.ss.usermodel.{Cell, Sheet}
 import scala.collection.JavaConverters._
 
 class CodeMapping {
-  var project = Map.empty[String, String]
-  var category = Map.empty[String, String]
-  var grant = Map.empty[String, String]
+  var project = Map.empty[Int, String]
+  var category = Map.empty[Int, String]
+  var grant = Map.empty[Int, String]
 }
 
 
@@ -15,9 +15,9 @@ object CodeMapping {
   def readMapping(sheet: Sheet): CodeMapping = {
     val mapping = new CodeMapping()
 
-    var map = Map.empty[String, String]
+    var map = Map.empty[Int, String]
 
-    var maps = Seq.empty[Map[String, String]]
+    var maps = Seq.empty[Map[Int, String]]
 
     for (row <- sheet.asScala.tail) {
       val c1 = row.getCell(0)
@@ -28,7 +28,7 @@ object CodeMapping {
         if (map.nonEmpty)
           maps = maps ++ Seq(map)
         println("New map, old = " + map)
-        map = Map.empty[String, String]
+        map = Map.empty[Int, String]
       }
 
       if (c2 != null && c2.getCellType != Cell.CELL_TYPE_BLANK) {
@@ -36,7 +36,7 @@ object CodeMapping {
         val tp = if (c3 != null && c3.getCellType != Cell.CELL_TYPE_BLANK) {
           c3.getStringCellValue + "/" + c2.getStringCellValue
         } else c2.getStringCellValue
-        map += c1.getStringCellValue -> tp
+        map += c1.getStringCellValue.toInt -> tp
 
         println(c1.getStringCellValue + " = " + tp)
       }

@@ -1,17 +1,16 @@
 package org.intracer.finance.slick
 
-import slick.driver.{H2Driver, JdbcProfile}
-import slick.jdbc.meta.MTable
+import slick.driver._
 import slick.lifted.TableQuery
-
 import slick.driver.H2Driver.api._
 import slick.driver.{H2Driver, JdbcProfile}
 import slick.jdbc.meta.MTable
 import slick.lifted.TableQuery
 import spray.util.pimpFuture
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FinDatabase(val db: Database, val driver: JdbcProfile = H2Driver) {
+class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
 
   val categories = TableQuery[Categories](
     (tag: Tag) => new Categories(tag)

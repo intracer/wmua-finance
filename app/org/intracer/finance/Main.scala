@@ -59,15 +59,15 @@ object Main {
 
     var rowNum = sheet.getLastRowNum
 
-    def groupCell(groupId:String) = groupId + " " + mapping.project(groupId)
+    def groupCell(groupId: Int) = groupId + " " + mapping.project(groupId)
 
     rowNum = addStatistics(rowNum, obpSheet, operationsByProject, "Project", groupId => groupId + " " + mapping.project(groupId))
     rowNum = addStatistics(rowNum, obpSheet, operationsByCategory, "Category", groupId => groupId + " " + mapping.category(groupId))
     rowNum = addStatistics(rowNum, obpSheet, operationsByGrant, "Grant", groupId => groupId + " " + mapping.grant(groupId))
 
-    def groupCell2(groupId:String) = {
-      val parts = if (groupId.contains(".")) groupId.split("\\.") else groupId.split("-")
-      groupId + " " + mapping.project(parts(0)) + " - " + mapping.category(parts(1))
+    def groupCell2(groupId: Int) = {
+      val parts = Seq(groupId, groupId, groupId)
+      groupId * 1000 +  mapping.project(parts(0)) * 100 +  mapping.category(parts(1))
     }
 
     rowNum = addStatistics(rowNum, obpSheet, operationsByProjectAndCategory, "Project-Category", groupCell2)
@@ -75,7 +75,7 @@ object Main {
 
 
   def addStatistics(rowNum: Int, obpSheet: Sheet, groupedOperations: Map[String, Iterable[Operation]],
-                    groupName: String, groupCell: String => String) = {
+                    groupName: String, groupCell: Int => String) = {
     var rowIndex = rowNum
     rowIndex += 1
     val row = obpSheet.createRow(rowNum)
@@ -90,7 +90,7 @@ object Main {
       rowIndex += 1
 
       val projectCell = row.createCell(0, Cell.CELL_TYPE_STRING)
-      projectCell.setCellValue(groupCell(groupId))
+      projectCell.setCellValue(groupCell(groupId.toInt))
 
       val formulaCell = row.createCell(1, Cell.CELL_TYPE_FORMULA)
       val formula = operations.map(_.to.ref.formatAsString).mkString("+")

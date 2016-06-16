@@ -4,13 +4,11 @@ import com.github.nscala_time.time.Imports._
 import org.intracer.finance.{Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
-import play.api.mvc._
-import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-import play.api.libs.json._
-import play.api.libs.functional.syntax._
+import play.api.mvc._
 
 
 object Operations extends Controller with Secured {
@@ -30,9 +28,9 @@ object Operations extends Controller with Secured {
       implicit request =>
 
         val map = request.queryString
-        val projects = map.getOrElse("projects", Nil).toSet
-        val categories = map.getOrElse("categories", Nil).toSet
-        val grants = map.getOrElse("grants", Nil).toSet
+        val projects = map.getOrElse("projects", Nil).toSet.map((x: String) => x.toInt)
+        val categories = map.getOrElse("categories", Seq.empty[String]).toSet.map((x: String) => x.toInt)
+        val grants = map.getOrElse("grants", Nil).toSet.map((x: String) => x.toInt)
 
         val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
         var operations = filterOperations(projects, categories, grants, daterange)
@@ -50,9 +48,9 @@ object Operations extends Controller with Secured {
       implicit request =>
 
         val map = request.queryString
-        val projects = map.getOrElse("projects", Nil).toSet
-        val categories = map.getOrElse("categories", Nil).toSet
-        val grants = map.getOrElse("grants", Nil).toSet
+        val projects = map.getOrElse("projects", Nil).toSet.map((x: String) => x.toInt)
+        val categories = map.getOrElse("categories", Nil).toSet.map((x: String) => x.toInt)
+        val grants = map.getOrElse("grants", Nil).toSet.map((x: String) => x.toInt)
 
         val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
         val filtered = filterOperations(projects, categories, grants, daterange)
@@ -73,9 +71,9 @@ object Operations extends Controller with Secured {
     implicit request =>
 
       val map = request.queryString
-      val projects = map.getOrElse("projects", Nil).toSet
-      val categories = map.getOrElse("categories", Nil).toSet
-      val grants = map.getOrElse("grants", Nil).toSet
+      val projects = map.getOrElse("projects", Nil).toSet.map((x: String) => x.toInt)
+      val categories = map.getOrElse("categories", Nil).map(_.toInt).toSet
+      val grants = map.getOrElse("grants", Nil).map(_.toInt).toSet
       val rate = map.get("rate").map(_.head.toDouble).getOrElse(Global.uahToUsd)
 
       val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
@@ -98,18 +96,18 @@ object Operations extends Controller with Secured {
   }
 
 
-  def filterOperations(projects: Set[String], categories: Set[String], grants: Set[String], daterange: Option[Seq[String]]): Seq[Operation] = {
+  def filterOperations(projects: Set[Int], categories: Set[Int], grants: Set[Int], daterange: Option[Seq[String]]): Seq[Operation] = {
     var operations = Global.operations.sortBy(_.date.toString())
 
     if (projects.nonEmpty) {
-      operations = operations.filter(op => projects.contains(op.to.project.code))
+      operations = operations.filter(op => projects.contains(op.to.project.id.get))
     }
     if (categories.nonEmpty) {
-      operations = operations.filter(op => categories.contains(op.to.category.code))
+      operations = operations.filter(op => categories.contains(op.to.category.id.get))
     }
 
     if (grants.nonEmpty) {
-      operations = operations.filter(op => op.to.grant.exists(grant => grants.contains(grant.code)))
+      operations = operations.filter(op => op.to.grant.exists(grant => grants.contains(grant.id.get)))
     }
 
     val pattern = "MM/dd/yyyy"
@@ -145,7 +143,11 @@ object Operations extends Controller with Secured {
 
       val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
 
-      val operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
+      val operations: Seq[Operation] = filterOperations(
+        projects.map(_.toInt),
+        categories.map(_.toInt),
+        grants.map(_.toInt), daterange
+      )
 
       val operationsByProject = operations.groupBy(o => o.to.project.name)
       val operationsByCategory = operations.groupBy(o => o.to.category.name)
@@ -163,30 +165,12 @@ object Operations extends Controller with Secured {
 
   def update() = Action {
     implicit request =>
-//      implicit def reads: Reads[Update] = (
-//        (__ \ "name").read[String] and
-//          (__ \ "pk").read[Long] and
-//          (__ \ "value").read[String]
-//        ) (Update.apply _)
-
-
       updateForm.bindFromRequest.fold(
         formWithErrors => // binding failure, you retrieve the form containing errors,
           BadRequest(updateForm.errorsAsJson),
         update => {
-//          ContestJuryJdbc.updateGreeting(contestId, formGreeting)
           Ok(update.toString)
         })
-
-//      request.body.asJson.map { json =>
-//        json.validate[Update].map {
-//          case u: Update => Ok(u.toString)
-//        }.recoverTotal {
-//          e => BadRequest("Detected error:" + JsError.toJson(e))
-//        }
-//      }.getOrElse {
-//        BadRequest("Expecting Json data")
-//      }
   }
 
 
@@ -199,7 +183,6 @@ object Operations extends Controller with Secured {
       "value" -> text
     )(Update.apply)(Update.unapply)
   )
-
 
   val form = Form(
     tuple(

@@ -1,9 +1,9 @@
 @import org.intracer.finance.AlphaNumOrdering
 @(operations: Seq[org.intracer.finance.Operation],
         total: Double,
-        projects: Set[String],
-        categories: Set[String],
-        grants: Set[String],
+        projects: Set[Int],
+        categories: Set[Int],
+        grants: Set[Int],
         daterange: String,
         operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]],
         rate: Option[Double] = None

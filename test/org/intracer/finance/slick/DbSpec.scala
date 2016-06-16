@@ -37,7 +37,7 @@ class DbSpec extends Specification with BeforeAfter {
 
   "category" should {
     "insert" in {
-      val category = new CategoryF(code = "code", name = "name")
+      val category = new CategoryF(name = "name")
 
       categoryDao.insert(category)
 
@@ -53,7 +53,7 @@ class DbSpec extends Specification with BeforeAfter {
 
   "project" should {
     "insert" in {
-      val project = new Project(code = "code", name = "name")
+      val project = new Project(name = "name")
 
       projectDao.insert(project)
 
@@ -69,7 +69,7 @@ class DbSpec extends Specification with BeforeAfter {
 
   "grants" should {
     "insert" in {
-      val grant = new Grant(code = "code", name = "name")
+      val grant = new Grant(name = "name")
 
       grantDao.insert(grant)
 
@@ -85,7 +85,7 @@ class DbSpec extends Specification with BeforeAfter {
 
   "accounts" should {
     "insert" in {
-      val account = new Account(code = "code", name = "name")
+      val account = new Account(name = "name")
 
       accountDao.insert(account)
 
@@ -102,28 +102,28 @@ class DbSpec extends Specification with BeforeAfter {
 
   "expenditure" should {
     "insert" in {
-      val category1 = new CategoryF(code = "code1", name = "cat1")
-      val category2 = new CategoryF(code = "code2", name = "cat2")
+      val category1 = new CategoryF(name = "cat1")
+      val category2 = new CategoryF(name = "cat2")
 
       categoryDao.insertAll(Seq(category1, category2))
 
       val cats = categoryDao.list.groupBy(_.id.get).mapValues(_.head)
       cats.size === 2
 
-      val project1 = new Project(code = "code1", name = "p1")
-      val project2 = new Project(code = "code2", name = "p2")
+      val project1 = new Project(name = "p1")
+      val project2 = new Project(name = "p2")
       projectDao.insertAll(Seq(project1, project2))
 
       val projects = projectDao.list.groupBy(_.id.get).mapValues(_.head)
       projects.size === 2
 
-      val grant1 = new Grant(code = "01", name = "Grant1")
-      val grant2 = new Grant(code = "02", name = "Grant2")
+      val grant1 = new Grant(name = "Grant1")
+      val grant2 = new Grant(name = "Grant2")
       grantDao.insertAll(Seq(grant1, grant2))
       val grants = grantDao.list.groupBy(_.id.get).mapValues(_.head)
 
-      val account1 = new Account(code = "01", name = "Account1")
-      val account2 = new Account(code = "02", name = "Account2")
+      val account1 = new Account(name = "Account1")
+      val account2 = new Account(name = "Account2")
       accountDao.insertAll(Seq(account1, account2))
       val accounts = accountDao.list.groupBy(_.id.get).mapValues(_.head)
 

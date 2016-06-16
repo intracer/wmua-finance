@@ -5,7 +5,7 @@ version := "1.0"
 
 scalacOptions += "-target:jvm-1.8"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.8"
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.2.0",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
-
+  "mysql" % "mysql-connector-java" % "5.1.35",
 
   "com.google.jimfs" % "jimfs" % "1.0" % "test"
   , specs2 % Test

@@ -1,9 +1,9 @@
 @(user: org.intracer.finance.User,
         operations: Seq[org.intracer.finance.Operation],
         total: Double,
-        projects: Set[String],
-        categories: Set[String],
-        grants: Set[String],
+        projects: Set[Int],
+        categories: Set[Int],
+        grants: Set[Int],
         daterange: String,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 

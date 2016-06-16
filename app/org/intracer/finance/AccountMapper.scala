@@ -35,7 +35,11 @@ object AccountMapper {
                   println("Oops!")
                 }
 
-                val (category, project, grant) = (new CategoryF(code = parts(1)), new Project(code = parts(0)), new Grant(code = parts(2)))
+                val (category, project, grant) = (
+                  new CategoryF(id = Some(parts(1).toInt)),
+                  new Project(id = Some(parts(0).toInt)),
+                  new Grant(id = Some(parts(2).toInt))
+                  )
 
                 val grantRow = mappedRow.grantRow
 

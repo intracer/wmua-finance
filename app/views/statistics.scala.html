@@ -54,10 +54,10 @@
 
 
 @main(Messages("operations")) {
-    @filter(operations, projects, categories, grants, daterange, "/statistics")
-    @statGrid(Messages("by.project"), Messages("project"), Global.mapping.project.toMap, operationsByProject)
-    @statGrid(Messages("by.category"), Messages("category"), Global.mapping.category.toMap, operationsByCategory)
-    @statGrid(Messages("by.grant"), Messages("grant"), Global.mapping.grant.toMap, operationsByGrant)
+    @filter(operations, projects.map(_.toInt), categories.map(_.toInt), grants.map(_.toInt), daterange, "/statistics")
+    @statGrid(Messages("by.project"), Messages("project"), Global.mapping.project.toMap.map{case (k,v) => (k.toString, v)}, operationsByProject)
+    @statGrid(Messages("by.category"), Messages("category"), Global.mapping.category.toMap.map{case (k,v) => (k.toString, v)}, operationsByCategory)
+    @statGrid(Messages("by.grant"), Messages("grant"), Global.mapping.grant.toMap.map{case (k,v) => (k.toString, v)}, operationsByGrant)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
 
 }

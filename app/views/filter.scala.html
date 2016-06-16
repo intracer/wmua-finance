@@ -1,7 +1,7 @@
 @(operations: Seq[org.intracer.finance.Operation],
-        projects: Set[String],
-        categories: Set[String],
-        grants: Set[String],
+        projects: Set[Int],
+        categories: Set[Int],
+        grants: Set[Int],
         daterange: String,
         action: String,
         rate: Option[Double] = None)(implicit flash: Flash, lang: Lang, messages: Messages)

@@ -3,11 +3,11 @@ package org.intracer.finance.slick
 import _root_.slick.driver.H2Driver.api._
 import org.intracer.finance._
 
-class Expenditures(tag: Tag) extends Table[Expenditure](tag, "EXPENDITURE") {
+class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
-  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
-  def date = column[String]("date")
+  def date = column[String]("op_date")
 
   def amount = column[BigDecimal]("amount")
 
@@ -18,7 +18,7 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "EXPENDITURE") {
   def grantId = column[Option[Int]]("grant_id")
 
   def grantRow = column[Option[String]]("grant_row")
-  def desc = column[String]("desc")
+  def desc = column[String]("descr")
 
   def account = foreignKey("ACC_FK", categoryId, TableQuery[Accounts])(_.id)
   def category = foreignKey("CAT_FK", categoryId, TableQuery[Categories])(_.id)
@@ -39,7 +39,7 @@ object Expenditures {
 
   var accounts: Map[Int, Account] = _
 
-  def fromDb(t: (Option[Long], String, BigDecimal, Int, Int, Int, Option[Int], Option[String], String)) = {
+  def fromDb(t: (Option[Int], String, BigDecimal, Int, Int, Int, Option[Int], Option[String], String)) = {
     new Expenditure(t._1, t._2, t._3,  accounts(t._4), categories(t._5), projects(t._6), t._7.map(grants),  t._8, t._9, null)
   }
 

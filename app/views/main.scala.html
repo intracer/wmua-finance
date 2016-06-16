@@ -73,8 +73,10 @@
                     }
                 }, cb);
 
+                $('#operations').DataTable( {
+                    "paging":   false
+                } );
 
-                $('#operations').DataTable();
                 $.fn.editable.defaults.mode = 'popup';
 
                 $('.editable').editable();

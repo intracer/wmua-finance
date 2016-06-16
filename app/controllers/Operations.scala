@@ -89,9 +89,9 @@ object Operations extends Controller with Secured {
 
       val operationsByGrantRow = operations.groupBy(o => o.to.grantRow.getOrElse(""))
 
-      val zeros = Global.wmf.keySet -- operationsByGrantRow.keySet
+      //val zeros = Global.wmf.keySet -- operationsByGrantRow.keySet
 
-      val withZeros = operationsByGrantRow ++ zeros.map(code => code -> Seq.empty)
+      val withZeros = operationsByGrantRow //++ zeros.map(code => code -> Seq.empty)
 
       val total = operations.map(_.amount).sum.toDouble
 

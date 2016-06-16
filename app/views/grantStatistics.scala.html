@@ -34,11 +34,11 @@
                     </td>
 
                     <td>
-                        @Global.wmf.get(groupId).map(_.description).getOrElse("")
+                        Global.wmf.get(groupId).map(_.description).getOrElse("")
                     </td>
 
                     <td>
-                    @org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0))
+                    org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0))
                     </td>
 
                     <td>
@@ -56,7 +56,7 @@
                     </td>
 
 @if(false){                    <td>
-                        @org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0.0) - (groupedOperations(groupId).map(_.amount).sum / Global.uahToUsd))
+                        org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0.0) - (groupedOperations(groupId).map(_.amount).sum / Global.uahToUsd))
                     </td> }
                 </tr>
             }
@@ -64,10 +64,10 @@
             <tfoot>
                 <tr>
                     <td colspan="2">@Messages("total") </td>
-                    <td>@org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum) </td>
-                    <td>@org.intracer.finance.Formatter.fmt.format(total) </td>
-                    <td>@org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd) </td>
-@if(false) {                   <td>@org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum - (groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd)) </td>  }
+                    <td>org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum) </td>
+                    <td>org.intracer.finance.Formatter.fmt.format(total) </td>
+                    <td>org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd) </td>
+@if(false) {                   <td>org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum - (groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd)) </td>  }
                 </tr>
             </tfoot>
         </table>

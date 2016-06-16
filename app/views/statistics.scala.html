@@ -12,7 +12,7 @@
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.Operation
-@import scala.collection.mutable.HashMap
+@import org.intracer.finance.slick.Expenditures
 
 
     @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
@@ -55,9 +55,9 @@
 
 @main(Messages("operations")) {
     @filter(operations, projects.map(_.toInt), categories.map(_.toInt), grants.map(_.toInt), daterange, "/statistics")
-    @statGrid(Messages("by.project"), Messages("project"), Global.mapping.project.toMap.map{case (k,v) => (k.toString, v)}, operationsByProject)
-    @statGrid(Messages("by.category"), Messages("category"), Global.mapping.category.toMap.map{case (k,v) => (k.toString, v)}, operationsByCategory)
-    @statGrid(Messages("by.grant"), Messages("grant"), Global.mapping.grant.toMap.map{case (k,v) => (k.toString, v)}, operationsByGrant)
+    @statGrid(Messages("by.project"), Messages("project"), Expenditures.projects.map{case (k,v) => (k.toString, v.name)}, operationsByProject)
+    @statGrid(Messages("by.category"), Messages("category"), Expenditures.categories.map{case (k,v) => (k.toString, v.name)}, operationsByCategory)
+    @statGrid(Messages("by.grant"), Messages("grant"), Expenditures.grants.map{case (k,v) => (k.toString, v.name)}, operationsByGrant)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
 
 }

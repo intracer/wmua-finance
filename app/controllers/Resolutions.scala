@@ -34,7 +34,7 @@ object Resolutions extends Controller with Secured {
         val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
         var operations: Seq[Operation] = filterOperations(projects, categories, grants, daterange)
 
-        val total = operations.map(_.amount).sum.toDouble
+        val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 
         Ok(views.html.resolutions(new User(***REMOVED***), operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange)))
   }

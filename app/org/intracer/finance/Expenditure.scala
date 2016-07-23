@@ -6,7 +6,7 @@ import org.intracer.finance.slick.Expenditures
 
 case class Expenditure(id: Option[Int] = None,
                        date: Timestamp,
-                       amount: BigDecimal,
+                       amount: Option[BigDecimal],
                        from: Account,
                        category: CategoryF,
                        project: Project,

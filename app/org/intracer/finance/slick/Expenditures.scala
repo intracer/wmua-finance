@@ -15,7 +15,7 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def date = column[Timestamp]("op_date", SqlType("datetime "))
 
-  def amount = column[BigDecimal]("amount")
+  def amount = column[Option[BigDecimal]]("amount")
 
   def from = column[Int]("account_id")
   def categoryId = column[Int]("cat_id")
@@ -45,7 +45,7 @@ object Expenditures {
 
   lazy val accounts: Map[Int, Account] = Global.db.accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
-  def fromDb(t: (Option[Int], Timestamp, BigDecimal, Int, Int, Int, Option[Int], Option[String], String)) = {
+  def fromDb(t: (Option[Int], Timestamp, Option[BigDecimal], Int, Int, Int, Option[Int], Option[String], String)) = {
     new Expenditure(t._1, t._2, t._3,  accounts(t._4), categories(t._5), projects(t._6), t._7.map(grants),  t._8, t._9)
   }
 

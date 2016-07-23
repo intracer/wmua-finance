@@ -40,7 +40,8 @@ object Operations extends Controller with Secured {
         val daterange = map.get("daterange").orElse(Option(Seq(defaultDateRange)))
         var operations = filterOperations(projects, categories, grants, daterange)
 
-        val total = operations.map(_.amount).sum.toDouble
+        val amounts = operations.map(_.amount.map(_.toDouble).getOrElse(0.0))
+        val total = amounts.sum
 
         Ok(views.html.operations(new User(***REMOVED***),
           operations, total, projects, categories, grants,
@@ -63,7 +64,7 @@ object Operations extends Controller with Secured {
 
         val keys = filtered.map(o => o.to.grantRow.getOrElse("?????") + o.date.toString()).sorted
 
-        val total = filtered.map(_.amount).sum.toDouble
+        val total = filtered.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 
         Ok(views.html.operations(
           new User(***REMOVED***), sorted, total, projects, categories, grants,
@@ -93,7 +94,7 @@ object Operations extends Controller with Secured {
 
       val withZeros = operationsByGrantRow //++ zeros.map(code => code -> Seq.empty)
 
-      val total = operations.map(_.amount).sum.toDouble
+      val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 
       Ok(views.html.grantStatistics(operations, total, projects, categories, grants,
         daterange.map(_.head).getOrElse(defaultDateRange),
@@ -102,7 +103,7 @@ object Operations extends Controller with Secured {
 
 
   def filterOperations(projects: Set[Int], categories: Set[Int], grants: Set[Int], daterange: Option[Seq[String]]): Seq[Operation] = {
-    var operations = Global.operations.sortBy(_.date.toString())
+    var operations = Global.operations.sortBy(_.date.toString())(Ordering.fromLessThan((s1: String, s2: String) => s1 > s2))
 
     if (projects.nonEmpty) {
       operations = operations.filter(op => projects.contains(op.to.project.id.get))
@@ -162,7 +163,7 @@ object Operations extends Controller with Secured {
 
       val operationsByGrantRow = operations.groupBy(o => o.to.grantRow.getOrElse(""))
 
-      val total = operations.map(_.amount).sum.toDouble
+      val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 
       Ok(views.html.statistics(operations, total, projects, categories, grants, daterange.map(_.head).getOrElse(defaultDateRange),
         operationsByProject, operationsByCategory, operationsByGrant, operationsByGrantRow, operationsByProjectAndCategory))
@@ -187,7 +188,9 @@ object Operations extends Controller with Secured {
               idFilter.map(_.descr).update(u.value)
 
             case "amount" =>
-              idFilter.map(_.amount).update(new java.math.BigDecimal(u.value))
+              idFilter.map(_.amount).update(
+                Option(u.value).filter(_.nonEmpty).map(x => new java.math.BigDecimal(x))
+              )
 
             case "grant" =>
               idFilter.map(_.grantId).update(Try(u.value.toInt).toOption)

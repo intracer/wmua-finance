@@ -42,7 +42,7 @@
                     </td>
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum)
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
                         @if(false) { =
                             @for(op <- groupedOperations(groupId)) {
                                 <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
@@ -52,7 +52,7 @@
 
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount).sum / Global.uahToUsd)
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd)
                     </td>
 
 @if(false){                    <td>

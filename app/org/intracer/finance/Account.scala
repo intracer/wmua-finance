@@ -33,11 +33,11 @@ case class Account(id: Option[Int] = None, name: String) extends OpPoint
 class Operation(
                  val from: OpPoint,
                  val to: Expenditure,
-                 val amount: BigDecimal,
+                 val amount: Option[BigDecimal],
                  val date: DateTime) {
   override def toString: String = s"${date.toString().substring(0, 10)}: $from -> $to, amount: $amount"
 
-  def amountString = Formatter.fmt.format(amount.toDouble)
+  def amountString = amount.map(_.toDouble).map(Formatter.fmt.format).getOrElse("")
 }
 
 object Formatter {

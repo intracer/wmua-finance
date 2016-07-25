@@ -51,6 +51,11 @@ object Global extends GlobalSettings {
     }.mkString(", ")
   }
 
+  def accountsJson: String = {
+    Expenditures.accounts.toSeq.sortBy(_._2.name.toLowerCase).map {
+      case (id, account) => s"""{ value: "$id", text: "${account.name}"}"""
+    }.mkString(", ")
+  }
 
   def isNumber(s: String): Boolean = s.matches("[+-]?\\d+.?\\d+")
 

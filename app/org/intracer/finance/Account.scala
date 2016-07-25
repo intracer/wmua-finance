@@ -50,4 +50,3 @@ object Formatter {
 }
 
 
-object CacheAccount extends Account(Some(1), "Cache")

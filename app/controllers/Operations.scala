@@ -195,6 +195,9 @@ object Operations extends Controller with Secured {
             case "grant" =>
               idFilter.map(_.grantId).update(Try(u.value.toInt).toOption)
 
+            case "account" =>
+              idFilter.map(_.from).update(u.value.toInt)
+
             case "project" =>
               idFilter.map(_.projectId).update(u.value.toInt)
 

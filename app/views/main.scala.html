@@ -113,6 +113,14 @@
                     showbuttons: false
                 });
 
+                $('.edit_account').editable({
+                    source: [
+                        @Html(Global.accountsJson)
+                    ],
+                    showbuttons: false
+                });
+
+
             });
         </script>
     </head>

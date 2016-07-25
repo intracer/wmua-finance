@@ -23,7 +23,7 @@ CREATE TABLE grant_list (
 CREATE TABLE operation (
   id         SERIAL         NOT NULL PRIMARY KEY,
   op_date    VARCHAR(20)    NOT NULL,
-  amount     DECIMAL(20, 2) NOT NULL,
+  amount     DECIMAL(20, 2),
   account_id INT            ,
   cat_id     INT            ,
   proj_id    INT            ,
@@ -36,9 +36,9 @@ CREATE TABLE operation (
 );
 
 
-ALTER TABLE wmua_fin.operation add COLUMN grant_row VARCHAR(20);
+ALTER TABLE operation add COLUMN grant_row VARCHAR(20);
 
-ALTER TABLE wmua_fin.operation
+ALTER TABLE operation
   ADD CONSTRAINT operation_project_id_id_fk
 FOREIGN KEY (proj_id) REFERENCES project (id);
 

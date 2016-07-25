@@ -18,12 +18,15 @@ GET         /resolutions         controllers.Resolutions.list
 
 GET         /statistics          controllers.Operations.statistics
 
+
 GET         /logout              controllers.Application.logout()
 
 POST        /auth                controllers.Application.auth()
 
 GET         /auth                controllers.Application.index
 
-GET         /grant/*name         controllers.Grants.stat(name)
+GET         /grant              controllers.Grants.stat(name: String)
+
+GET         /grants          controllers.Grants.list
 
 POST        /update_op           controllers.Operations.update()

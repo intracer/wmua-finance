@@ -7,7 +7,9 @@ scalacOptions += "-target:jvm-1.8"
 
 scalaVersion := "2.11.8"
 
-resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+val scalawikiVersion = "0.4.3"
+
+resolvers += Resolver.bintrayRepo("intracer", "maven")
 
 libraryDependencies ++= Seq(
   "com.github.nscala-time" %% "nscala-time" % "1.8.0",
@@ -16,6 +18,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "3.1.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.h2database" % "h2" % "1.4.187",
+  "org.scalawiki" %% "scalawiki-core" % scalawikiVersion,
 
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",

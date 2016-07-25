@@ -1,0 +1,36 @@
+@(user: org.intracer.finance.User,
+        grants: Seq[org.intracer.finance.Grant]
+)(implicit flash: Flash, lang: Lang, messages: Messages)
+
+@main(Messages("grants"), user) {
+
+    <div class="row">
+
+
+        <table class="table table-striped table-bordered" id="operations">
+            <thead>
+                <tr>
+                    <th style="width: 50%">@Messages("name")</th>
+                    <th>@Messages("url")</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(grant <- grants) {
+                @defining(grant.id.getOrElse(0)) { id =>
+                    <tr>
+                        <td>
+                            <a href="@routes.Grants.stat(grant.name)">@grant.name</a>
+                        </td>
+                        <td>
+                            @if(grant.toUrl.isDefined) {
+                                <a href="@grant.toUrl.get">Meta</a>
+                            }
+                        </td>
+                    </tr>
+
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+}

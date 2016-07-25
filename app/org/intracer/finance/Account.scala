@@ -18,7 +18,13 @@ trait HasName {
 
 case class CategoryF(id: Option[Int] = None, name: String = "") extends HasName
 
-case class Grant(id: Option[Int] = None, name: String = "", url: String = "") extends HasName
+case class Grant(id: Option[Int] = None, name: String = "", url: Option[String] = None) extends HasName {
+  def toUrl = if (name.startsWith("Grants:")) {
+    Some("https://meta.wikimedia.org/wiki/" + name)
+  } else {
+    None
+  }
+}
 
 case class Project(id: Option[Int] = None, name: String = "") extends HasName
 

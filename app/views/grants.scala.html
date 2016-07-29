@@ -19,7 +19,7 @@
                 @defining(grant.id.getOrElse(0)) { id =>
                     <tr>
                         <td>
-                            <a href="@routes.Grants.stat(grant.name)">@grant.name</a>
+                            <a href="@routes.Grants.items(grant.id.get)">@grant.name</a>
                         </td>
                         <td>
                             @if(grant.toUrl.isDefined) {

@@ -1,5 +1,6 @@
 package client.finance
 
+import org.intracer.finance.Grant
 import org.scalawiki.MwBot
 import org.scalawiki.wikitext.SwebleParser
 import org.sweble.wikitext.engine.config.WikiConfig
@@ -14,14 +15,6 @@ object GrantReader extends SwebleParser {
   val config: WikiConfig = DefaultConfigEnWp.generate
 
   val bot = MwBot.fromHost("meta.wikimedia.org")
-
-  def main(args: Array[String]) {
-
-    val title = "Grants:PEG/WM_UA/Programs_in_Ukraine_2014"
-    val items = grantItems(title)
-
-    println(items)
-  }
 
   def sectionByTitle(title: String): PartialFunction[WtNode, WtNode] = {
     case node: WtNode if Section(node).exists(_.heading.toLowerCase == title.toLowerCase) => node
@@ -46,7 +39,8 @@ object GrantReader extends SwebleParser {
       ||-
       | """.stripMargin
 
-  def grantItems(title: String): Seq[GrantItem] = {
+  def grantItems(grant: Grant): Seq[GrantItem] = {
+    val title = grant.name
 
     val budgetPage = if (title.startsWith("Grants:APG")) {
       "Grants:APG/Proposals/2015-2016 round1/Wikimedia Ukraine/Proposal form/Detailed budget"
@@ -92,6 +86,7 @@ object GrantReader extends SwebleParser {
       else
         GrantItemFactory(values)
     }
-    items
+
+    items.map(_.copy(grantId = grant.id))
   }
 }

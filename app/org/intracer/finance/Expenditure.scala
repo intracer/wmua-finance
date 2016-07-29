@@ -2,6 +2,7 @@ package org.intracer.finance
 
 import java.sql.Timestamp
 
+import client.finance.GrantItem
 import org.intracer.finance.slick.Expenditures
 
 case class Expenditure(id: Option[Int] = None,
@@ -11,6 +12,7 @@ case class Expenditure(id: Option[Int] = None,
                        category: CategoryF,
                        project: Project,
                        grant: Option[Grant],
+                       grantItem: Option[GrantItem],
                        grantRow: Option[String],
                        desc: String
                       ) extends OpPoint {

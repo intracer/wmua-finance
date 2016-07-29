@@ -17,9 +17,10 @@ case class GrantItem(id: Option[Int] = None,
                     ) extends HasName {
 
   //  Number	Item description	Unit	Qty	Cost per unit UAH / USD	Total cost USD	WMF contribution (USD)	Other sources (USD)	Notes
-  override def toString: String = s"$number $description - $wmfContrib"
+  override def toString: String = s"$number $description $$$totalCost"
 
   override def name = number + " " + description
+
 }
 
 object GrantItemFactory {

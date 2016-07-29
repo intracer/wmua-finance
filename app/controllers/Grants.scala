@@ -9,12 +9,14 @@ import play.api.i18n.Messages.Implicits._
 
 object Grants extends Controller with Secured {
 
-  def stat(name: String) = withAuth {
+  def items(id: Int) = withAuth {
     username =>
       implicit request =>
 
-        val items = GrantReader.grantItems(name)
-        Ok(views.html.grantStat(new User(***REMOVED***), name, items))
+        val grant = Expenditures.grants(id)
+        val items = GrantReader.grantItems(grant)
+
+        Ok(views.html.grantItems(new User(***REMOVED***), grant, items))
   }
 
   def list() = withAuth {
@@ -24,6 +26,19 @@ object Grants extends Controller with Secured {
         val grants = Expenditures.grants.values.toSeq
 
         Ok(views.html.grants(new User(***REMOVED***), grants))
+
+  }
+
+  def importItems(id: Int) = withAuth {
+    username =>
+      implicit request =>
+
+        val grant = Expenditures.grants(id)
+        val items = GrantReader.grantItems(grant)
+
+        Global.db.grantItemDao.insertAll(items)
+
+        Ok(views.html.grantItems(new User(***REMOVED***), grant, items))
 
   }
 

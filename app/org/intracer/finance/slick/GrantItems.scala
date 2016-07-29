@@ -1,9 +1,7 @@
 package org.intracer.finance.slick
 
 import client.finance.GrantItem
-import org.intracer.finance.Account
 import slick.driver.H2Driver.api._
-import squants._
 
 class GrantItems(tag: Tag) extends Table[GrantItem](tag, "grant_item") {
 

@@ -20,7 +20,7 @@ class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures],
     db.run(query.forceInsertAll(exps)).await
   }
 
-  def list: Seq[Expenditure] = db.run(query.sortBy(_.date).result).await
+  def list: Seq[Expenditure] = db.run(query.sortBy(_.date.desc).result).await
 
 //  def plus(n: Int) = {
 //    val exps = (1 to n).map { _ =>

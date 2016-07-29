@@ -29,11 +29,17 @@ class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
     (tag: Tag) => new Accounts(tag)
   )
 
+  val grantItems = TableQuery[GrantItems] (
+    (tag: Tag) => new GrantItems(tag)
+  )
+
+
   def tables =
     Seq(
       categories,
       projects,
       grants,
+      grantItems,
       accounts
     )
 
@@ -42,6 +48,7 @@ class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
   val projectDao = new ProjectDao(this, projects, driver)
   val expDao = new ExpenditureDao(this, exps, driver)
   val accountDao = new AccountDao(this, accounts, driver)
+  val grantItemDao = new GrantItemsDao(this, grantItems, driver)
 
   def createTables() {
     createIfNotExists()

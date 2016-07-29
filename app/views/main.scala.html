@@ -1,4 +1,5 @@
 @(title: String, user: org.intracer.finance.User = null)(content: Html)(implicit lang: Lang, messages: Messages)
+    @import org.intracer.finance.slick.Expenditures
 
 <!DOCTYPE html>
 
@@ -30,7 +31,7 @@
         <script src="https://cdn.datatables.net/responsive/2.1.0/js/responsive.bootstrap.min.js"></script>
 
         <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>
 
             <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
@@ -106,6 +107,15 @@
                     showbuttons: false
                 });
 
+                @for(grant <- Expenditures.grants.values if Expenditures.grantItems.getOrElse(grant.id.get, Seq.empty).nonEmpty) {
+                $('.edit_grant_item_@grant.id.get').editable({
+                    source: [
+                        @Html(Global.grantItemsJson(grant.id.get))
+                    ],
+                    showbuttons: false
+                });
+                }
+
                 $('.edit_grant').editable({
                     source: [
                         @Html(Global.grantsJson)
@@ -113,14 +123,13 @@
                     showbuttons: false
                 });
 
+
                 $('.edit_account').editable({
                     source: [
                         @Html(Global.accountsJson)
                     ],
                     showbuttons: false
                 });
-
-
             });
         </script>
     </head>

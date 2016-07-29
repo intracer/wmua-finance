@@ -3,30 +3,32 @@
 # ~~~~
 
 # Home page
-GET         /                    controllers.Application.index
+GET         /                      controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file        controllers.Assets.at(path="/public", file)
+GET         /assets/*file          controllers.Assets.at(path="/public", file)
 
-GET         /operations          controllers.Operations.list
+GET         /operations            controllers.Operations.list
 
-GET         /bygrantrow          controllers.Operations.byGrantRow
+GET         /bygrantrow            controllers.Operations.byGrantRow
 
-GET         /bygrantrowstat      controllers.Operations.byGrantRowStat
+GET         /bygrantrowstat        controllers.Operations.byGrantRowStat
 
-GET         /resolutions         controllers.Resolutions.list
+GET         /resolutions           controllers.Resolutions.list
 
-GET         /statistics          controllers.Operations.statistics
+GET         /statistics            controllers.Operations.statistics
 
 
-GET         /logout              controllers.Application.logout()
+GET         /logout                controllers.Application.logout()
 
-POST        /auth                controllers.Application.auth()
+POST        /auth                  controllers.Application.auth()
 
-GET         /auth                controllers.Application.index
+GET         /auth                  controllers.Application.index
 
-GET         /grant              controllers.Grants.stat(name: String)
+GET         /grant                 controllers.Grants.items(id: Int)
 
-GET         /grants          controllers.Grants.list
+POST        /grant/import          controllers.Grants.importItems(id: Int)
 
-POST        /update_op           controllers.Operations.update()
+GET         /grants                controllers.Grants.list
+
+POST        /update_op             controllers.Operations.update()

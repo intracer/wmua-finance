@@ -20,6 +20,7 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.187",
   "org.scalawiki" %% "scalawiki-core" % scalawikiVersion,
 
+  "com.adrianhurt" %% "play-bootstrap" % "1.0-P24-B3",
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
   "io.spray" % "spray-util_2.11" % "1.3.3",

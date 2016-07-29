@@ -1,18 +1,23 @@
 @(user: org.intracer.finance.User,
-        name: String,
+        grant: org.intracer.finance.Grant,
         grantItems: Seq[client.finance.GrantItem]
 )(implicit flash: Flash, lang: Lang, messages: Messages)
+
+@import b3.vertical.fieldConstructor
 
 @main(Messages("grant"), user) {
 
 
-    <h3><a href="https://meta.wikimedia.org/wiki/@name">@name</a></h3>
+    <h3><a href="https://meta.wikimedia.org/wiki/@grant.name">@grant.name</a></h3>
 
+    @b3.form(routes.Grants.importItems(grant.id.get)) {
+        @b3.submit('class -> "btn btn-primary"){ Import }
+    }
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
 
-                <th style="width:60pt">@Messages("Number")</th>
+                <th style="width: 60pt">@Messages("Number")</th>
                 <th>@Messages("Item description")</th>
                 <th>@Messages("Unit")</th>
                 <th>@Messages("Qty")</th>

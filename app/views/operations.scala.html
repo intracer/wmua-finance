@@ -21,7 +21,6 @@
                 <th>@Messages("category")</th>
                 <th>@Messages("grant")</th>
                 <th>@Messages("grant item")</th>
-                <th>@Messages("grant.row")</th>
                 <th>@Messages("amount")</th>
                 <th>@Messages("account")</th>
                 <th>@Messages("descr")</th>
@@ -60,11 +59,6 @@
                         data-value="@operation.to.grantItem.flatMap(_.id).getOrElse(0)"
                     data-type="select" data-pk="@id" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem">
                     @operation.to.grantItem.map(_.name).getOrElse("")
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("grantRow")" data-name="grantRow">
-                        @operation.to.grantRow.getOrElse("")
                     </a>
                 </td>
                 <td>

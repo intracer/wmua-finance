@@ -4,6 +4,8 @@
         projects: Set[Int],
         categories: Set[Int],
         grants: Set[Int],
+        grantItems: Set[Int],
+        accounts: Set[Int],
         daterange: String,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
@@ -11,7 +13,7 @@
 
     <div class="row">
 
-    @filter(operations, projects, categories, grants, daterange, url)
+    @filter(operations, projects, categories, grants, grantItems, accounts, daterange, url)
 
     <table class="table table-striped table-bordered" id="operations">
         <thead>

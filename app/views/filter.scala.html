@@ -2,17 +2,19 @@
         projects: Set[Int],
         categories: Set[Int],
         grants: Set[Int],
+        grantItems: Set[Int],
+        accounts: Set[Int],
         daterange: String,
         action: String,
         rate: Option[Double] = None)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.slick.Expenditures
-<form class="form-vertical" action="@action" method="get" style="margin-bottom: 5px">
+<form class="form-horizontal" action="@action" method="get" style="margin-bottom: 5px">
     <fieldset>
 
         <div class="row">
 
-            <div class="span9">
+            <div class="col-md-4">
                 <label class="control-label" for="projects_select" style="width: 60pt">@Messages("projects")</label>
                 <select id="projects_select" class="selectpicker" multiple name="projects">
                 @for((id, project) <- Expenditures.projects.toSeq.sortBy(_._2.name.toLowerCase)) {
@@ -21,7 +23,7 @@
                 </select>
             </div>
 
-            <div class="span9">
+            <div class="col-md-4">
                 <label class="control-label" for="categories_select" style="width: 60pt">@Messages("categories")</label>
                 <select id="categories_select" class="selectpicker" multiple name="categories">
                 @for((id, category) <- Expenditures.categories.toSeq.sortBy(_._2.name.toLowerCase)) {
@@ -30,7 +32,7 @@
                 </select>
             </div>
 
-            <div class="span9">
+            <div class="col-md-4">
                 <label class="control-label" for="grants_select" style="width: 60pt">@Messages("grants")</label>
                 <select id="grants_select" class="selectpicker" multiple name="grants">
                 @for((id, grant) <- Expenditures.grants.toSeq.sortBy(_._2.name.toLowerCase)) {
@@ -39,7 +41,25 @@
                 </select>
             </div>
 
-            <div class="span3">
+            <div class="col-md-4">
+                <label class="control-label" for="grantItems_select" style="width: 60pt">@Messages("grants items")</label>
+                <select id="grantItems_select" class="selectpicker" multiple name="grantItems">
+                @for(grantItem <- Expenditures.grantItems(17).sortBy(_.number.toLowerCase)) {
+                    <option value="@grantItem.id.get" @if(grantItems.contains(grantItem.id.get)) {selected}>@grantItem.name </option>
+                }
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="control-label" for="accounts_select" style="width: 60pt">@Messages("accounts")</label>
+                <select id="accounts_select" class="selectpicker" multiple name="accounts">
+                @for((id, account) <- Expenditures.accounts.toSeq.sortBy(_._2.name.toLowerCase)) {
+                    <option value="@id" @if(accounts.contains(id)) {selected}>@account.name </option>
+                }
+                </select>
+            </div>
+
+            <div class="col-md-4">
                 <label class="control-label" for="reservation">@Messages("dates")</label>
                 <div class="controls">
                     <div class="input-prepend">
@@ -50,13 +70,13 @@
             </div>
 
             @if(rate.isDefined) {
-                <div class="span3">
+                <div class="col-md-2">
                     <label class="control-label" for="rate">@Messages("rate")</label>
                     <input type="text" style="width: 180px" name="rate" id="rate" value="@rate.get" />
                 </div>
             }
 
-            <div class="span3">
+            <div class="col-md-2">
                 <button type="submit" class="btn btn-primary" style="margin-top: 18pt">@Messages("filter")</button>
             </div>
         </div>

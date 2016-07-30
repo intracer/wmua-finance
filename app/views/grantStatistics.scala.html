@@ -4,6 +4,8 @@
         projects: Set[Int],
         categories: Set[Int],
         grants: Set[Int],
+        grantItems: Set[Int],
+        accounts: Set[Int],
         daterange: String,
         operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]],
         rate: Option[Double] = None
@@ -75,7 +77,7 @@
 
 
 @main(Messages("operations")) {
-    @filter(operations, projects, categories, grants, daterange, "/bygrantrowstat", rate)
+    @filter(operations, projects, categories, grants, grantItems, accounts, daterange, "/bygrantrowstat", rate)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
 }
 

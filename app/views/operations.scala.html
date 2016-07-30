@@ -57,7 +57,7 @@
                     <a href="#"
                         @if(operation.to.grant.isDefined){class="edit_grant_item_@operation.to.grant.map(_.code).getOrElse(0)"}
                         data-value="@operation.to.grantItem.flatMap(_.id).getOrElse(0)"
-                    data-type="select" data-pk="@id" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem">
+                    data-type="select2" data-pk="@id" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem">
                     @operation.to.grantItem.map(_.name).getOrElse("")
                     </a>
                 </td>

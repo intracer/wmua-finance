@@ -39,17 +39,17 @@
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_project" data-type="select" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
+                    <a href="#" class="edit_project" data-type="select2" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
                     @operation.to.projectName
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_category" data-type="select" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
+                    <a href="#" class="edit_category" data-type="select2" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
                     @operation.to.categoryName
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_grant" data-type="select" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
+                    <a href="#" class="edit_grant" data-type="select2" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
                     @operation.to.grantName
                     </a>
                 </td>
@@ -68,7 +68,7 @@
                 </td>
 
                 <td>
-                    <a href="#" class="edit_account" data-type="select" data-pk="@id" data-value="@operation.to.from.code" data-url="/update_op" data-title="@Messages("account")" data-name="account">
+                    <a href="#" class="edit_account" data-type="select2" data-pk="@id" data-value="@operation.to.from.code" data-url="/update_op" data-title="@Messages("account")" data-name="account">
                     @operation.to.from.name
                     </a>
                 </td>

@@ -98,6 +98,11 @@
                     source: [
                         @Html(Global.projectsJson)
                     ],
+                    select2: {
+                        placeholder: 'Select a project',
+                        allowClear: true,
+                        width: '250px'
+                    },
                     showbuttons: false
                 });
 
@@ -105,6 +110,11 @@
                     source: [
                         @Html(Global.categoriesJson)
                     ],
+                    select2: {
+                        placeholder: 'Select a category',
+                        allowClear: true,
+                        width: '450px'
+                    },
                     showbuttons: false
                 });
 
@@ -116,7 +126,7 @@
                     select2: {
                         placeholder: 'Select a grant item',
                         allowClear: true,
-                        width: '400px',
+                        width: '450px',
                         id: function(o) {return o.value}
                     },
                     showbuttons: false
@@ -127,14 +137,23 @@
                     source: [
                         @Html(Global.grantsJson)
                     ],
+                    select2: {
+                        placeholder: 'Select a grant',
+                        allowClear: true,
+                        width: '400px'
+                    },
                     showbuttons: false
                 });
-
 
                 $('.edit_account').editable({
                     source: [
                         @Html(Global.accountsJson)
                     ],
+                    select2: {
+                        placeholder: 'Select an account',
+                        allowClear: true,
+                        width: '150px'
+                    },
                     showbuttons: false
                 });
             });

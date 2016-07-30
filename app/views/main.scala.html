@@ -113,7 +113,8 @@
                     select2: {
                         placeholder: 'Select a category',
                         allowClear: true,
-                        width: '450px'
+                        width: '450px',
+                        id: function(o) {return o.value}
                     },
                     showbuttons: false
                 });

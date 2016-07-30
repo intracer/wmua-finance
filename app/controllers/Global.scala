@@ -7,6 +7,8 @@ import org.intracer.finance.slick.{Expenditures, FinDatabase}
 import org.joda.time.DateTime
 import play.api._
 
+import scala.collection.SortedSet
+
 object Global extends GlobalSettings {
 
   def operations: Seq[Operation] = {
@@ -39,8 +41,17 @@ object Global extends GlobalSettings {
   }
 
   def categoriesJson: String = {
-    Expenditures.categories.toSeq.sortBy(_._2.name.toLowerCase).map {
-      case (id, cat) => s"""{ value: "$id", text: "${cat.name}"}"""
+    val elems = Expenditures.categories.values.flatMap(_.name.split("/").headOption).toSeq
+    val parents = SortedSet(elems: _*)
+
+    parents.map { parent =>
+      s"""{text: "$parent", children: [""" +
+        Expenditures.categories.toSeq
+          .filter(_._2.name.toLowerCase.startsWith(parent.toLowerCase))
+          .sortBy(_._2.name.toLowerCase)
+          .map {
+            case (id, cat) => s"""{ value: "$id", text: "${cat.name}"}"""
+          }.mkString(", ") + "]}"
     }.mkString(", ")
   }
 
@@ -56,9 +67,12 @@ object Global extends GlobalSettings {
     )
     (1 to 4).map { program =>
       s"""{text: "${programs(program - 1)}", children: [""" +
-        Expenditures.grantItems.getOrElse(grantId, Seq.empty).filter(_.number.startsWith(program.toString)).map {
-          item => s"""{ value: "${item.id.get}", text: "${item.name}"}"""
-        }.mkString(", ") + "]}"
+        Expenditures.grantItems
+          .getOrElse(grantId, Seq.empty)
+          .filter(_.number.startsWith(program.toString))
+          .map {
+            item => s"""{ value: "${item.id.get}", text: "${item.name}"}"""
+          }.mkString(", ") + "]}"
     }.mkString(", ")
   }
 

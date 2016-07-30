@@ -10,6 +10,7 @@
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
         <!-- ************** Bootstrap begin ************** -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -20,7 +21,6 @@
          <!-- ************** Bootstrap select begin ************** -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
         <!-- ************** Bootstrap select end ************** -->
 
         <!-- ************** Data tables begin ************** -->
@@ -45,9 +45,6 @@
 
         <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
-        @if(lang.satisfies(Lang("uk"))) {
-            <script src="@routes.Assets.at("javascripts/min/lang/uk.js")"></script>
-        }
             <!-- Include Date Range Picker -->
         <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
@@ -55,6 +52,8 @@
         <script type="text/javascript">
 
             $(document).ready(function () {
+
+                var newRowInnerHtml = document.getElementById("newrow").innerHTML;
 
                 $('.selectpicker').selectpicker('show');
 
@@ -82,80 +81,177 @@
 
                 $.fn.editable.defaults.mode = 'popup';
 
-                $('.editable').editable();
+                var initEditableFunc = function() {
+                    $('.editable').editable();
 
-                $('.edit_date').editable({
-                    format: 'yyyy-mm-dd',
-                    viewformat: 'dd/mm/yyyy',
-                    mode: 'popup',
-                    datepicker: {
-                        weekStart: 1
-                    },
-                    combodate: { maxYear: 2016 }
-                });
+                    $('.edit_date').editable({
+                        format: 'yyyy-mm-dd',
+                        viewformat: 'dd/mm/yyyy',
+                        mode: 'popup',
+                        datepicker: {
+                            weekStart: 1
+                        },
+                        combodate: { maxYear: 2016 }
+                    });
 
-                $('.edit_project').editable({
-                    source: [
-                        @Html(Global.projectsJson)
-                    ],
-                    select2: {
-                        placeholder: 'Select a project',
-                        allowClear: true,
-                        width: '250px'
-                    },
-                    showbuttons: false
-                });
+                    $('.edit_project').editable({
+                        source: [
+                            @Html(Global.projectsJson)
+                        ],
+                        select2: {
+                            placeholder: 'Select a project',
+                            allowClear: true,
+                            width: '250px'
+                        },
+                        showbuttons: false
+                    });
 
-                $('.edit_category').editable({
-                    source: [
-                        @Html(Global.categoriesJson)
-                    ],
-                    select2: {
-                        placeholder: 'Select a category',
-                        allowClear: true,
-                        width: '450px',
-                        id: function(o) {return o.value}
-                    },
-                    showbuttons: false
-                });
+                    $('.edit_category').editable({
+                        source: [
+                            @Html(Global.categoriesJson)
+                        ],
+                        select2: {
+                            placeholder: 'Select a category',
+                            allowClear: true,
+                            width: '450px',
+                            id: function(o) {return o.value}
+                        },
+                        showbuttons: false
+                    });
 
-                @for(grant <- Expenditures.grants.values if Expenditures.grantItems.getOrElse(grant.id.get, Seq.empty).nonEmpty) {
-                $('.edit_grant_item_@grant.id.get').editable({
-                    source: [
-                        @Html(Global.grantItemsJson(grant.id.get))
-                    ],
-                    select2: {
-                        placeholder: 'Select a grant item',
-                        allowClear: true,
-                        width: '450px',
-                        id: function(o) {return o.value}
-                    },
-                    showbuttons: false
-                });
-                }
+                    @for(grant <- Expenditures.grants.values if Expenditures.grantItems.getOrElse(grant.id.get, Seq.empty).nonEmpty) {
+                    $('.edit_grant_item_@grant.id.get').editable({
+                        source: [
+                            @Html(Global.grantItemsJson(grant.id.get))
+                        ],
+                        select2: {
+                            placeholder: 'Select a grant item',
+                            allowClear: true,
+                            width: '450px',
+                            id: function(o) {return o.value}
+                        },
+                        showbuttons: false
+                    });
+                    }
 
-                $('.edit_grant').editable({
-                    source: [
-                        @Html(Global.grantsJson)
-                    ],
-                    select2: {
-                        placeholder: 'Select a grant',
-                        allowClear: true,
-                        width: '400px'
-                    },
-                    showbuttons: false
-                });
+                    $('.edit_grant').editable({
+                        source: [
+                            @Html(Global.grantsJson)
+                        ],
+                        select2: {
+                            placeholder: 'Select a grant',
+                            allowClear: true,
+                            width: '400px'
+                        },
+                        showbuttons: false
+                    });
 
-                $('.edit_account').editable({
-                    source: [
-                        @Html(Global.accountsJson)
-                    ],
-                    select2: {
-                        placeholder: 'Select an account',
-                        allowClear: true,
-                        width: '150px'
-                    },
-                    showbuttons: false
+                    $('.edit_account').editable({
+                        source: [
+                            @Html(Global.accountsJson)
+                        ],
+                        select2: {
+                            placeholder: 'Select an account',
+                            allowClear: true,
+                            width: '150px'
+                        },
+                        showbuttons: false
+                    });
+
+                    $('.newrow').on('save.newoperation', function(){
+                        var that = this;
+                        setTimeout(function() {
+                            $(that).closest('td').next().find('.newrow').editable('show');
+                        }, 200);
+                    });
+
+                    $('#new_required').editable('option', 'validate', function(v) {
+                        if(!v) return 'Required field!';
+                    });
+                };
+
+                initEditableFunc();
+
+                var saveBtnFunc = function() {
+                    $('.newrow').editable('submit', {
+                        url: '/newoperation',
+                        ajaxOptions: {
+                            dataType: 'json' //assuming json response
+                        },
+                        success: function(data, config) {
+                            if(data && data.id) {  //record created, response like {"id": 2}
+                                //set pk
+                                $(this).editable('option', 'pk', data.id);
+                                //remove unsaved class
+                                $(this).removeClass('editable-unsaved');
+                                //show messages
+//                                var msg = 'Operation created! Now editables submit individually.';
+//                                $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
+
+                                $(this).off('save.newoperation');
+
+                                var resetBtn = $('#reset-btn');
+                                var saveBtn = $('#save-btn');
+
+                                var row = document.getElementById("newrow");
+
+                                var newRow = document.getElementById("operations").insertRow(1);
+                                newRow.innerHTML = newRowInnerHtml;
+
+                                row.removeAttribute("id");
+                                row.removeAttribute("class");
+
+                                newRow.setAttribute("id", "newrow");
+
+                                resetBtn.remove();
+                                saveBtn.remove();
+
+                                $('#reset-btn').click(restBtnFunc);
+                                $('#save-btn').click(saveBtnFunc);
+
+                                $(row).find(".newrow").removeClass("newrow");
+
+                                initEditableFunc();
+
+                                $('.newrow').editable('setValue', null)
+                                        .editable('option', 'pk', null)
+                                        .removeClass('editable-unsaved');
+
+                            } else if(data && data.errors){
+                                //server-side validation error, response like {"errors": {"username": "username already exist"} }
+                                config.error.call(this, data.errors);
+                            }
+                        },
+                        error: function(errors) {
+                            var msg = '';
+                            if(errors && errors.responseText) { //ajax error, errors = xhr object
+                                msg = errors.responseText;
+                            } else { //validation error (client-side or server-side)
+                                $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
+                            }
+                            $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
+                        }
+                    });
+                };
+
+                $('#save-btn').click(saveBtnFunc);
+
+                var restBtnFunc = function() {
+                    $('.newrow').editable('setValue', null)
+                            .editable('option', 'pk', null)
+                            .removeClass('editable-unsaved');
+
+                    $('#save-btn').show();
+                    $('#msg').hide();
+                };
+
+                $('#reset-btn').click(restBtnFunc);
+
+                $('#add-btn').click(function() {
+                    var row = document.getElementById("newrow");
+                    row.parentNode.insertBefore(row.cloneNode(true), row);
+
+                    initEditableFunc();
                 });
             });
         </script>

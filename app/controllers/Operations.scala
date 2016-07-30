@@ -1,9 +1,11 @@
 package controllers
 
 import java.sql.Timestamp
+import java.util.Date
 
 import com.github.nscala_time.time.Imports._
-import org.intracer.finance.{Operation, User}
+import org.intracer.finance.slick.Expenditures
+import org.intracer.finance.{Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
@@ -75,7 +77,6 @@ object Operations extends Controller with Secured {
           daterange.map(_.head).getOrElse(defaultDateRange),
           "/bygrantrow"))
   }
-
 
   def byGrantRowStat = Action {
     implicit request =>
@@ -204,10 +205,9 @@ object Operations extends Controller with Secured {
         u => {
 
           import Global.db.expDao.driver.api._
-
           val q = Global.db.expDao.query
-
           val db = Global.db.expDao.db
+
           val idFilter = q.filter(_.id === u.pk.toInt)
 
           val cmd = u.name match {
@@ -243,10 +243,33 @@ object Operations extends Controller with Secured {
               idFilter.map(_.grantRow).update(Some(u.value))
           }
 
-          db.run(cmd).map(r => Ok(u.toString)).recover{ case cause => BadRequest(cause.getMessage)}
+          db.run(cmd).map(r => Ok(u.toString)).recover { case cause => BadRequest(cause.getMessage) }
         })
   }
 
+  def insert() = Action.async {
+    implicit request =>
+      insertForm.bindFromRequest.fold(
+        formWithErrors => // binding failure, you retrieve the form containing errors,
+          Future.successful(BadRequest(insertForm.errorsAsJson)),
+        u => {
+          import Global.db.expDao.driver.api._
+          val db = Global.db.expDao.db
+          val q = Global.db.expDao.query
+          val exp = new Expenditure(
+            date = new Timestamp(u.date.getTime),
+            amount = u.amount,
+            from = u.account.flatMap(Expenditures.accounts.get).orNull,
+            category = Expenditures.categories.get(u.category).orNull,
+            project = Expenditures.projects.get(u.project).orNull,
+            grant  = u.grant.flatMap(Expenditures.grants.get),
+            grantItem = u.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
+            desc = u.descr.orNull
+          )
+
+          db.run(q += exp).map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
+        })
+  }
 
   import play.api.data.format.Formats._
 
@@ -256,6 +279,19 @@ object Operations extends Controller with Secured {
       "pk" -> longNumber,
       "value" -> text
     )(Update.apply)(Update.unapply)
+  )
+
+  val insertForm = Form(
+    mapping(
+      "date" -> date("yyyy-MM-dd"),
+      "project" -> number,
+      "category" -> number,
+      "grant" -> optional(number),
+      "grantItem" -> optional(number),
+      "amount" -> optional(bigDecimal),
+      "account" -> optional(number),
+      "descr" -> optional(text)
+    )(NewOp.apply)(NewOp.unapply)
   )
 
   val form = Form(
@@ -269,3 +305,14 @@ object Operations extends Controller with Secured {
 }
 
 case class Update(name: String, pk: Long, value: String)
+
+case class NewOp(
+                  date: Date,
+                  project: Int,
+                  category: Int,
+                  grant: Option[Int],
+                  grantItem: Option[Int],
+                  amount: Option[BigDecimal],
+                  account: Option[Int],
+                  descr: Option[String]
+                )

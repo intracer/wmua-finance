@@ -32,3 +32,5 @@ POST        /grant/import          controllers.Grants.importItems(id: Int)
 GET         /grants                controllers.Grants.list
 
 POST        /update_op             controllers.Operations.update()
+
+POST        /newoperation          controllers.Operations.insert()

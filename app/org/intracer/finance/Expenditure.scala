@@ -13,7 +13,7 @@ case class Expenditure(id: Option[Int] = None,
                        project: Project,
                        grant: Option[Grant],
                        grantItem: Option[GrantItem],
-                       grantRow: Option[String],
+                       grantRow: Option[String] = None,
                        desc: String
                       ) extends OpPoint {
   override def name = desc

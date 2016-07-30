@@ -1,1 +1,9 @@
 tfoot {font-weight: bold; }
+
+.greenrow {
+    background: #C1FFC1;
+}
+
+.redcell {
+    background: #ffC1C1;
+}

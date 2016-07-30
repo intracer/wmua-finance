@@ -12,7 +12,7 @@ class User(val fullname: String) {
 
 object User {
   def login(username: String, password: String): Option[User] = {
-    if (sha1(username + "/" + password) == "bc3c8804c34b060f9f7379aedf5c7a940edba989") {
+    if (sha1(username + "/" + password) == "***REMOVED***") {
       Some(new User(***REMOVED***))
     } else {
       None
@@ -21,11 +21,11 @@ object User {
 
   def sha1(input: String) = {
 
-    val digest = MessageDigest.getInstance("SHA-1");
+    val digest = MessageDigest.getInstance("SHA-1")
 
-    digest.update(input.getBytes(), 0, input.length());
+    digest.update(input.getBytes(), 0, input.length())
 
-    new BigInteger(1, digest.digest()).toString(16);
+    new BigInteger(1, digest.digest()).toString(16)
   }
 
 }

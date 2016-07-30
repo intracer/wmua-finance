@@ -1,0 +1,131 @@
+<html>
+<head>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+
+    <!-- ************** Bootstrap begin ************** -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
+    <!-- ************** Bootstrap end ************** -->
+
+    <!-- ************** X editable begin *************** -->
+    <link href="app/assets/select2/select2.css" rel="stylesheet" type="text/css">
+    <script src="app/assets/select2/select2.js"></script>
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
+          rel="stylesheet"/>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <!-- ************** X editable end *************** -->
+
+
+    <link rel="stylesheet" media="screen" href="public/stylesheets/main.css">
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var innerRow = '<td class="redcell">1</td>\n'+
+                    '<td>\n'+
+                    '<a href="#" class="newrow editable" data-type="text" data-url="/update_op" data-title="amount" data-name="amount"></a>\n'+
+                    '</td>\n'+
+                    '<td>\n'+
+                    '<a href="#" class="newrow edit_account" data-type="select2" data-url="/update_op" data-title="account" data-name="account"></a>\n'+
+                    '</td>\n'+
+                    '<td>\n'+
+                    '<button id="save-btn" type="button" class="btn btn-default btn-xs" style="width: 25px; height: 25px">\n'+
+                    '<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>\n'+
+                    '</button>\n'+
+                    '</td>\n';
+
+            var rowHtml = '<tr id="newrow" class="greenrow">\n'+
+                    innerRow +
+                    '</tr>';
+
+            var innerRow2 = document.getElementById("newrow").innerHTML;
+
+            var initEditableFunc = function () {
+                $.fn.editable.defaults.mode = 'popup';
+
+                $('.editable').editable();
+
+                $('.edit_account').editable({
+                    source: [
+                        {value: "2", text: "2200"}, {value: "3", text: "2201"}, {value: "1", text: "2202"}, {
+                            value: "4",
+                            text: "2203"
+                        }, {value: "8", text: "ann"}, {value: "6", text: "***REMOVED***"}, {value: "5", text: "nana"}, {
+                            value: "7",
+                            text: "sasha"
+                        }
+                    ],
+                    select2: {
+                        placeholder: 'Select an account',
+                        allowClear: true,
+                        width: '150px'
+                    },
+                    showbuttons: false
+                });
+            };
+
+            initEditableFunc();
+
+            var saveBtnFunc = function () {
+                var saveBtn = $('#save-btn');
+
+                var row = document.getElementById("newrow");
+
+                var newRow = document.getElementById("operations").insertRow(0);
+
+                //row.parentNode.insertBefore(rowHtml, row);
+                newRow.innerHTML = innerRow2;
+
+                row.removeAttribute("class");
+                row.removeAttribute("id");
+
+                newRow.setAttribute("id", "newrow");
+
+                saveBtn.remove();
+
+                $(row).find(".redcell").removeClass("redcell");
+
+                $('#save-btn').click(saveBtnFunc);
+
+                initEditableFunc();
+            };
+
+            $('#save-btn').click(saveBtnFunc);
+        });
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <br>
+        <h1>Header</h1>
+        <br>
+        <table class="table table-bordered" id="operations">
+            <tr id="newrow" class="greenrow">
+                <td class="redcell">1</td>
+                <td>
+                    <a href="#" class="newrow editable" data-type="text" data-url="/update_op" data-title="amount" data-name="amount"></a>
+                </td>
+                <td>
+                    <a href="#" class="newrow edit_account" data-type="select2" data-url="/update_op"
+                       data-title="account" data-name="account"></a>
+                </td>
+                <td>
+                    <button id="save-btn" type="button" class="btn btn-default btn-xs"
+                            style="width: 25px; height: 25px">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

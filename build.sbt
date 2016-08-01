@@ -1,7 +1,7 @@
 
 name := "finance"
 
-version := "1.0"
+version := "0.8"
 
 scalacOptions += "-target:jvm-1.8"
 
@@ -32,3 +32,77 @@ libraryDependencies ++= Seq(
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+
+organization := "org.intracer"
+
+rpmVendor := "intracer"
+
+rpmUrl := Some("https://github.com/intracer/finance")
+
+rpmLicense := Some("ASL 2.0")
+
+packageSummary := "finance tool"
+
+packageDescription :=  """finance tool""".stripMargin.replace('\n', ' ')
+
+maintainer := "Ilya Korniiko <intracer@gmail.com>"
+
+debianPackageDependencies in Debian ++= Seq("java8-runtime")
+
+debianPackageRecommends in Debian ++= Seq("virtual-mysql-server")
+
+lazy val packageDebianSystemV = taskKey[File]("creates debian package with systemv")
+lazy val packageDebianUpstart = taskKey[File]("creates debian package with upstart")
+lazy val packageDebianSystemD = taskKey[File]("creates debian package with systemd")
+
+lazy val packageRpmSystemV = taskKey[File]("creates rpm package with systemv")
+lazy val packageRpmUpstart = taskKey[File]("creates rpm package with upstart")
+lazy val packageRpmSystemD = taskKey[File]("creates rpm package with systemd")
+
+packageDebianSystemV := {
+  serverLoading in Debian := com.typesafe.sbt.packager.archetypes.ServerLoader.SystemV
+  val output = baseDirectory.value / "package" / s"${name.value}-systemv-${version.value}.deb"
+  val debianFile = (packageBin in Debian).value
+  IO.move(debianFile, output)
+  output
+}
+
+packageDebianUpstart := {
+  serverLoading in Debian := com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
+  val output = baseDirectory.value / "package" / s"${name.value}-upstart-${version.value}.deb"
+  val debianFile = (packageBin in Debian).value
+  IO.move(debianFile, output)
+  output
+}
+
+packageDebianSystemD := {
+  serverLoading in Debian := com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
+  val output = baseDirectory.value / "package" / s"${name.value}-systemd-${version.value}.deb"
+  val debianFile = (packageBin in Debian).value
+  IO.move(debianFile, output)
+  output
+}
+
+packageRpmSystemV := {
+  serverLoading in Rpm := com.typesafe.sbt.packager.archetypes.ServerLoader.SystemV
+  val output = baseDirectory.value / "package" / s"${name.value}-systemv-${version.value}.rpm"
+  val rpmFile = (packageBin in Rpm).value
+  IO.move(rpmFile, output)
+  output
+}
+
+packageRpmUpstart := {
+  serverLoading in Rpm := com.typesafe.sbt.packager.archetypes.ServerLoader.Upstart
+  val output = baseDirectory.value / "package" / s"${name.value}-upstart-${version.value}.rpm"
+  val rpmFile = (packageBin in Rpm).value
+  IO.move(rpmFile, output)
+  output
+}
+
+packageRpmSystemD := {
+  serverLoading in Rpm := com.typesafe.sbt.packager.archetypes.ServerLoader.Systemd
+  val output = baseDirectory.value / "package" / s"${name.value}-systemd-${version.value}.rpm"
+  val rpmFile = (packageBin in Rpm).value
+  IO.move(rpmFile, output)
+  output
+}

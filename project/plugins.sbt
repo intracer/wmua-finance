@@ -10,4 +10,6 @@ resolvers ++= Seq(
 )
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
 
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
+
 //addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.0.0")

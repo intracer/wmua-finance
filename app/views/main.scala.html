@@ -50,10 +50,17 @@
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
         <script type="text/javascript">
+                var rowBackup = [];
 
             $(document).ready(function () {
 
                 var newRowInnerHtml = document.getElementById("newrow").innerHTML;
+
+                $("tr").each(function() {
+                            var row  = $(this);
+                            rowBackup[row.attr("id")] = row.html();
+                        }
+                );
 
                 $('.selectpicker').selectpicker('show');
 
@@ -245,14 +252,32 @@
                     $('#msg').hide();
                 };
 
-                $('#reset-btn').click(resetBtnFunc);
+                var cloneFunc = function () {
+                    var origin = document.querySelector("tr:hover");
+                    var id = origin.getAttribute("id"); // find row to copy
+                    var html = rowBackup[id];
 
-                $('#add-btn').click(function() {
-                    var row = document.getElementById("newrow");
-                    row.parentNode.insertBefore(row.cloneNode(true), row);
+                    var clone = document.createElement('tr');
+                    clone.innerHTML = html;
+                    $(clone).find("a").attr("data-pk", null);
+
+                    var editDate = $(clone).find("a.edit_date");
+                    editDate.attr("data-value", null);
+                    editDate.text("");
+
+                    var newrow = document.getElementById("newrow");
+
+                    var inserted = origin.parentNode.insertBefore(clone, newrow.nextSibling);
 
                     initEditableFunc();
-                });
+
+//                    $(inserted).editable('option', 'pk', null);
+
+                };
+
+                $('#reset-btn').click(resetBtnFunc);
+
+                $('.copy-btn').click(cloneFunc);
             });
         </script>
     </head>

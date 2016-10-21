@@ -35,7 +35,7 @@
 
             @for(operation <- operations) {
             @defining(operation.to.id.getOrElse(0)) { id =>
-            <tr>
+            <tr id="@id">
                 <td>
                     <a href="#" class="edit_date"
                     data-type="combodate" data-pk="@id" data-url="/update_op" data-title="Select date" data-name="date"
@@ -83,6 +83,13 @@
                     <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
                         @operation.to.desc
                     </a>
+
+                    <div style="float: right; width: 25px; height: 25px" class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px; height: 25px">
+                            <span class="fa fa-copy" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
                 </td>
             </tr>
             }

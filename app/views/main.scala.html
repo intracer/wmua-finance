@@ -180,7 +180,8 @@
                 initEditableFunc();
 
                 var saveBtnFunc = function() {
-                    $('.newrow').editable('submit', {
+                    var origin = document.querySelector("tr:hover");
+                    $(origin).editable('submit', {
                         url: '/newoperation',
                         ajaxOptions: {
                             dataType: 'json' //assuming json response
@@ -197,32 +198,33 @@
 
                                 $(this).off('save.newoperation');
 
-                                var resetBtn = $('#reset-btn');
-                                var saveBtn = $('#save-btn');
+                                var resetBtn = $(origin).find('.reset-btn');
+                                var saveBtn = $(origin).find('.save-btn');
 
-                                var row = document.getElementById("newrow");
+                                var addNewRow = origin.hasClass("newrow");
 
-                                var newRow = document.getElementById("operations").insertRow(1);
-                                newRow.innerHTML = newRowInnerHtml;
-
-                                row.removeAttribute("id");
-                                row.removeAttribute("class");
-
-                                newRow.setAttribute("id", "newrow");
-
+                                origin.removeAttribute("id");
+                                origin.removeAttribute("class");
                                 resetBtn.remove();
                                 saveBtn.remove();
+                                $(origin).find(".newrow").removeClass("newrow");
 
-                                $('#reset-btn').click(resetBtnFunc);
-                                $('#save-btn').click(saveBtnFunc);
+                                if (addNewRow) {
 
-                                $(row).find(".newrow").removeClass("newrow");
+                                    var newRow = document.getElementById("operations").insertRow(1);
+                                    newRow.innerHTML = newRowInnerHtml;
+                                    newRow.setAttribute("id", "newrow");
 
-                                initEditableFunc();
+                                    $('.reset-btn').click(resetBtnFunc);
+                                    $('.save-btn').click(saveBtnFunc);
 
-                                $('.newrow').editable('setValue', null)
-                                        .editable('option', 'pk', null)
-                                        .removeClass('editable-unsaved');
+                                    initEditableFunc();
+
+                                    $('.newrow').editable('setValue', null)
+                                            .editable('option', 'pk', null)
+                                            .removeClass('editable-unsaved');
+                                }
+
 
                             } else if(data && data.errors){
                                 //server-side validation error, response like {"errors": {"username": "username already exist"} }
@@ -241,14 +243,14 @@
                     });
                 };
 
-                $('#save-btn').click(saveBtnFunc);
+                $('.save-btn').click(saveBtnFunc);
 
                 var resetBtnFunc = function() {
                     $('.newrow').editable('setValue', null)
                             .editable('option', 'pk', null)
                             .removeClass('editable-unsaved');
 
-                    $('#save-btn').show();
+                    $('.save-btn').show();
                     $('#msg').hide();
                 };
 
@@ -265,17 +267,31 @@
                     editDate.attr("data-value", null);
                     editDate.text("");
 
+                    var copyButton = $(clone).find(".btn-group")[0];
+
+                    var buttons = $("#newrow_buttons")[0];
+
+                    var buttonsClone = buttons.cloneNode(true);
+
+                    $(buttonsClone).attr("id", null);
+
+                    copyButton.parentNode.insertBefore(buttonsClone, copyButton);
+                    copyButton.remove();
+
                     var newrow = document.getElementById("newrow");
 
                     var inserted = origin.parentNode.insertBefore(clone, newrow.nextSibling);
 
                     initEditableFunc();
 
+                    $('.reset-btn').click(resetBtnFunc);
+                    $('.save-btn').click(saveBtnFunc);
+
 //                    $(inserted).editable('option', 'pk', null);
 
                 };
 
-                $('#reset-btn').click(resetBtnFunc);
+                $('.reset-btn').click(resetBtnFunc);
 
                 $('.copy-btn').click(cloneFunc);
             });

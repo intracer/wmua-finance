@@ -54,7 +54,7 @@
 
             $(document).ready(function () {
 
-                var newRowInnerHtml = document.getElementById("newrow").innerHTML;
+                var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
 
                 $("tr").each(function() {
                             var row  = $(this);
@@ -201,7 +201,7 @@
                                 var resetBtn = $(origin).find('.reset-btn');
                                 var saveBtn = $(origin).find('.save-btn');
 
-                                var addNewRow = origin.hasClass("newrow");
+                                var addNewRow = origin.hasClass("tr_new");
 
                                 origin.removeAttribute("id");
                                 origin.removeAttribute("class");
@@ -213,7 +213,7 @@
 
                                     var newRow = document.getElementById("operations").insertRow(1);
                                     newRow.innerHTML = newRowInnerHtml;
-                                    newRow.setAttribute("id", "newrow");
+                                    newRow.setAttribute("id", "tr_new");
 
                                     $('.reset-btn').click(resetBtnFunc);
                                     $('.save-btn').click(saveBtnFunc);
@@ -278,7 +278,7 @@
                     copyButton.parentNode.insertBefore(buttonsClone, copyButton);
                     copyButton.remove();
 
-                    var newrow = document.getElementById("newrow");
+                    var newrow = document.getElementById("tr_new");
 
                     var inserted = origin.parentNode.insertBefore(clone, newrow.nextSibling);
 

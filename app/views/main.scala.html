@@ -206,7 +206,7 @@
                                 resetBtn.remove();
                                 saveBtn.remove();
 
-                                $('#reset-btn').click(restBtnFunc);
+                                $('#reset-btn').click(resetBtnFunc);
                                 $('#save-btn').click(saveBtnFunc);
 
                                 $(row).find(".newrow").removeClass("newrow");
@@ -236,7 +236,7 @@
 
                 $('#save-btn').click(saveBtnFunc);
 
-                var restBtnFunc = function() {
+                var resetBtnFunc = function() {
                     $('.newrow').editable('setValue', null)
                             .editable('option', 'pk', null)
                             .removeClass('editable-unsaved');
@@ -245,7 +245,7 @@
                     $('#msg').hide();
                 };
 
-                $('#reset-btn').click(restBtnFunc);
+                $('#reset-btn').click(resetBtnFunc);
 
                 $('#add-btn').click(function() {
                     var row = document.getElementById("newrow");

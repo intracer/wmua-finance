@@ -34,3 +34,11 @@ GET         /grants                controllers.Grants.list
 POST        /update_op             controllers.Operations.update()
 
 POST        /newoperation          controllers.Operations.insert()
+
+GET         /dicts                 controllers.Dictionaries.list()
+
+GET         /accounts              controllers.Dictionaries.accounts()
+
+GET         /categories            controllers.Dictionaries.categories()
+
+GET         /projects              controllers.Dictionaries.projects()

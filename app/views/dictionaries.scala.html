@@ -1,0 +1,21 @@
+@(user: org.intracer.finance.User,
+        dict: Seq[org.intracer.finance.HasName])(implicit flash: Flash, lang: Lang, messages: Messages)
+
+@main(Messages("Lookup"), user) {
+
+    <div class="row">
+
+        <ul>
+            <li> <a href="/accounts">Accounts</a> </li>
+            <li> <a href="/categories">Categories</a> </li>
+            <li> <a href="/projects">Projects</a> </li>
+        </ul>
+
+        <ul>
+        @for(e <- dict) {
+            <li> @e.code - @e.name </li>
+        }
+        </ul>
+
+    </div>
+}

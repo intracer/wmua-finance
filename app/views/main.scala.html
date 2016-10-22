@@ -88,7 +88,7 @@
 
                 $.fn.editable.defaults.mode = 'popup';
 
-                var initDictEditable = function() {
+                var initDictEditableFunc = function() {
                     $('.dict_editable.account_editable').editable({
                         params: function(params) {
                             params.table = "account";
@@ -199,7 +199,7 @@
                 };
 
                 initEditableFunc();
-                initDictEditable();
+                initDictEditableFunc();
 
                 var saveBtnFunc = function() {
                     var origin = document.querySelector("tr:hover");
@@ -265,6 +265,71 @@
                 };
 
                 $('.save-btn').click(saveBtnFunc);
+
+                var dictSaveBtnFunc = function() {
+                    var origin = document.querySelector("tr:hover");
+                    $(origin).find(".dict_editable").editable('submit', {
+                        url: '/newdict',
+                        ajaxOptions: {
+                            dataType: 'json' //assuming json response
+                        },
+                        success: function(data, config) {
+                            if(data && data.id) {  //record created, response like {"id": 2}
+                                //set pk
+                                $(this).editable('option', 'pk', data.id);
+                                //remove unsaved class
+                                $(this).removeClass('editable-unsaved');
+                                //show messages
+//                                var msg = 'Operation created! Now editables submit individually.';
+//                                $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
+
+                                $(this).off('save.newoperation');
+
+                                var buttons = $(origin).find('.newrow_buttons')[0];
+                                buttons.remove();
+
+                                var addNewRow = $(origin).hasClass("tr_new");
+
+                                origin.removeAttribute("id");
+                                origin.removeAttribute("class");
+
+                                if (addNewRow) {
+                                    $(origin).find(".newrow").removeClass("newrow");
+
+                                    var newRow = document.getElementById("dictionary").insertRow(1);
+                                    newRow.innerHTML = newRowInnerHtml;
+                                    newRow.setAttribute("id", "tr_new");
+                                    newRow.setAttribute("class", "tr_new");
+
+                                    $(newRow).find('.reset-btn').click(resetBtnFunc);
+                                    $(newRow).find('.dict-save-btn').click(dictSaveBtnFunc);
+
+                                    initDictEditableFunc();
+
+//                                    $(origin).find(".newrow").editable('setValue', null)
+//                                            .editable('option', 'pk', null)
+//                                            .removeClass('editable-unsaved');
+                                }
+
+
+                            } else if(data && data.errors){
+                                //server-side validation error, response like {"errors": {"username": "username already exist"} }
+                                config.error.call(this, data.errors);
+                            }
+                        },
+                        error: function(errors) {
+                            var msg = '';
+                            if(errors && errors.responseText) { //ajax error, errors = xhr object
+                                msg = errors.responseText;
+                            } else { //validation error (client-side or server-side)
+                                $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
+                            }
+                            $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
+                        }
+                    });
+                };
+
+                $('.dict-save-btn').click(dictSaveBtnFunc);
 
                 var resetBtnFunc = function() {
                     var origin = document.querySelector("tr:hover");

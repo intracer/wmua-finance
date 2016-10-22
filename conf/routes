@@ -18,7 +18,6 @@ GET         /resolutions           controllers.Resolutions.list
 
 GET         /statistics            controllers.Operations.statistics
 
-
 GET         /logout                controllers.Application.logout()
 
 POST        /auth                  controllers.Application.auth()

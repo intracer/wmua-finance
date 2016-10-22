@@ -198,15 +198,13 @@
 
                                 $(this).off('save.newoperation');
 
-                                var resetBtn = $(origin).find('.reset-btn');
-                                var saveBtn = $(origin).find('.save-btn');
+                                var buttons = $(origin).find('.newrow_buttons');
+                                buttons.remove();
 
-                                var addNewRow = origin.hasClass("tr_new");
+                                var addNewRow = $(origin).hasClass("tr_new");
 
                                 origin.removeAttribute("id");
                                 origin.removeAttribute("class");
-                                resetBtn.remove();
-                                saveBtn.remove();
                                 $(origin).find(".newrow").removeClass("newrow");
 
                                 if (addNewRow) {

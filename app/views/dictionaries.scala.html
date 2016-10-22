@@ -11,11 +11,25 @@
             <li> <a href="/projects">Projects</a> </li>
         </ul>
 
-        <ul>
-        @for(e <- dict) {
-            <li> @e.code - @e.name </li>
-        }
-        </ul>
+
+        <table class="table table-striped table-bordered" id="dictionary">
+            <thead>
+                <tr>
+                    <th>@Messages("n")</th>
+                    <th>@Messages("name")</th>
+                </tr>
+            </thead>
+            <tbody id="operations_body">
+
+            @for(e <- dict) {
+                <tr>
+                    <td> @e.code </td>
+                    <td> @e.name </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
 
     </div>
 }

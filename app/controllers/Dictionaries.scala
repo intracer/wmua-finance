@@ -1,10 +1,13 @@
 package controllers
 
-import org.intracer.finance.User
+import org.intracer.finance._
 import org.intracer.finance.slick.Expenditures
-import play.api.mvc.{Action, Controller}
 import play.api.Play.current
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, Controller}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
@@ -13,7 +16,7 @@ object Dictionaries extends Controller with Secured {
   def list() = withAuth { username =>
     implicit request =>
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), Seq.empty))
+      Ok(views.html.dictionaries(new User(***REMOVED***), "", Seq.empty))
   }
 
   def accounts() = withAuth { username =>
@@ -21,7 +24,7 @@ object Dictionaries extends Controller with Secured {
 
       val accounts = Expenditures.accounts.values.toSeq.sortBy(_.id)
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), accounts))
+      Ok(views.html.dictionaries(new User(***REMOVED***), "account", accounts))
   }
 
   def categories() = withAuth { username =>
@@ -29,7 +32,7 @@ object Dictionaries extends Controller with Secured {
 
       val categories = Expenditures.categories.values.toSeq.sortBy(_.id)
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), categories))
+      Ok(views.html.dictionaries(new User(***REMOVED***), "category", categories))
   }
 
   def projects() = withAuth { username =>
@@ -37,16 +40,68 @@ object Dictionaries extends Controller with Secured {
 
       val projects = Expenditures.projects.values.toSeq.sortBy(_.id)
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), projects))
+      Ok(views.html.dictionaries(new User(***REMOVED***), "project", projects))
   }
 
   def update() = Action.async {
     implicit request =>
-      Future.successful(Ok("ok"))
+      updateForm.bindFromRequest.fold(
+        formWithErrors => // binding failure, you retrieve the form containing errors,
+          Future.successful(BadRequest(insertForm.errorsAsJson)),
+        u => {
+          import Global.db.driver.api._
+
+          val db = Global.db
+
+          val q = u.table match {
+            case "account" => db.db.run(db.accountDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+            case "project" => db.db.run(db.projectDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+            case "category" => db.db.run(db.categoryDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+          }
+
+          q.map(r => Ok(u.toString)).recover { case cause => BadRequest(cause.getMessage) }
+        })
   }
 
   def insert() = Action.async {
     implicit request =>
-      Future.successful(Ok("ok"))
+
+      insertForm.bindFromRequest.fold(
+        formWithErrors => // binding failure, you retrieve the form containing errors,
+          Future.successful(BadRequest(insertForm.errorsAsJson)),
+        u => {
+          import Global.db.driver.api._
+
+          val db = Global.db
+
+          val q = u.table match {
+            case "account" => db.db.run(db.accountDao.query += Account(name = u.value))
+            case "project" => db.db.run(db.projectDao.query += Project(name = u.value))
+            case "category" => db.db.run(db.categoryDao.query += CategoryF(name = u.value))
+          }
+
+          q.map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
+        })
   }
+
+  val updateForm = Form(
+    mapping(
+      "table" -> text,
+      "name" -> text,
+      "pk" -> longNumber,
+      "value" -> text
+    )(Update.apply)(Update.unapply)
+  )
+
+  val insertForm = Form(
+    mapping(
+      "table" -> text,
+      "name" -> text
+    )(Insert.apply)(Insert.unapply)
+  )
+
+  case class Update(table: String, name: String, pk: Long, value: String)
+
+  case class Insert(table: String, value: String)
+
 }

@@ -1,4 +1,5 @@
 @(user: org.intracer.finance.User,
+        table: String,
         dict: Seq[org.intracer.finance.HasName])(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("Lookup"), user) {
@@ -24,7 +25,7 @@
                 <tr id="tr_new" class="tr_new">
                     <td>  </td>
                     <td>
-                        <a href="#" class="newrow new_required editable xeditable" data-type="text" data-url="/update_dict" data-title="@Messages("name")" data-name="name">
+                        <a href="#" class="newrow new_required dict_editable @{table}_editable" data-type="text" data-url="/update_op" data-title="@Messages("name")" data-name="name">
                         </a>
                     </td>
                 </tr>
@@ -33,7 +34,7 @@
                     <tr>
                         <td> @e.code </td>
                         <td>
-                            <a href="#" class="editable xeditable" data-type="text" data-pk="@e.code" data-url="/update_dict" data-title="@Messages("name")" data-name="name">
+                            <a href="#" class="dict_editable @{table}_editable" data-type="text" data-pk="@e.code" data-url="/update_dict" data-title="@Messages("name")" data-name="name">
                             @e.name
                             </a>
                         </td>

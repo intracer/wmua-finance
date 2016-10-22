@@ -46,9 +46,9 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
 object Expenditures {
 
-  lazy val categories: Map[Int, CategoryF] = Global.db.categoryDao.list.groupBy(_.id.get).mapValues(_.head)
+  def categories: Map[Int, CategoryF] = Global.db.categoryDao.list.groupBy(_.id.get).mapValues(_.head)
 
-  lazy val projects: Map[Int, Project] = Global.db.projectDao.list.groupBy(_.id.get).mapValues(_.head)
+  def projects: Map[Int, Project] = Global.db.projectDao.list.groupBy(_.id.get).mapValues(_.head)
 
   lazy val grants: Map[Int, Grant] = Global.db.grantDao.list.groupBy(_.id.get).mapValues(_.head)
 
@@ -56,7 +56,7 @@ object Expenditures {
     Global.db.grantItemDao.listAll().groupBy(_.grantId.get)
   }
 
-  lazy val accounts: Map[Int, Account] = Global.db.accountDao.list.groupBy(_.id.get).mapValues(_.head)
+  def accounts: Map[Int, Account] = Global.db.accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
   def fromDb(t: (Option[Int], Timestamp, Option[BigDecimal], Int, Int, Int, Option[Int], Option[Int], Option[String], String)) = {
     val (maybeGrantId, maybeGrantItemId) = (t._7, t._8)

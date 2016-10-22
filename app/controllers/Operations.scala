@@ -262,7 +262,7 @@ object Operations extends Controller with Secured {
             from = u.account.flatMap(Expenditures.accounts.get).orNull,
             category = Expenditures.categories.get(u.category).orNull,
             project = Expenditures.projects.get(u.project).orNull,
-            grant  = u.grant.flatMap(Expenditures.grants.get),
+            grant = u.grant.flatMap(Expenditures.grants.get),
             grantItem = u.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
             desc = u.descr.orNull
           )

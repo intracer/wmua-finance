@@ -88,6 +88,27 @@
 
                 $.fn.editable.defaults.mode = 'popup';
 
+                var initDictEditable = function() {
+                    $('.dict_editable.account_editable').editable({
+                        params: function(params) {
+                            params.table = "account";
+                            return params;
+                        }
+                    });
+                    $('.dict_editable.category_editable').editable({
+                        params: function(params) {
+                            params.table = "category";
+                            return params;
+                        }
+                    });
+                    $('.dict_editable.project_editable').editable({
+                        params: function(params) {
+                            params.table = "project";
+                            return params;
+                        }
+                    });
+                };
+
                 var initEditableFunc = function() {
                     $('.editable').editable();
 
@@ -178,6 +199,7 @@
                 };
 
                 initEditableFunc();
+                initDictEditable();
 
                 var saveBtnFunc = function() {
                     var origin = document.querySelector("tr:hover");

@@ -181,7 +181,7 @@
 
                 var saveBtnFunc = function() {
                     var origin = document.querySelector("tr:hover");
-                    $(origin).editable('submit', {
+                    $(origin).find(".newrow").editable('submit', {
                         url: '/newoperation',
                         ajaxOptions: {
                             dataType: 'json' //assuming json response

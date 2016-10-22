@@ -33,7 +33,11 @@ GET         /grants                controllers.Grants.list
 
 POST        /update_op             controllers.Operations.update()
 
+POST        /update_dict           controllers.Dictionaries.update()
+
 POST        /newoperation          controllers.Operations.insert()
+
+POST        /newdict               controllers.Dictionaries.insert()
 
 GET         /dicts                 controllers.Dictionaries.list()
 

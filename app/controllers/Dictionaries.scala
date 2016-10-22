@@ -2,9 +2,11 @@ package controllers
 
 import org.intracer.finance.User
 import org.intracer.finance.slick.Expenditures
-import play.api.mvc.Controller
+import play.api.mvc.{Action, Controller}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+
+import scala.concurrent.Future
 
 object Dictionaries extends Controller with Secured {
 
@@ -38,4 +40,13 @@ object Dictionaries extends Controller with Secured {
       Ok(views.html.dictionaries(new User(***REMOVED***), projects))
   }
 
+  def update() = Action.async {
+    implicit request =>
+      Future.successful(Ok("ok"))
+  }
+
+  def insert() = Action.async {
+    implicit request =>
+      Future.successful(Ok("ok"))
+  }
 }

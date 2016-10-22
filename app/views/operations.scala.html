@@ -37,7 +37,7 @@
             @defining(operation.to.id.getOrElse(0)) { id =>
             <tr id="@id">
                 <td>
-                    <a href="#" class="edit_date"
+                    <a href="#" class="edit_date xeditable"
                     data-type="combodate" data-pk="@id" data-url="/update_op" data-title="Select date" data-name="date"
                     data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY"
                     data-value="@operation.date.toString().substring(0, 10)">
@@ -45,42 +45,42 @@
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_project" data-type="select2" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
+                    <a href="#" class="edit_project xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
                     @operation.to.projectName
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_category" data-type="select2" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
+                    <a href="#" class="edit_category xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
                     @operation.to.categoryName
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="edit_grant" data-type="select2" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
+                    <a href="#" class="edit_grant xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
                     @operation.to.grantName
                     </a>
                 </td>
                 <td>
                     <a href="#"
-                        @if(operation.to.grant.isDefined){class="edit_grant_item_@operation.to.grant.map(_.code).getOrElse(0)"}
+                        @if(operation.to.grant.isDefined){class="edit_grant_item_@operation.to.grant.map(_.code).getOrElse(0) xeditable"}
                         data-value="@operation.to.grantItem.flatMap(_.id).getOrElse(0)"
                     data-type="select2" data-pk="@id" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem">
                     @operation.to.grantItem.map(_.name).getOrElse("")
                     </a>
                 </td>
                 <td>
-                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("amount")" data-name="amount">
+                    <a href="#" class="editable xeditable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("amount")" data-name="amount">
                     @operation.amountString
                     </a>
                 </td>
 
                 <td>
-                    <a href="#" class="edit_account" data-type="select2" data-pk="@id" data-value="@operation.to.from.code" data-url="/update_op" data-title="@Messages("account")" data-name="account">
+                    <a href="#" class="edit_account xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.from.code" data-url="/update_op" data-title="@Messages("account")" data-name="account">
                     @operation.to.from.name
                     </a>
                 </td>
 
                 <td>
-                    <a href="#" class="editable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
+                    <a href="#" class="editable xeditable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
                         @operation.to.desc
                     </a>
 

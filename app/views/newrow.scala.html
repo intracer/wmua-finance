@@ -1,43 +1,43 @@
 @()(implicit lang: Lang, messages: Messages)
 <tr id="tr_new" class="tr_new">
     <td>
-        <a href="#" class="newrow new_required edit_date" data-type="combodate" data-url="/update_op" data-title="Select date" data-name="date"
+        <a href="#" class="xeditable newrow newrow new_required edit_date" data-type="combodate" data-url="/update_op" data-title="Select date" data-name="date"
         data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY"></a>
     </td>
     <td>
-        <a href="#" class="newrow new_required edit_project" data-type="select2"  data-url="/update_op" data-title="@Messages("project")" data-name="project"
+        <a href="#" class="xeditable newrow new_required edit_project" data-type="select2"  data-url="/update_op" data-title="@Messages("project")" data-name="project"
         data-value="0">адміністрування</a>
     </td>
     <td>
-        <a href="#" class="newrow new_required edit_category" data-type="select2"  data-url="/update_op" data-title="@Messages("category")" data-name="category"
+        <a href="#" class="xeditable newrow new_required edit_category" data-type="select2"  data-url="/update_op" data-title="@Messages("category")" data-name="category"
         data-value="19">адміністративні/банківські витрати</a>
     </td>
     <td>
-        <a href="#" class="newrow edit_grant" data-type="select2"  data-url="/update_op" data-title="@Messages("grant")" data-name="grant"
+        <a href="#" class="xeditable newrow edit_grant" data-type="select2"  data-url="/update_op" data-title="@Messages("grant")" data-name="grant"
         data-value="17">Grants:APG/Proposals/2015-2016 round1</a>
     </td>
     <td>
-        <a href="#" class="newrow edit_grant_item_17" data-type="select2" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem"
+        <a href="#" class="xeditable newrow edit_grant_item_17" data-type="select2" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem"
         data-value="74">4.1 Operations (excludes staff and programs)</a>
     </td>
     <td>
-        <a href="#" class="newrow editable" data-type="text"  data-url="/update_op" data-title="@Messages("amount")" data-name="amount">1.5</a>
+        <a href="#" class="xeditable newrow editable" data-type="text"  data-url="/update_op" data-title="@Messages("amount")" data-name="amount">1.5</a>
     </td>
 
     <td>
-        <a href="#" class="newrow edit_account" data-type="select2" data-url="/update_op" data-title="@Messages("account")" data-name="account"
+        <a href="#" class="xeditable newrow edit_account" data-type="select2" data-url="/update_op" data-title="@Messages("account")" data-name="account"
         data-value="1">2202</a>
     </td>
 
     <td>
-        <a href="#" class="newrow editable" data-type="text" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">банківські</a>
+        <a href="#" class="xeditable newrow editable" data-type="text" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">банківські</a>
 
         @if(false) {<button id="add-btn" type="button" class="btn btn-default btn-xs" style="width: 25px; height: 25px">
             <span class="fa fa-copy" aria-hidden="true"></span>
         </button>
         }
 
-        <div id="newrow_buttons" style="float: right; width: 50px; height: 25px" class="btn-group">
+        <div style="float: right; width: 50px; height: 25px" class="btn-group newrow_buttons">
             <button type="button" class="btn btn-default btn-xs save-btn" style="width: 25px; height: 25px">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
             </button>

@@ -181,7 +181,7 @@
 
                 var saveBtnFunc = function() {
                     var origin = document.querySelector("tr:hover");
-                    $(origin).find(".newrow").editable('submit', {
+                    $(origin).find(".xeditable").editable('submit', {
                         url: '/newoperation',
                         ajaxOptions: {
                             dataType: 'json' //assuming json response
@@ -198,29 +198,30 @@
 
                                 $(this).off('save.newoperation');
 
-                                var buttons = $(origin).find('.newrow_buttons');
+                                var buttons = $(origin).find('.newrow_buttons')[0];
                                 buttons.remove();
 
                                 var addNewRow = $(origin).hasClass("tr_new");
 
                                 origin.removeAttribute("id");
                                 origin.removeAttribute("class");
-                                $(origin).find(".newrow").removeClass("newrow");
 
                                 if (addNewRow) {
+                                    $(origin).find(".newrow").removeClass("newrow");
 
                                     var newRow = document.getElementById("operations").insertRow(1);
                                     newRow.innerHTML = newRowInnerHtml;
                                     newRow.setAttribute("id", "tr_new");
+                                    newRow.setAttribute("class", "tr_new");
 
-                                    $('.reset-btn').click(resetBtnFunc);
-                                    $('.save-btn').click(saveBtnFunc);
+                                    $(newRow).find('.reset-btn').click(resetBtnFunc);
+                                    $(newRow).find('.save-btn').click(saveBtnFunc);
 
                                     initEditableFunc();
 
-                                    $('.newrow').editable('setValue', null)
-                                            .editable('option', 'pk', null)
-                                            .removeClass('editable-unsaved');
+//                                    $(origin).find(".newrow").editable('setValue', null)
+//                                            .editable('option', 'pk', null)
+//                                            .removeClass('editable-unsaved');
                                 }
 
 
@@ -244,7 +245,8 @@
                 $('.save-btn').click(saveBtnFunc);
 
                 var resetBtnFunc = function() {
-                    $('.newrow').editable('setValue', null)
+                    var origin = document.querySelector("tr:hover");
+                    $(origin).find('.newrow').editable('setValue', null)
                             .editable('option', 'pk', null)
                             .removeClass('editable-unsaved');
 
@@ -267,7 +269,7 @@
 
                     var copyButton = $(clone).find(".btn-group")[0];
 
-                    var buttons = $("#newrow_buttons")[0];
+                    var buttons = $(".newrow_buttons")[0];
 
                     var buttonsClone = buttons.cloneNode(true);
 
@@ -282,8 +284,8 @@
 
                     initEditableFunc();
 
-                    $('.reset-btn').click(resetBtnFunc);
-                    $('.save-btn').click(saveBtnFunc);
+                    $(clone).find('.reset-btn').click(resetBtnFunc);
+                    $(clone).find('.save-btn').click(saveBtnFunc);
 
 //                    $(inserted).editable('option', 'pk', null);
 

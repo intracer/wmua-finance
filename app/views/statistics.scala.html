@@ -16,15 +16,17 @@
 @import org.intracer.finance.Operation
 @import org.intracer.finance.slick.Expenditures
 
-
     @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" style="background-color: #DDDDDD;">
             <caption><b>@tableName</b></caption>
             <thead>
                 <tr>
                     <th width="50%">@groupName</th>
-                    <th>@Messages("amount")</th>
+                    <th>@Messages("year")</th>
+                    @for(m <- 1 to 12) {
+                        <th>@m</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -36,12 +38,19 @@
                     </td>
                     <td>
                     @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+
                         @if(false) { =
                         @for(op <- groupedOperations(groupId)) {
                     <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
                         }
                         }
                     </td>
+
+                    @for(m <- 1 to 12) {
+                        <td>
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
+                        </td>
+                    }
                 </tr>
             }
             </tbody>

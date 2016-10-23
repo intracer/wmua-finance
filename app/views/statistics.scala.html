@@ -28,11 +28,11 @@
                 </tr>
             </thead>
             <tbody>
-            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping(key).toLowerCase)) {
+            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping.getOrElse(key, key).toLowerCase)) {
 
                 <tr>
                     <td>
-                    @mapping(groupId)
+                    @mapping.getOrElse(groupId, groupId)
                     </td>
                     <td>
                     @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)

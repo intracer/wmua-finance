@@ -3,6 +3,7 @@ package controllers
 import java.sql.Timestamp
 import java.util.Date
 
+import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
 import org.intracer.finance.slick.Expenditures
 import org.intracer.finance.{Expenditure, Operation, User}
@@ -95,7 +96,7 @@ object Operations extends Controller with Secured {
 
       val operations: Seq[Operation] = filterOperations(projects, categories, grants, grantItems, accounts, daterange)
 
-      val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.map(_.name).getOrElse(""))
+      val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1))
 
       //val zeros = Global.wmf.keySet -- operationsByGrantRow.keySet
 
@@ -103,9 +104,12 @@ object Operations extends Controller with Secured {
 
       val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 
+      val grantItemsMap = Global.db.grantItemDao.listAll().groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
+        Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
+
       Ok(views.html.grantStatistics(operations, total, projects, categories, grants, grantItems, accounts,
         daterange.map(_.head).getOrElse(defaultDateRange),
-        withZeros, Some(rate)))
+        withZeros, Some(rate), grantItemsMap))
   }
 
 
@@ -188,7 +192,7 @@ object Operations extends Controller with Secured {
 
       val operationsByProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
 
-      val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.map(_.name).getOrElse(""))
+      val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.map(_.id.toString).getOrElse(""))
 
       val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 

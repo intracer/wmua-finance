@@ -1,4 +1,5 @@
 @import org.intracer.finance.AlphaNumOrdering
+@import client.finance.GrantItem
 @(operations: Seq[org.intracer.finance.Operation],
         total: Double,
         projects: Set[Int],
@@ -7,69 +8,64 @@
         grantItems: Set[Int],
         accounts: Set[Int],
         daterange: String,
-        operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]],
-        rate: Option[Double] = None
+        operationsByGrantRow: Map[Int, Iterable[org.intracer.finance.Operation]],
+        rate: Option[Double] = None,
+        itemsByKey: Map[Int, GrantItem] = Map.empty
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.Operation
 
 
-    @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
+    @statGrid(tableName: String, groupName: String, groupedOperations: Map[Int, Iterable[Operation]]) = {
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" style="background-color: #DDDDDD;">
             <caption><b>@tableName</b></caption>
             <thead>
                 <tr>
                     <th>@Messages("Code")</th>
                     <th width="50%">@Messages("Description")</th>
                     <th>@Messages("Budgeted (USD)")</th>
-                    <th>@Messages("Expenses (UAH)")</th>
                     <th>@Messages("Expenses (USD)")</th>
-@if(false){                    <th>@Messages("diff")</th> }
+                    <th>@Messages("Expenses (UAH)")</th>
+                    <th>@Messages("Diff (UAH)")</th>
                 </tr>
             </thead>
             <tbody>
-            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => if (key.isEmpty) "zzzz" else key)(AlphaNumOrdering)) {
+            @for(groupId <- itemsByKey.keys.toSeq.sortBy(id => itemsByKey(id).number.replaceFirst("^$", "z"))(AlphaNumOrdering)) {
                 <tr>
                     <td>
-                        @mapping.getOrElse(groupId, "")
+                        @itemsByKey(groupId).number
                     </td>
 
                     <td>
-                        Global.wmf.get(groupId).map(_.description).getOrElse("")
+                        @itemsByKey(groupId).description
                     </td>
 
                     <td>
-                    org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0))
+                        @itemsByKey(groupId).totalCost
                     </td>
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
-                        @if(false) { =
-                            @for(op <- groupedOperations(groupId)) {
-                                <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
-                            }
-                        }
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")
                     </td>
-
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd)
+                        @org.intracer.finance.Formatter.fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
                     </td>
 
-@if(false){                    <td>
-                        org.intracer.finance.Formatter.fmt.format(Global.wmf.get(groupId).map(_.value).getOrElse(0.0) - (groupedOperations(groupId).map(_.amount).sum / Global.uahToUsd))
-                    </td> }
+                    <td>
+                        @org.intracer.finance.Formatter.fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+                    </td>
                 </tr>
             }
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="2">@Messages("total") </td>
-                    <td>org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum) </td>
-                    <td>org.intracer.finance.Formatter.fmt.format(total) </td>
-                    <td>org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd) </td>
-@if(false) {                   <td>org.intracer.finance.Formatter.fmt.format(Global.wmf.values.map(_.value).sum - (groupedOperations.values.flatten.map(_.amount).sum / Global.uahToUsd)) </td>  }
+                    <td> @org.intracer.finance.Formatter.fmt.format(itemsByKey.values.map(_.totalCost).sum)</td>
+                    <td> @org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")</td>
+                    <td> @org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-") </td>
+                   <td> @org.intracer.finance.Formatter.fmt.format(itemsByKey.values.map(_.totalCost).sum * Global.uahToUsd - groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)</td>
                 </tr>
             </tfoot>
         </table>
@@ -78,7 +74,7 @@
 
 @main(Messages("operations")) {
     @filter(operations, projects, categories, grants, grantItems, accounts, daterange, "/bygrantrowstat", rate)
-    @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
+    @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow)
 }
 
 

@@ -7,6 +7,8 @@
         total: Double
 )(implicit flash: Flash, lang: Lang, messages: Messages)
 
+@import org.intracer.finance.Formatter.fmt
+
     <table class="table table-striped table-bordered" style="background-color: #DDDDDD;">
         <caption><b>@tableName</b></caption>
         <thead>
@@ -24,18 +26,18 @@
             <tr>
                 <td> @mapping.getOrElse(groupId, groupId) </td>
                 <td>
-                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+                    @fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
 
                     @if(false) { =
                         @for(op <- groupedOperations(groupId)) {
-                            <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
+                            <span title="@op.to.desc"> @fmt.format(op.amount) </span>
                         }
                     }
                 </td>
 
                 @for(m <- 1 to 12) {
                     <td>
-                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
+                    @fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
                     </td>
                 }
             </tr>
@@ -44,7 +46,7 @@
         <tfoot>
             <tr>
                 <td>@Messages("total") </td>
-                <td>@org.intracer.finance.Formatter.fmt.format(total) </td>
+                <td>@fmt.format(total) </td>
             </tr>
         </tfoot>
     </table>

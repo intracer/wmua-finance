@@ -1,15 +1,17 @@
+@import org.intracer.finance.Operation
 @import org.intracer.finance.AlphaNumOrdering
 @import client.finance.GrantItem
-@(operations: Seq[org.intracer.finance.Operation],
+
+@(
+        operations: Seq[Operation],
         total: Double,
         opFilter: OpFilter,
-        operationsByGrantRow: Map[Int, Iterable[org.intracer.finance.Operation]],
+        operationsByGrantRow: Map[Int, Iterable[Operation]],
         rate: Option[Double] = None,
         itemsByKey: Map[Int, GrantItem] = Map.empty
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
-@import org.intracer.finance.Operation
-
+@import org.intracer.finance.Formatter.fmt
 
     @statGrid(tableName: String, groupName: String, groupedOperations: Map[Int, Iterable[Operation]]) = {
 
@@ -41,15 +43,15 @@
                     </td>
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")
+                        @fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")
                     </td>
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
+                        @fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
                     </td>
 
                     <td>
-                        @org.intracer.finance.Formatter.fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+                        @fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
                     </td>
                 </tr>
             }
@@ -57,10 +59,10 @@
             <tfoot>
                 <tr>
                     <td colspan="2">@Messages("total") </td>
-                    <td> @org.intracer.finance.Formatter.fmt.format(itemsByKey.values.map(_.totalCost).sum)</td>
-                    <td> @org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")</td>
-                    <td> @org.intracer.finance.Formatter.fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-") </td>
-                   <td> @org.intracer.finance.Formatter.fmt.format(itemsByKey.values.map(_.totalCost).sum * Global.uahToUsd - groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)</td>
+                    <td> @fmt.format(itemsByKey.values.map(_.totalCost).sum)</td>
+                    <td> @fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")</td>
+                    <td> @fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-") </td>
+                   <td> @fmt.format(itemsByKey.values.map(_.totalCost).sum * Global.uahToUsd - groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)</td>
                 </tr>
             </tfoot>
         </table>

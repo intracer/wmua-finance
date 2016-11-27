@@ -77,7 +77,7 @@ object GrantReader extends SwebleParser {
 
       val cells = collectNodes(row, { case c: WtTableCell => c })
 
-      val values = cells.map(c => getText(c.getBody).trim)
+      val values = cells.map(c => getText(c.getBody).trim).toIndexedSeq
 
       if (simple)
         GrantItemFactory.simple(values)

@@ -1,30 +1,42 @@
 package controllers
 
-import play.api._
+import org.intracer.finance.{User, UserObj}
 import play.api.mvc._
-import play.api.data._
-import play.api.data.Forms._
-import org.intracer.finance.User
 
 trait Secured {
 
-  def username(request: RequestHeader) = request.session.get(Security.username)
+  type Permission = User => Boolean
 
-  def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Application.index())
+  def userDao = Global.db.userDao
 
-  def withAuth(f: => String => Request[AnyContent] => Result) = {
-    Security.Authenticated(username, onUnauthorized) { user =>
-      Action(request => f(user)(request))
+  def user(request: RequestHeader): Option[User] = {
+    request.session.get(Security.username).map(_.trim.toLowerCase).flatMap(userDao.get)
+  }
+
+  def onUnAuthenticated(request: RequestHeader) = Results.Redirect(routes.Login.login())
+
+  def onUnAuthorized(user: User) = Results.Redirect(routes.Login.error("You don't have permission to access this page"))
+
+  def withAuth(permission: Permission = AllowPermission)
+              (f: => User => Request[AnyContent] => Result) = {
+    Security.Authenticated(user, onUnAuthenticated) { user =>
+      Action(request =>
+        if (permission(user))
+          f(user)(request)
+        else
+          onUnAuthorized(user)
+      )
     }
   }
 
-  /**
-   * This method shows how you could wrap the withAuth method to also fetch your user
-   * You will need to implement UserDAO.findOneByUsername
-   */
-  def withUser(f: User => Request[AnyContent] => Result) = withAuth { username => implicit request =>
-    User.login(username, "123").map { user =>
-      f(user)(request)
-    }.getOrElse(onUnauthorized(request))
-  }
+  val AllowPermission = (_: User) => true
+
+  def rolePermission(roles: Set[String])(user: User) = user.hasAnyRole(roles)
+
 }
+
+
+
+
+
+

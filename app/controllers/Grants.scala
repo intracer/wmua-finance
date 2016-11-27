@@ -1,36 +1,35 @@
 package controllers
 
-import client.finance.{GrantItem, GrantReader}
-import org.intracer.finance.User
+import client.finance.GrantReader
 import org.intracer.finance.slick.Expenditures
-import play.api.mvc.Controller
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import play.api.mvc.Controller
 
 object Grants extends Controller with Secured {
 
-  def items(id: Int) = withAuth {
-    username =>
+  def items(id: Int) = withAuth() {
+    user =>
       implicit request =>
 
         val grant = Expenditures.grants(id)
         val items = GrantReader.grantItems(grant)
 
-        Ok(views.html.grantItems(new User(***REMOVED***), grant, items))
+        Ok(views.html.grantItems(user, grant, items))
   }
 
-  def list() = withAuth {
-    username =>
+  def list() = withAuth() {
+    user =>
       implicit request =>
 
         val grants = Expenditures.grants.values.toSeq
 
-        Ok(views.html.grants(new User(***REMOVED***), grants))
+        Ok(views.html.grants(user, grants))
 
   }
 
-  def importItems(id: Int) = withAuth {
-    username =>
+  def importItems(id: Int) = withAuth() {
+    user =>
       implicit request =>
 
         val grant = Expenditures.grants(id)
@@ -38,7 +37,7 @@ object Grants extends Controller with Secured {
 
         Global.db.grantItemDao.insertAll(items)
 
-        Ok(views.html.grantItems(new User(***REMOVED***), grant, items))
+        Ok(views.html.grantItems(user, grant, items))
 
   }
 

@@ -1,10 +1,4 @@
-@(user: org.intracer.finance.User,
-        operations: Seq[org.intracer.finance.Operation],
-        total: Double,
-        projects: Set[String],
-        categories: Set[String],
-        grants: Set[String],
-        daterange: String)(implicit flash: Flash, lang: Lang, messages: Messages)
+@(user: org.intracer.finance.User)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("resolutions"), user) {
 

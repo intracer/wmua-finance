@@ -12,7 +12,7 @@ val scalawikiVersion = "0.4.3"
 resolvers += Resolver.bintrayRepo("intracer", "maven")
 
 libraryDependencies ++= Seq(
-  "com.github.nscala-time" %% "nscala-time" % "1.8.0",
+  "com.github.nscala-time" %% "nscala-time" % "2.10.0",
   "com.squants" %% "squants" % "0.4.2",
   "org.sweble.wikitext" % "swc-engine" % "2.0.0",
   "com.typesafe.slick" %% "slick" % "3.1.1",
@@ -23,6 +23,7 @@ libraryDependencies ++= Seq(
   "com.adrianhurt" %% "play-bootstrap" % "1.0-P24-B3",
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
+  "com.typesafe.play" %% "play-mailer" % "4.0.0",
   "io.spray" % "spray-util_2.11" % "1.3.3",
   "joda-time" % "joda-time" % "2.7",
   "mysql" % "mysql-connector-java" % "5.1.35",

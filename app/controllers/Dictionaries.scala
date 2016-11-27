@@ -13,34 +13,34 @@ import scala.concurrent.Future
 
 object Dictionaries extends Controller with Secured {
 
-  def list() = withAuth { username =>
+  def list() = withAuth() { user =>
     implicit request =>
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), "", Seq.empty))
+      Ok(views.html.dictionaries(user, "", Seq.empty))
   }
 
-  def accounts() = withAuth { username =>
+  def accounts() = withAuth() { user =>
     implicit request =>
 
       val accounts = Expenditures.accounts.values.toSeq.sortBy(_.id)
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), "account", accounts))
+      Ok(views.html.dictionaries(user, "account", accounts))
   }
 
-  def categories() = withAuth { username =>
+  def categories() = withAuth() { user =>
     implicit request =>
 
       val categories = Expenditures.categories.values.toSeq.sortBy(_.id)
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), "category", categories))
+      Ok(views.html.dictionaries(user, "category", categories))
   }
 
-  def projects() = withAuth { username =>
+  def projects() = withAuth() { user =>
     implicit request =>
 
       val projects = Expenditures.projects.values.toSeq.sortBy(_.id)
 
-      Ok(views.html.dictionaries(new User(***REMOVED***), "project", projects))
+      Ok(views.html.dictionaries(user, "project", projects))
   }
 
   def update() = Action.async {

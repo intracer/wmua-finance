@@ -28,7 +28,7 @@ object GrantItemFactory {
   //  def detailed()
 
   //Number	Category	Item description	Unit	Number of units	Cost per unit	Total cost	Currency	Notes
-  def simple(v: Seq[String]): Option[GrantItem] = {
+  def simple(v: IndexedSeq[String]): Option[GrantItem] = {
     Some(new GrantItem(None,
       number = v(0),
       category = Some(v(1)),
@@ -42,8 +42,8 @@ object GrantItemFactory {
     )
   }
 
-  def apg(v: Seq[String]): Option[GrantItem] = {
-    val firstParts = v(0).split(" ").toSeq
+  def apg(v: IndexedSeq[String]): Option[GrantItem] = {
+    val firstParts = v(0).split(" ")
     if (firstParts(0).charAt(0).isDigit && firstParts(0).charAt(1) == '.') {
       Some(new GrantItem(None,
         number = firstParts(0),

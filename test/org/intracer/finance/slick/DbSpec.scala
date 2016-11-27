@@ -137,7 +137,7 @@ class DbSpec extends Specification with BeforeAfter {
       val exp = new Expenditure(
         None,
         new Timestamp(0L),
-        BigDecimal(10),
+        Some(BigDecimal(10)),
         accounts.values.find(_.code == "code1").get,
         cats.values.find(_.code == "code1").get,
         projects.values.find(_.code == "code1").get,

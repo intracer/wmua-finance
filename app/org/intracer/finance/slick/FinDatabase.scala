@@ -12,27 +12,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
 
-  val categories = TableQuery[Categories](
-    (tag: Tag) => new Categories(tag)
-  )
+  val categories = TableQuery[Categories]((tag: Tag) => new Categories(tag))
 
-  val grants = TableQuery[Grants](
-    (tag: Tag) => new Grants(tag))
+  val grants = TableQuery[Grants]((tag: Tag) => new Grants(tag))
 
-  val projects = TableQuery[Projects](
-    (tag: Tag) => new Projects(tag))
+  val projects = TableQuery[Projects]((tag: Tag) => new Projects(tag))
 
-  val exps = TableQuery[Expenditures](
-    (tag: Tag) => new Expenditures(tag))
+  val exps = TableQuery[Expenditures]((tag: Tag) => new Expenditures(tag))
 
-  val accounts = TableQuery[Accounts] (
-    (tag: Tag) => new Accounts(tag)
-  )
+  val accounts = TableQuery[Accounts]((tag: Tag) => new Accounts(tag))
 
-  val grantItems = TableQuery[GrantItems] (
-    (tag: Tag) => new GrantItems(tag)
-  )
+  val grantItems = TableQuery[GrantItems]((tag: Tag) => new GrantItems(tag))
 
+  val users = TableQuery[Users]((tag: Tag) => new Users(tag))
 
   def tables =
     Seq(
@@ -40,7 +32,8 @@ class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
       projects,
       grants,
       grantItems,
-      accounts
+      accounts,
+      users
     )
 
   val categoryDao = new CategoryDao(this, categories, driver)
@@ -49,6 +42,7 @@ class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
   val expDao = new ExpenditureDao(this, exps, driver)
   val accountDao = new AccountDao(this, accounts, driver)
   val grantItemDao = new GrantItemsDao(this, grantItems, driver)
+  val userDao = new UserDao(this, users, driver)
 
   def createTables() {
     createIfNotExists()

@@ -1,0 +1,11 @@
+@import org.intracer.finance.User
+@(
+        message: String,
+        user: User = null,
+        asUserId: Long = 0,
+        asUser: User = null
+)(implicit lang: Lang, messages: Messages)
+
+@main("error", user) {
+    <div class="alert alert-danger"> @Messages(message) </div>
+}

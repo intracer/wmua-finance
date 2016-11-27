@@ -1,71 +1,22 @@
-@(operations: Seq[org.intracer.finance.Operation],
-        total: Double,
-        opFilter: OpFilter,
-        operationsByProject: Map[String, Iterable[org.intracer.finance.Operation]],
-        operationsByCategory: Map[String, Iterable[org.intracer.finance.Operation]],
-        operationsByGrant: Map[String, Iterable[org.intracer.finance.Operation]],
-        operationsByGrantRow: Map[String, Iterable[org.intracer.finance.Operation]],
-        operationsByProjectAndCategory: Map[String, Iterable[org.intracer.finance.Operation]]
-        )(implicit flash: Flash, lang: Lang, messages: Messages)
-
 @import org.intracer.finance.Operation
 @import org.intracer.finance.slick.Expenditures
 
-    @statGrid(tableName: String, groupName: String, mapping: Map[String, String], groupedOperations: Map[String, Iterable[Operation]]) = {
-
-        <table class="table table-striped table-bordered" style="background-color: #DDDDDD;">
-            <caption><b>@tableName</b></caption>
-            <thead>
-                <tr>
-                    <th width="50%">@groupName</th>
-                    <th>@Messages("year")</th>
-                    @for(m <- 1 to 12) {
-                        <th>@m</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-            @for(groupId <- groupedOperations.keys.toSeq.sortBy(key => mapping.getOrElse(key, key).toLowerCase)) {
-
-                <tr>
-                    <td>
-                    @mapping.getOrElse(groupId, groupId)
-                    </td>
-                    <td>
-                    @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
-
-                        @if(false) { =
-                        @for(op <- groupedOperations(groupId)) {
-                    <span title="@op.to.desc"> @org.intracer.finance.Formatter.fmt.format(op.amount) </span>
-                        }
-                        }
-                    </td>
-
-                    @for(m <- 1 to 12) {
-                        <td>
-                        @org.intracer.finance.Formatter.fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
-                        </td>
-                    }
-                </tr>
-            }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>@Messages("total") </td>
-                    <td>@org.intracer.finance.Formatter.fmt.format(total) </td>
-                </tr>
-            </tfoot>
-        </table>
-    }
-
+@(operations: Seq[Operation],
+        total: Double,
+        opFilter: OpFilter,
+        byProject: Map[String, Iterable[Operation]],
+        byCategory: Map[String, Iterable[Operation]],
+        byGrant: Map[String, Iterable[Operation]],
+        byGrantRow: Map[String, Iterable[Operation]],
+        byProjectAndCategory: Map[String, Iterable[Operation]]
+        )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("operations")) {
     @filter(operations, opFilter, "/statistics")
-    @statGrid(Messages("by.project"), Messages("project"), Expenditures.projects.map{case (k,v) => (k.toString, v.name)}, operationsByProject)
-    @statGrid(Messages("by.category"), Messages("category"), Expenditures.categories.map{case (k,v) => (k.toString, v.name)}, operationsByCategory)
-    @statGrid(Messages("by.grant"), Messages("grant"), Expenditures.grants.map{case (k,v) => (k.toString, v.name)}, operationsByGrant)
-    @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow.keySet.map(k => (k,k)).toMap, operationsByGrantRow)
-
+    @statGrid(Messages("by.project"), Messages("project"), Expenditures.projects.map{case (k,v) => (k.toString, v.name)}, byProject, total)
+    @statGrid(Messages("by.category"), Messages("category"), Expenditures.categories.map{case (k,v) => (k.toString, v.name)}, byCategory, total)
+    @statGrid(Messages("by.grant"), Messages("grant"), Expenditures.grants.map{case (k,v) => (k.toString, v.name)}, byGrant, total)
+    @statGrid(Messages("by.grant.row"), Messages("grant.row"), byGrantRow.keySet.map(k => (k,k)).toMap, byGrantRow, total)
 }
 
 

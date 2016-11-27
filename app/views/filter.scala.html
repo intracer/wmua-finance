@@ -1,10 +1,5 @@
 @(operations: Seq[org.intracer.finance.Operation],
-        projects: Set[Int],
-        categories: Set[Int],
-        grants: Set[Int],
-        grantItems: Set[Int],
-        accounts: Set[Int],
-        daterange: String,
+        filter: OpFilter,
         action: String,
         rate: Option[Double] = None)(implicit flash: Flash, lang: Lang, messages: Messages)
 
@@ -18,7 +13,7 @@
                 <label class="control-label" for="projects_select" style="width: 60pt">@Messages("projects")</label>
                 <select id="projects_select" class="selectpicker" multiple name="projects">
                 @for((id, project) <- Expenditures.projects.toSeq.sortBy(_._2.name.toLowerCase)) {
-                    <option value="@id" @if(projects.contains(id)) {selected}>@project.name </option>
+                    <option value="@id" @if(filter.projects.contains(id)) {selected}>@project.name </option>
                 }
                 </select>
             </div>
@@ -27,7 +22,7 @@
                 <label class="control-label" for="categories_select" style="width: 60pt">@Messages("categories")</label>
                 <select id="categories_select" class="selectpicker" multiple name="categories">
                 @for((id, category) <- Expenditures.categories.toSeq.sortBy(_._2.name.toLowerCase)) {
-                    <option value="@id" @if(categories.contains(id)) {selected}>@category.name </option>
+                    <option value="@id" @if(filter.categories.contains(id)) {selected}>@category.name </option>
                 }
                 </select>
             </div>
@@ -36,7 +31,7 @@
                 <label class="control-label" for="grants_select" style="width: 60pt">@Messages("grants")</label>
                 <select id="grants_select" class="selectpicker" multiple name="grants">
                 @for((id, grant) <- Expenditures.grants.toSeq.sortBy(_._2.name.toLowerCase)) {
-                    <option value="@id" @if(grants.contains(id)) {selected}>@grant.name </option>
+                    <option value="@id" @if(filter.grants.contains(id)) {selected}>@grant.name </option>
                 }
                 </select>
             </div>
@@ -45,7 +40,7 @@
                 <label class="control-label" for="grantItems_select" style="width: 60pt">@Messages("grants items")</label>
                 <select id="grantItems_select" class="selectpicker" multiple name="grantItems">
                 @for(grantItem <- Expenditures.grantItems(17).sortBy(_.number.toLowerCase)) {
-                    <option value="@grantItem.id.get" @if(grantItems.contains(grantItem.id.get)) {selected}>@grantItem.name </option>
+                    <option value="@grantItem.id.get" @if(filter.grantItems.contains(grantItem.id.get)) {selected}>@grantItem.name </option>
                 }
                 </select>
             </div>
@@ -54,7 +49,7 @@
                 <label class="control-label" for="accounts_select" style="width: 60pt">@Messages("accounts")</label>
                 <select id="accounts_select" class="selectpicker" multiple name="accounts">
                 @for((id, account) <- Expenditures.accounts.toSeq.sortBy(_._2.name.toLowerCase)) {
-                    <option value="@id" @if(accounts.contains(id)) {selected}>@account.name </option>
+                    <option value="@id" @if(filter.accounts.contains(id)) {selected}>@account.name </option>
                 }
                 </select>
             </div>
@@ -64,7 +59,7 @@
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon-calendar"></i></span>
-                        <input type="text" style="width: 180px" name="daterange" id="daterange" value="@daterange" />
+                        <input type="text" style="width: 180px" name="daterange" id="daterange" value="@filter.dateRange" />
                     </div>
                 </div>
             </div>

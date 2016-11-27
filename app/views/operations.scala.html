@@ -1,19 +1,14 @@
 @(user: org.intracer.finance.User,
         operations: Seq[org.intracer.finance.Operation],
         total: Double,
-        projects: Set[Int],
-        categories: Set[Int],
-        grants: Set[Int],
-        grantItems: Set[Int],
-        accounts: Set[Int],
-        daterange: String,
+        opFilter: OpFilter,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("operations"), user) {
 
     <div class="row">
 
-    @filter(operations, projects, categories, grants, grantItems, accounts, daterange, url)
+    @filter(operations, opFilter, url)
 
         <div id="msg"></div>
     <table class="table table-striped table-bordered" id="operations" style="background-color: #DDDDDD;">

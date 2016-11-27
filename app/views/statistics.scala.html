@@ -1,11 +1,6 @@
 @(operations: Seq[org.intracer.finance.Operation],
         total: Double,
-        projects: Set[String],
-        categories: Set[String],
-        grants: Set[String],
-        grantItems: Set[String],
-        accounts: Set[String],
-        daterange: String,
+        opFilter: OpFilter,
         operationsByProject: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByCategory: Map[String, Iterable[org.intracer.finance.Operation]],
         operationsByGrant: Map[String, Iterable[org.intracer.finance.Operation]],
@@ -65,14 +60,7 @@
 
 
 @main(Messages("operations")) {
-    @filter(operations,
-        projects.map(_.toInt),
-        categories.map(_.toInt),
-        grants.map(_.toInt),
-        grantItems.map(_.toInt),
-        accounts.map(_.toInt),
-        daterange,
-        "/statistics")
+    @filter(operations, opFilter, "/statistics")
     @statGrid(Messages("by.project"), Messages("project"), Expenditures.projects.map{case (k,v) => (k.toString, v.name)}, operationsByProject)
     @statGrid(Messages("by.category"), Messages("category"), Expenditures.categories.map{case (k,v) => (k.toString, v.name)}, operationsByCategory)
     @statGrid(Messages("by.grant"), Messages("grant"), Expenditures.grants.map{case (k,v) => (k.toString, v.name)}, operationsByGrant)

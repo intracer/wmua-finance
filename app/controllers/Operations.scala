@@ -76,8 +76,7 @@ object Operations extends Controller with Secured {
         val amounts = operations.map(_.amount.map(_.toDouble).getOrElse(0.0))
         val total = amounts.sum
 
-        Ok(views.html.operations(user, operations, total, opFilter, "/operations")
-        )
+        Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
   }
 
   def byGrantRow = withAuth() {
@@ -127,18 +126,18 @@ object Operations extends Controller with Secured {
       val opFilter = OpFilter(request.queryString)
       val operations = opFilter.filter()
 
-      val operationsByProject = operations.groupBy(o => o.to.project.name)
-      val operationsByCategory = operations.groupBy(o => o.to.category.name)
-      val operationsByGrant = operations.groupBy(o => o.to.grant.map(_.name).getOrElse("No"))
+      val byProject = operations.groupBy(o => o.to.project.name)
+      val byCategory = operations.groupBy(o => o.to.category.name)
+      val byGrant = operations.groupBy(o => o.to.grant.map(_.name).getOrElse("No"))
 
-      val operationsByProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
+      val byProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
 
-      val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.map(_.id.toString).getOrElse(""))
+      val byGrantRow = operations.groupBy(o => o.to.grantItem.map(_.id.toString).getOrElse(""))
 
       val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 
       Ok(views.html.statistics(operations, total, opFilter,
-        operationsByProject, operationsByCategory, operationsByGrant, operationsByGrantRow, operationsByProjectAndCategory))
+        byProject, byCategory, byGrant, byGrantRow, byProjectAndCategory))
   }
 
   def update() = Action.async {

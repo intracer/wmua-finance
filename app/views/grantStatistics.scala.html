@@ -29,31 +29,33 @@
             </thead>
             <tbody>
             @for(groupId <- itemsByKey.keys.toSeq.sortBy(id => itemsByKey(id).number.replaceFirst("^$", "z"))(AlphaNumOrdering)) {
-                <tr>
-                    <td>
-                        @itemsByKey(groupId).number
-                    </td>
+                @defining(operations.filter(_.to.grantItem.exists(_.number.startsWith(itemsByKey(groupId).number)))) { groupOperations =>
+                    <tr>
+                        <td>
+                            @itemsByKey(groupId).number
+                        </td>
 
-                    <td>
+                        <td>
                         @itemsByKey(groupId).description
-                    </td>
+                        </td>
 
-                    <td>
+                        <td>
                         @itemsByKey(groupId).totalCost
+                        </td>
+
+                        <td>
+                        @fmt.format(groupOperations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")
+                </td>
+
+                    <td>
+                    @fmt.format(groupOperations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
                     </td>
 
                     <td>
-                        @fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")
-                    </td>
-
-                    <td>
-                        @fmt.format(groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
-                    </td>
-
-                    <td>
-                        @fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupedOperations.getOrElse(groupId, Seq.empty).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+                    @fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupOperations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
                     </td>
                 </tr>
+                }
             }
             </tbody>
             <tfoot>

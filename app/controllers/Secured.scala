@@ -1,7 +1,9 @@
 package controllers
 
-import org.intracer.finance.{User, UserObj}
+import org.intracer.finance.User
 import play.api.mvc._
+
+import scala.concurrent.Future
 
 trait Secured {
 
@@ -29,7 +31,21 @@ trait Secured {
     }
   }
 
+  def withAuthAsync(permission: Permission = AllowPermission)
+              (f: => User => Request[AnyContent] => Future[Result]) = {
+    Security.Authenticated(user, onUnAuthenticated) { user =>
+      Action.async(request =>
+        if (permission(user))
+          f(user)(request)
+        else
+          Future.successful(onUnAuthorized(user))
+      )
+    }
+  }
+
   val AllowPermission = (_: User) => true
+
+  def isAdmin(user: User) = user.hasRole("admin")
 
   def rolePermission(roles: Set[String])(user: User) = user.hasAnyRole(roles)
 

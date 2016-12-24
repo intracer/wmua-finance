@@ -54,7 +54,7 @@
 
             $(document).ready(function () {
 
-                @if(user.hasRole("admin")) {
+                @if(user != null && user.hasRole("admin")) {
                     var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
                 }
 

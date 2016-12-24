@@ -132,7 +132,7 @@ object Operations extends Controller with Secured {
 
       val byProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
 
-      val byGrantRow = operations.groupBy(o => o.to.grantItem.map(_.id.toString).getOrElse(""))
+      val byGrantRow = operations.groupBy(o => o.to.grantItem.map(_.description).getOrElse(""))
 
       val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 

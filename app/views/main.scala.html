@@ -54,7 +54,9 @@
 
             $(document).ready(function () {
 
-                var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
+                @if(user.hasRole("admin")) {
+                    var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
+                }
 
                 $("tr").each(function() {
                             var row  = $(this);

@@ -21,23 +21,29 @@
             </thead>
             <tbody id="dictionary_body">
 
-                <tr id="tr_new" class="tr_new">
-                    <td>
-                        <a href="#" class="newrow new_required dict_editable @{table}_editable" data-type="text" data-url="/update_op" data-title="@Messages("table")" data-name="table" style="display: none;">@table</a>
-                    </td>
-                    <td>
-                        <a href="#" class="newrow new_required dict_editable @{table}_editable" data-type="text" data-url="/update_op" data-title="@Messages("name")" data-name="name">
-                        </a>
+                @if(user.hasRole("admin")) {
+                    <tr id="tr_new" class="tr_new">
+                        <td>
+                            <a href="#" class="newrow new_required dict_editable @{
+                                table
+                            }_editable" data-type="text" data-url="/update_op" data-title="@Messages("table")" data-name="table" style="display: none;">@table</a>
+                        </td>
+                        <td>
+                            <a href="#" class="newrow new_required dict_editable @{
+                                table
+                            }_editable" data-type="text" data-url="/update_op" data-title="@Messages("name")" data-name="name">
+                            </a>
 
-                        @saveReset("dict-save-btn")
-                    </td>
-                </tr>
+                            @saveReset("dict-save-btn")
+                        </td>
+                    </tr>
+                }
 
                 @for(e <- dict) {
                     <tr>
                         <td> @e.code </td>
                         <td>
-                            <a href="#" class="dict_editable @{table}_editable" data-type="text" data-pk="@e.code" data-url="/update_dict" data-title="@Messages("name")" data-name="name">
+                            <a href="#" @if(user.hasRole("admin")) {class="dict_editable @{table}_editable" data-type="text" data-pk="@e.code" data-url="/update_dict" data-title="@Messages("name")" data-name="name" }>
                             @e.name
                             </a>
                         </td>

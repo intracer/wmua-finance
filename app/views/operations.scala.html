@@ -4,98 +4,109 @@
         opFilter: OpFilter,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
+@editable(clazz: String) = { @if(user.hasRole("admin")) { class="@clazz xeditable" }  }
+
 @main(Messages("operations"), user) {
 
-    <div class="row">
 
-    @filter(operations, opFilter, url)
+        <div class="row">
+
+            @filter(operations, opFilter, url)
 
         <div id="msg"></div>
-    <table class="table table-striped table-bordered" id="operations" style="background-color: #DDDDDD;">
-        <thead>
-            <tr>
-                <th style="width:60pt">@Messages("date")</th>
-                <th>@Messages("project")</th>
-                <th>@Messages("category")</th>
-                <th>@Messages("grant")</th>
-                <th>@Messages("grant item")</th>
-                <th>@Messages("amount")</th>
-                <th>@Messages("account")</th>
-                <th>@Messages("descr")</th>
-            </tr>
-        </thead>
-        <tbody id="operations_body">
+        <table class="table table-striped table-bordered" id="operations" style="background-color: #DDDDDD;">
+            <thead>
+                <tr>
+                    <th style="width: 60pt">@Messages("date")</th>
+                    <th>@Messages("project")</th>
+                    <th>@Messages("category")</th>
+                    <th>@Messages("grant")</th>
+                    <th>@Messages("grant item")</th>
+                    <th>@Messages("amount")</th>
+                    <th>@Messages("account")</th>
+                    <th>@Messages("descr")</th>
+                </tr>
+            </thead>
 
-            @newrow()
+            <tbody id="operations_body">
 
-            @for(operation <- operations) {
-            @defining(operation.to.id.getOrElse(0)) { id =>
-            <tr id="@id">
-                <td>
-                    <a href="#" class="edit_date xeditable"
-                    data-type="combodate" data-pk="@id" data-url="/update_op" data-title="Select date" data-name="date"
-                    data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY"
-                    data-value="@operation.date.toString().substring(0, 10)">
-                        @operation.date.toString().substring(0, 10)
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="edit_project xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
-                    @operation.to.projectName
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="edit_category xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
-                    @operation.to.categoryName
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="edit_grant xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
-                    @operation.to.grantName
-                    </a>
-                </td>
-                <td>
-                    <a href="#"
-                        @if(operation.to.grant.isDefined){class="edit_grant_item_@operation.to.grant.map(_.code).getOrElse(0) xeditable"}
-                        data-value="@operation.to.grantItem.flatMap(_.id).getOrElse(0)"
-                    data-type="select2" data-pk="@id" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem">
-                    @operation.to.grantItem.map(_.name).getOrElse("")
-                    </a>
-                </td>
-                <td>
-                    <a href="#" class="editable xeditable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("amount")" data-name="amount">
-                    @operation.amountString
-                    </a>
-                </td>
+                @if(user.hasRole("admin")) {
+                    @newrow()
+                }
 
-                <td>
-                    <a href="#" class="edit_account xeditable" data-type="select2" data-pk="@id" data-value="@operation.to.from.code" data-url="/update_op" data-title="@Messages("account")" data-name="account">
-                    @operation.to.from.name
-                    </a>
-                </td>
+                @for(operation <- operations) {
+                    @defining(operation.to.id.getOrElse(0)) { id =>
+                        <tr id="@id">
+                            <td>
+                                <a href="#" @editable("edit_date")
+                                data-type="combodate" data-pk="@id" data-url="/update_op" data-title="Select date" data-name="date"
+                                data-format="YYYY-MM-DD" data-viewformat="DD/MM/YYYY" data-template="D / MMM / YYYY"
+                                data-value="@operation.date.toString().substring(0, 10)">
+                                @operation.date.toString().substring(0, 10)
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" @editable("edit_project") data-type="select2" data-pk="@id" data-value="@operation.to.project.code" data-url="/update_op" data-title="@Messages("project")" data-name="project">
+                                @operation.to.projectName
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" @editable("edit_category") data-type="select2" data-pk="@id" data-value="@operation.to.category.code" data-url="/update_op" data-title="@Messages("category")" data-name="category">
+                                @operation.to.categoryName
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" @editable("edit_grant") data-type="select2" data-pk="@id" data-value="@operation.to.grant.map(_.code).getOrElse(0)" data-url="/update_op" data-title="@Messages("grant")" data-name="grant">
+                                @operation.to.grantName
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#"
+                                    @if(operation.to.grant.isDefined) {
+                                        @editable("edit_grant_item_" + operation.to.grant.map(_.code).getOrElse(0))
+                                    }
+                                data-value="@operation.to.grantItem.flatMap(_.id).getOrElse(0)"
+                                data-type="select2" data-pk="@id" data-url="/update_op" data-title="@Messages("grantItem")" data-name="grantItem">
+                                @operation.to.grantItem.map(_.name).getOrElse("")
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" @editable("editable") data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("amount")" data-name="amount">
+                                @operation.amountString
+                                </a>
+                            </td>
 
-                <td>
-                    <a href="#" class="editable xeditable" data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
-                        @operation.to.desc
-                    </a>
+                            <td>
+                                <a href="#" @editable("edit_account") data-type="select2" data-pk="@id" data-value="@operation.to.from.code" data-url="/update_op" data-title="@Messages("account")" data-name="account">
+                                @operation.to.from.name
+                                </a>
+                            </td>
 
-                    <div style="float: right; width: 25px; height: 25px" class="btn-group">
-                        <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px; height: 25px">
-                            <span class="fa fa-copy" aria-hidden="true"></span>
-                        </button>
-                    </div>
+                            <td>
+                                <a href="#" @editable("editable") data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
+                                @operation.to.desc
+                                </a>
 
-                </td>
-            </tr>
-            }
-        }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4">@Messages("total") </td>
-                <td colspan="2">@org.intracer.finance.Formatter.fmt.format(total) </td>
-            </tr>
+                                @if(user.hasRole("admin")) {
+                                    <div style="float: right; width: 25px; height: 25px" class="btn-group">
+                                        <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px;
+                                            height: 25px">
+                                            <span class="fa fa-copy" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">@Messages("total") </td>
+                    <td colspan="2">@org.intracer.finance.Formatter.fmt.format(total) </td>
+        </tr>
         </tfoot>
-    </table>
-    </div>
-}
+        </table>
+        </div>
+    }

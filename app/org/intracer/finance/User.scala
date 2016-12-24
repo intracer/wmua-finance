@@ -4,7 +4,6 @@ import javax.mail.internet.InternetAddress
 
 import play.api.data.validation.{Constraints, Invalid, Valid}
 
-
 case class User(id: Option[Long],
                 fullname: String,
                 email: String,

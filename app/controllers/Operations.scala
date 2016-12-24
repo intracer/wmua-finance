@@ -48,7 +48,7 @@ case class OpFilter(projects: Set[Int],
 }
 
 object OpFilter {
-  val defaultDateRange: String = "01/01/2016 - 12/20/2016"
+  val defaultDateRange: String = "01/01/2016 - 12/31/2016"
 
   def apply(map: Map[String, Seq[String]]) = {
     val projects = map.getOrElse("projects", Nil).toSet.map((x: String) => x.toInt)

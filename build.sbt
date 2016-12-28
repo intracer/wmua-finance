@@ -10,6 +10,7 @@ scalaVersion := "2.11.8"
 val scalawikiVersion = "0.4.3"
 
 resolvers += Resolver.bintrayRepo("intracer", "maven")
+resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
   "com.github.nscala-time" %% "nscala-time" % "2.10.0",

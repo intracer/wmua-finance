@@ -4,7 +4,7 @@
         opFilter: OpFilter,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
-@editable(clazz: String) = { @if(user.hasRole("admin")) { class="@clazz xeditable" }  }
+@editable(clazz: String) = { @if(user.hasRole("admin")) { class="@clazz xeditable" } else { class="noteditable" } }
 
 @main(Messages("operations"), user) {
 

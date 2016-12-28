@@ -200,8 +200,12 @@
                     });
                 };
 
-                initEditableFunc();
-                initDictEditableFunc();
+                @if(user != null && user.hasRole("admin")) {
+                    initEditableFunc();
+                    initDictEditableFunc();
+                } else {
+                    $('a.noteditable').contents().unwrap();
+                }
 
                 var saveBtnFunc = function() {
                     var origin = document.querySelector("tr:hover");

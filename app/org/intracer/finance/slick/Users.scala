@@ -5,7 +5,7 @@ import slick.driver.H2Driver.api._
 
 class Users(tag: Tag) extends Table[User](tag, "user") {
 
-  def id = column[Option[Long]]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def fullname = column[String]("fullname")
   def email = column[String]("email")
   def roles = column[String]("roles")
@@ -15,6 +15,6 @@ class Users(tag: Tag) extends Table[User](tag, "user") {
 
   def emailIndex = index("acc_email", email, unique = true)
 
-  def * = (id, fullname, email, roles, password, lang, wikiAccount) <> (User.tupled, User.unapply)
+  def * = (id.?, fullname, email, roles, password, lang, wikiAccount) <> (User.tupled, User.unapply)
 
 }

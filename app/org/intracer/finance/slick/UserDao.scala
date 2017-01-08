@@ -27,6 +27,9 @@ class UserDao(val mwDb: FinDatabase, val query: TableQuery[Users], val driver: J
   def get(email: String): Option[User] =
     db.run(query.filter(_.email === email).result.headOption).await
 
+  def get(id: Int): Option[User] =
+    db.run(query.filter(_.id === id).result.headOption).await
+
   def login(username: String, password: String): Option[User] = {
     get(username).filter(user => {
       val passwordTrimmed = password.trim

@@ -7,7 +7,7 @@ case class GrantItem(id: Option[Int] = None,
                      number: String,
                      description: String,
                      totalCost: BigDecimal,
-                     notes: Option[String],
+                     notes: Option[String] = None,
                      category: Option[String] = None,
                      unit: Option[String] = None,
                      qty: Option[String] = None,
@@ -29,7 +29,7 @@ object GrantItemFactory {
 
   //Number	Category	Item description	Unit	Number of units	Cost per unit	Total cost	Currency	Notes
   def simple(v: IndexedSeq[String]): Option[GrantItem] = {
-    Some(new GrantItem(None,
+    Some(GrantItem(None,
       number = v(0),
       category = Some(v(1)),
       description = v(2),
@@ -45,7 +45,7 @@ object GrantItemFactory {
   def apg(v: IndexedSeq[String]): Option[GrantItem] = {
     val firstParts = v(0).split(" ")
     if (firstParts(0).charAt(0).isDigit && firstParts(0).charAt(1) == '.') {
-      Some(new GrantItem(None,
+      Some(GrantItem(None,
         number = firstParts(0),
         category = None,
         description = firstParts.slice(1, firstParts.size).mkString(" "),

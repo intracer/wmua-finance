@@ -36,12 +36,15 @@ case class OpFilter(projects: Set[Int],
     None
 
   def filter(): Seq[Operation] = {
+
+    def bySet(set: Set[Int], id: Option[Int]) = set.isEmpty || id.exists(set.contains)
+
     Global.operations
-      .filter(op => projects.isEmpty || projects.contains(op.to.project.id.get))
-      .filter(op => categories.isEmpty || categories.contains(op.to.category.id.get))
-      .filter(op => grants.isEmpty || op.to.grant.exists(grant => grants.contains(grant.id.get)))
-      .filter(op => grantItems.isEmpty || op.to.grantItem.exists(item => grantItems.contains(item.id.get)))
-      .filter(op => accounts.isEmpty || accounts.contains(op.from.id.get))
+      .filter(op => bySet(projects, op.to.project.id))
+      .filter(op => bySet(categories, op.to.category.id))
+      .filter(op => bySet(accounts, op.from.id))
+      .filter(op => bySet(grants, op.to.grant.flatMap(_.id)))
+      .filter(op => bySet(grantItems, op.to.grantItem.flatMap(_.id)))
       .filter(op => interval.exists(_.contains(op.date)))
       .sortBy(_.date.toString())
   }
@@ -51,11 +54,17 @@ object OpFilter {
   val defaultDateRange: String = "01/01/2016 - 12/31/2016"
 
   def apply(map: Map[String, Seq[String]]) = {
-    val projects = map.getOrElse("projects", Nil).toSet.map((x: String) => x.toInt)
-    val categories = map.getOrElse("categories", Seq.empty[String]).toSet.map((x: String) => x.toInt)
-    val grants = map.getOrElse("grants", Nil).toSet.map((x: String) => x.toInt)
-    val grantItems = map.getOrElse("grantItems", Nil).map(_.toInt).toSet
-    val accounts = map.getOrElse("accounts", Nil).map(_.toInt).toSet
+
+    def toIntSet(name: String): Set[Int] = {
+      val toSet = map.getOrElse(name, Seq.empty[String]).toSet
+      toSet.map(_.toInt)
+    }
+
+    val projects = toIntSet("projects")
+    val categories = toIntSet("categories")
+    val grants = toIntSet("grants")
+    val grantItems = toIntSet("grantItems")
+    val accounts = toIntSet("accounts")
 
     val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
 
@@ -149,10 +158,11 @@ object Operations extends Controller with Secured {
           u => {
 
             import Global.db.expDao.driver.api._
-            val q = Global.db.expDao.query
             val db = Global.db.expDao.db
 
-            val idFilter = q.filter(_.id === u.pk.toInt)
+            val exps = Global.db.exps
+
+            val idFilter = exps.filter(_.id === u.pk.toInt)
 
             val cmd = u.name match {
               case "descr" =>
@@ -201,8 +211,9 @@ object Operations extends Controller with Secured {
           u => {
             import Global.db.expDao.driver.api._
             val db = Global.db.expDao.db
-            val q = Global.db.expDao.query
-            val exp = new Expenditure(
+            val exps = Global.db.exps
+
+            val exp = Expenditure(
               date = new Timestamp(u.date.getTime),
               amount = u.amount,
               from = u.account.flatMap(Expenditures.accounts.get).orNull,
@@ -210,10 +221,12 @@ object Operations extends Controller with Secured {
               project = Expenditures.projects.get(u.project).orNull,
               grant = u.grant.flatMap(Expenditures.grants.get),
               grantItem = u.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
-              desc = u.descr.orNull
+              desc = u.descr.orNull,
+              logDate = new Timestamp(DateTime.now().getMillis),
+              user = user
             )
 
-            db.run(q += exp).map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
+            db.run(exps += exp).map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
           })
   }
 

@@ -1,7 +1,6 @@
 package org.intracer.finance.slick
 
 import org.intracer.finance.Expenditure
-import org.joda.time.DateTime
 import slick.driver.JdbcProfile
 import slick.lifted.TableQuery
 import spray.util.pimpFuture

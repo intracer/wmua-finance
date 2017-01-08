@@ -33,7 +33,8 @@ class FinDatabase(val db: Database, val driver: JdbcProfile = MySQLDriver) {
       grants,
       grantItems,
       accounts,
-      users
+      users,
+      exps
     )
 
   val categoryDao = new CategoryDao(this, categories, driver)

@@ -9,3 +9,9 @@ CREATE TABLE user (
   roles varchar(255),
   lang char(10)
 );
+
+INSERT INTO test.user (fullname, wiki_account, email, created_at, deleted_at, password, roles, lang)
+VALUES ('Admin', null, 'admin', '2016-12-24 12:46:23', null, null, 'admin', 'en');
+
+INSERT INTO test.user (fullname, wiki_account, email, created_at, deleted_at, password, roles, lang)
+VALUES ('Viewer', null, 'viewer', '2016-12-24 12:46:23', null, null, 'organizer', 'en');

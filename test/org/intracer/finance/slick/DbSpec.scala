@@ -3,10 +3,10 @@ package org.intracer.finance.slick
 import java.sql.Timestamp
 
 import org.intracer.finance._
-import org.joda.time.DateTime
 import org.specs2.mutable.{BeforeAfter, Specification}
 import _root_.slick.backend.DatabaseConfig
 import _root_.slick.driver.JdbcProfile
+import client.finance.GrantItem
 
 class DbSpec extends Specification with BeforeAfter {
 
@@ -19,6 +19,8 @@ class DbSpec extends Specification with BeforeAfter {
   def projectDao = db.projectDao
 
   def grantDao = db.grantDao
+
+  def grantItemDao = db.grantItemDao
 
   def expDao = db.expDao
 
@@ -55,9 +57,9 @@ class DbSpec extends Specification with BeforeAfter {
 
   "project" should {
     "insert" in {
-      val project = new Project(name = "name")
+      val project = Project(name = "name")
 
-      projectDao.insert(project)
+      val id: Long = projectDao.insert(project)
 
       val list = projectDao.list
       list.size === 1
@@ -66,6 +68,7 @@ class DbSpec extends Specification with BeforeAfter {
 
       fromDb.id.isDefined === true
       fromDb.copy(id = None) === project
+      fromDb.id === Some(id)
     }
   }
 
@@ -73,7 +76,7 @@ class DbSpec extends Specification with BeforeAfter {
     "insert" in {
       val grant = new Grant(name = "name")
 
-      grantDao.insert(grant)
+      val id: Long = grantDao.insert(grant)
 
       val list = grantDao.list
       list.size === 1
@@ -82,6 +85,7 @@ class DbSpec extends Specification with BeforeAfter {
 
       fromDb.id.isDefined === true
       fromDb.copy(id = None) === grant
+      fromDb.id === Some(id)
     }
   }
 
@@ -89,7 +93,7 @@ class DbSpec extends Specification with BeforeAfter {
     "insert" in {
       val account = new Account(name = "name")
 
-      accountDao.insert(account)
+      val id: Long = accountDao.insert(account)
 
       val list = accountDao.list
       list.size === 1
@@ -98,9 +102,30 @@ class DbSpec extends Specification with BeforeAfter {
 
       fromDb.id.isDefined === true
       fromDb.copy(id = None) === account
+      fromDb.id === Some(id)
     }
   }
 
+  "grantItems" should {
+    "insert" in {
+
+      val grant = new Grant(name = "name")
+      val grantId = grantDao.insert(grant)
+
+      val grantItem = new GrantItem(None, Some(grantId.toInt), "1", "item", BigDecimal.valueOf(100))
+
+      val id: Long = grantItemDao.insert(grantItem)
+
+      val list = accountDao.list
+      list.size === 1
+
+      val fromDb = list.head
+
+      fromDb.id.isDefined === true
+      fromDb.copy(id = None) === grantItem
+      fromDb.id === Some(id)
+    }
+  }
 
   "expenditure" should {
     "insert" in {
@@ -124,6 +149,14 @@ class DbSpec extends Specification with BeforeAfter {
       grantDao.insertAll(Seq(grant1, grant2))
       val grants = grantDao.list.groupBy(_.id.get).mapValues(_.head)
 
+      val grant = grants.values.find(_.code == "01").get
+      val grantId = grant.id
+      val grantItem1 = new GrantItem(None, grantId, "1", "item1", BigDecimal.valueOf(100))
+      val grantItem2 = new GrantItem(None, grantId, "2", "item2", BigDecimal.valueOf(300))
+      grantItemDao.insertAll(Seq(grantItem1, grantItem2))
+
+      val grantItems = grantItemDao.list(grantId.get).groupBy(_.id.get).mapValues(_.head)
+
       val account1 = new Account(name = "Account1")
       val account2 = new Account(name = "Account2")
       accountDao.insertAll(Seq(account1, account2))
@@ -141,8 +174,9 @@ class DbSpec extends Specification with BeforeAfter {
         accounts.values.find(_.code == "code1").get,
         cats.values.find(_.code == "code1").get,
         projects.values.find(_.code == "code1").get,
-        grants.values.find(_.code == "01"),
-        Some("1.1"), "exp1"
+        Some(grant),
+        Some(grantItems.values.head), Some("exp1"),
+        desc = "123"
       )
 
       expDao.insert(exp)

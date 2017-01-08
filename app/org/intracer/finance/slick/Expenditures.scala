@@ -2,17 +2,16 @@ package org.intracer.finance.slick
 
 import java.sql.Timestamp
 
-import _root_.slick.driver.H2Driver.api._
+import slick.driver.H2Driver.api._
+import slick.profile.SqlProfile.ColumnOption.SqlType
 import org.intracer.finance._
-import _root_.slick.profile.SqlProfile.ColumnOption.SqlType
 import client.finance.GrantItem
 import controllers.Global
+import org.joda.time.DateTime
 
 class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-
-  //  def date = column[String]("op_date")
 
   def date = column[Timestamp]("op_date", SqlType("datetime "))
 
@@ -40,7 +39,13 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def grants = foreignKey("GRANT_FK", grantId, TableQuery[Grants])(_.id)
 
-  def * = (id.?, date, amount, from, categoryId, projectId, grantId, grantItem, grantRow, descr) <>(Expenditures.fromDb, Expenditures.toDb)
+  def logDate = column[Timestamp]("log_date", SqlType("datetime"))
+
+  def userId = column[Int]("user_id")
+
+
+  def * = (id.? , date , amount, from, categoryId, projectId, grantId, grantItem, descr, logDate, userId) <>
+    ((Expenditures.fromDb _).tupled, Expenditures.toDb)
 
 }
 
@@ -58,16 +63,30 @@ object Expenditures {
 
   def accounts: Map[Int, Account] = Global.db.accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
-  def fromDb(t: (Option[Int], Timestamp, Option[BigDecimal], Int, Int, Int, Option[Int], Option[Int], Option[String], String)) = {
-    val (maybeGrantId, maybeGrantItemId) = (t._7, t._8)
+  def fromDb(
+              id: Option[Int],
+              opDate: Timestamp,
+              amount: Option[BigDecimal],
+              accountId: Int,
+              categoryId: Int,
+              projectId: Int,
+              maybeGrantId: Option[Int],
+              maybeGrantItemId: Option[Int],
+              descr: String,
+              logDate: Timestamp,
+              userId: Int
+            ): Expenditure = {
 
-    val grantItem = for (grantId <- maybeGrantId;
-                         grantItemId <- maybeGrantItemId;
-                         grantItemsForGrant <- grantItems.get(grantId);
-                         grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
-    ) yield grantItem
+     val grantItem = for (grantId <- maybeGrantId;
+                          grantItemId <- maybeGrantItemId;
+                          grantItemsForGrant <- grantItems.get(grantId);
+                          grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
+     ) yield grantItem
 
-    new Expenditure(t._1, t._2, t._3, accounts(t._4), categories(t._5), projects(t._6), maybeGrantId.map(grants), grantItem, t._9, t._10)
+     val user = Global.db.userDao.get(userId).get
+
+     Expenditure(id, opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
+       maybeGrantId.map(grants), grantItem, descr, logDate, user)
   }
 
   def toDb(exp: Expenditure) = {
@@ -77,8 +96,9 @@ object Expenditures {
       exp.project.id.get,
       exp.grant.flatMap(_.id),
       exp.grantItem.flatMap(_.id),
-      exp.grantRow,
-      exp.desc))
+      exp.desc,
+      exp.logDate,
+      exp.user.id.get))
   }
 
 }

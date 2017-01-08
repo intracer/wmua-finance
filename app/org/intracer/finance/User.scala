@@ -4,7 +4,7 @@ import javax.mail.internet.InternetAddress
 
 import play.api.data.validation.{Constraints, Invalid, Valid}
 
-case class User(id: Option[Long],
+case class User(id: Option[Int],
                 fullname: String,
                 email: String,
                 roles: String = "",
@@ -39,13 +39,13 @@ object UserObj {
   val ADMIN_ROLES = Set(ADMIN_ROLE, ROOT_ROLE)
   val LANGS = Map("en" -> "English", "ru" -> "Русский", "uk" -> "Українська")
 
-  def unapplyEdit(user: User): Option[(Long, String, Option[String], String, Option[String], Option[String], Option[String])] = {
+  def unapplyEdit(user: User): Option[(Int, String, Option[String], String, Option[String], Option[String], Option[String])] = {
     Some((user.id.get, user.fullname, user.wikiAccount, user.email, None, Some(user.roles), user.lang))
   }
 
-  def applyEdit(id: Long, fullname: String, wikiAccount: Option[String], email: String, password: Option[String],
+  def applyEdit(id: Int, fullname: String, wikiAccount: Option[String], email: String, password: Option[String],
                 roles: Option[String], contest: Option[Long], lang: Option[String]): User = {
-    new User(Some(id), fullname, email.trim.toLowerCase, roles.getOrElse(""), password, lang,
+    User(Some(id), fullname, email.trim.toLowerCase, roles.getOrElse(""), password, lang,
       wikiAccount = wikiAccount)
   }
 

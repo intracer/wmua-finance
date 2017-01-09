@@ -1,12 +1,10 @@
 package controllers
 
-import java.sql.Timestamp
 import java.util.Date
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
-import org.intracer.finance.slick.Expenditures
-import org.intracer.finance.{Expenditure, Operation, User}
+import org.intracer.finance.{Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
@@ -17,7 +15,6 @@ import play.api.mvc._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
 
 case class OpFilter(projects: Set[Int],
                     categories: Set[Int],
@@ -151,89 +148,29 @@ object Operations extends Controller with Secured {
         byProject, byCategory, byGrant, byGrantRow, byProjectAndCategory))
   }
 
-  def update() = formAction(updateForm, doUpdate)
+  def update() = formAction(updateForm, Global.db.expDao.update)
 
-  def insert() = formAction(insertForm, doInsert)
+  def insert() = formAction(insertForm, Global.db.expDao.insert)
 
   def formAction[T](form: Form[T],
-                    process: (T, User) => Future[Result]): EssentialAction =
+                    process: (T, User) => Future[Int]): EssentialAction =
     withAuthAsync(isContributor) { user =>
       implicit request =>
         form.bindFromRequest.fold(
-          err => Future.successful(BadRequest(form.errorsAsJson)),
-          success => process(success, user)
+          error =>
+            Future.successful {
+              BadRequest(form.errorsAsJson)
+            },
+          success =>
+            process(success, user)
+              .map { id =>
+                Ok(s"""{"id": $id}""")
+              }
+              .recover { case cause =>
+                BadRequest(cause.getMessage)
+              }
         )
     }
-
-  def doUpdate(upd: Update, user: User): Future[Result] = {
-    import Global.db.expDao.driver.api._
-    val db = Global.db.expDao.db
-    val exps = Global.db.exps
-
-    val opFilter = exps.filter { e =>
-      e.id === upd.pk.toInt &&
-        e.userId === user.id.get
-    }
-
-    val cmd = upd.name match {
-      case "descr" =>
-        opFilter.map(_.descr).update(upd.value)
-
-      case "amount" =>
-        opFilter.map(_.amount)
-          .update(
-            Option(upd.value)
-              .filter(_.nonEmpty)
-              .map(new java.math.BigDecimal(_))
-          )
-
-      case "grant" =>
-        opFilter.map(_.grantId).update(Try(upd.value.toInt).toOption)
-
-      case "grantItem" =>
-        opFilter.map(_.grantItem).update(Try(upd.value.toInt).toOption)
-
-      case "account" =>
-        opFilter.map(_.from).update(upd.value.toInt)
-
-      case "project" =>
-        opFilter.map(_.projectId).update(upd.value.toInt)
-
-      case "category" =>
-        opFilter.map(_.categoryId).update(upd.value.toInt)
-
-      case "date" =>
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val dt = formatter.parseDateTime(upd.value)
-        opFilter.map(_.date).update(new Timestamp(dt.getMillis))
-
-      case "grantRow" =>
-        opFilter.map(_.grantRow).update(Some(upd.value))
-    }
-
-    db.run(cmd).map(r => Ok(upd.toString)).recover { case cause => BadRequest(cause.getMessage) }
-  }
-
-  def doInsert(op: NewOp, user: User) = {
-    import Global.db.expDao.driver.api._
-    val db = Global.db.expDao.db
-    val exps = Global.db.exps
-
-    val exp = Expenditure(
-      date = new Timestamp(op.date.getTime),
-      amount = op.amount,
-      from = op.account.flatMap(Expenditures.accounts.get).orNull,
-      category = Expenditures.categories.get(op.category).orNull,
-      project = Expenditures.projects.get(op.project).orNull,
-      grant = op.grant.flatMap(Expenditures.grants.get),
-      grantItem = op.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
-      desc = op.descr.orNull,
-      logDate = new Timestamp(DateTime.now().getMillis),
-      user = user
-    )
-
-    db.run(exps += exp).map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
-  }
 
   import play.api.data.format.Formats._
 

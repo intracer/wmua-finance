@@ -44,15 +44,15 @@
                         </td>
 
                         <td>
-                        @fmt.format(groupOperations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")
+                        @fmt.format(groupOperations.map(_.toDouble).sum / Global.uahToUsd).replaceFirst("^0$", "-")
                 </td>
 
                     <td>
-                    @fmt.format(groupOperations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
+                    @fmt.format(groupOperations.map(_.toDouble).sum).replaceFirst("^0$", "-")
                     </td>
 
                     <td>
-                    @fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupOperations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+                    @fmt.format(itemsByKey(groupId).totalCost * Global.uahToUsd - groupOperations.map(_.toDouble).sum)
                     </td>
                 </tr>
                 }
@@ -62,9 +62,9 @@
                 <tr>
                     <td colspan="2">@Messages("total") </td>
                     <td> @fmt.format(itemsByKey.values.filter(_.number.count(_ == '.') == 1).map(_.totalCost).sum)</td>
-                    <td> @fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum / Global.uahToUsd).replaceFirst("^0$", "-")</td>
-                    <td> @fmt.format(groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-") </td>
-                   <td> @fmt.format(itemsByKey.values.map(_.totalCost).sum * Global.uahToUsd - groupedOperations.values.flatten.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)</td>
+                    <td> @fmt.format(groupedOperations.values.flatten.map(_.toDouble).sum / Global.uahToUsd).replaceFirst("^0$", "-")</td>
+                    <td> @fmt.format(groupedOperations.values.flatten.map(_.toDouble).sum).replaceFirst("^0$", "-") </td>
+                   <td> @fmt.format(itemsByKey.values.map(_.totalCost).sum * Global.uahToUsd - groupedOperations.values.flatten.map(_.toDouble).sum)</td>
                 </tr>
             </tfoot>
         </table>

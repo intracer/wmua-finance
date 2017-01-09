@@ -89,8 +89,7 @@ object Operations extends Controller with Secured {
         val opFilter = OpFilter(request, Seq(user))
         val operations = opFilter.filter()
 
-        val amounts = operations.map(_.amount.map(_.toDouble).getOrElse(0.0))
-        val total = amounts.sum
+        val total = operations.map(_.toDouble).sum
 
         Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
   }
@@ -106,7 +105,7 @@ object Operations extends Controller with Secured {
 
         val keys = filtered.map(o => o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString()).sorted
 
-        val total = filtered.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
+        val total = filtered.map(_.toDouble).sum
 
         Ok(views.html.operations(user, sorted, total, opFilter, "/bygrantrow"))
   }
@@ -129,7 +128,7 @@ object Operations extends Controller with Secured {
 
       val withZeros = operationsByGrantRow //++ zeros.map(code => code -> Seq.empty)
 
-      val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
+      val total = operations.map(_.toDouble).sum
 
       val grantItemsMap = Global.db.grantItemDao.listAll().groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
         Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
@@ -151,7 +150,7 @@ object Operations extends Controller with Secured {
 
       val byGrantRow = operations.groupBy(_.to.grantItem.map(_.description).getOrElse(""))
 
-      val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
+      val total = operations.map(_.toDouble).sum
 
       Ok(views.html.statistics(operations, total, opFilter,
         byProject, byCategory, byGrant, byGrantRow, byProjectAndCategory))

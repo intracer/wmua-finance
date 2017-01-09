@@ -26,7 +26,7 @@
             <tr>
                 <td> @mapping.getOrElse(groupId, groupId) </td>
                 <td>
-                    @fmt.format(groupedOperations(groupId).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum)
+                    @fmt.format(groupedOperations(groupId).map(_.toDouble).sum)
 
                     @if(false) { =
                         @for(op <- groupedOperations(groupId)) {
@@ -37,7 +37,7 @@
 
                 @for(m <- 1 to 12) {
                     <td>
-                    @fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.amount.map(_.toDouble).getOrElse(0.0)).sum).replaceFirst("^0$", "-")
+                    @fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.toDouble).sum).replaceFirst("^0$", "-")
                     </td>
                 }
             </tr>

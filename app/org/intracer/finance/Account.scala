@@ -44,6 +44,8 @@ class Operation(
   override def toString: String = s"${date.toString().substring(0, 10)}: $from -> $to, amount: $amount"
 
   def amountString = amount.map(_.toDouble).map(Formatter.fmt.format).getOrElse("")
+
+  def toDouble = amount.map(_.toDouble).getOrElse(0.0)
 }
 
 object Formatter {

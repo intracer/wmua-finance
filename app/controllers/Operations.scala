@@ -103,8 +103,6 @@ object Operations extends Controller with Secured {
 
         val sorted = filtered.sortBy(o => o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString())
 
-        val keys = filtered.map(o => o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString()).sorted
-
         val total = filtered.map(_.toDouble).sum
 
         Ok(views.html.operations(user, sorted, total, opFilter, "/bygrantrow"))
@@ -124,9 +122,7 @@ object Operations extends Controller with Secured {
 
       val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1))
 
-      //val zeros = Global.wmf.keySet -- operationsByGrantRow.keySet
-
-      val withZeros = operationsByGrantRow //++ zeros.map(code => code -> Seq.empty)
+      val withZeros = operationsByGrantRow
 
       val total = operations.map(_.toDouble).sum
 

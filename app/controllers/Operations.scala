@@ -6,7 +6,7 @@ import java.util.Date
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
 import org.intracer.finance.slick.Expenditures
-import org.intracer.finance.{Expenditure, Operation}
+import org.intracer.finance.{Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
@@ -24,7 +24,8 @@ case class OpFilter(projects: Set[Int],
                     grants: Set[Int],
                     grantItems: Set[Int],
                     accounts: Set[Int],
-                    dateRange: String) {
+                    dateRange: String,
+                    users: Seq[User]) {
 
   val pattern = DateTimeFormat.forPattern("MM/dd/yyyy")
 
@@ -46,6 +47,7 @@ case class OpFilter(projects: Set[Int],
       .filter(op => bySet(grants, op.to.grant.flatMap(_.id)))
       .filter(op => bySet(grantItems, op.to.grantItem.flatMap(_.id)))
       .filter(op => interval.exists(_.contains(op.date)))
+      .filter(op => bySet(users.flatMap(_.id).toSet, op.to.user.id))
       .sortBy(_.date.toString())
   }
 }
@@ -53,7 +55,7 @@ case class OpFilter(projects: Set[Int],
 object OpFilter {
   val defaultDateRange: String = "01/01/2016 - 12/31/2016"
 
-  def apply(map: Map[String, Seq[String]]) = {
+  def apply(map: Map[String, Seq[String]], users: Seq[User]) = {
 
     def toIntSet(name: String): Set[Int] = {
       val toSet = map.getOrElse(name, Seq.empty[String]).toSet
@@ -68,7 +70,7 @@ object OpFilter {
 
     val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
 
-    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange)
+    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users)
   }
 
 }
@@ -79,7 +81,7 @@ object Operations extends Controller with Secured {
     user =>
       implicit request =>
 
-        val opFilter = OpFilter(request.queryString)
+        val opFilter = OpFilter(request.queryString, Seq(user))
         val operations = opFilter.filter()
 
         val amounts = operations.map(_.amount.map(_.toDouble).getOrElse(0.0))
@@ -92,7 +94,7 @@ object Operations extends Controller with Secured {
     user =>
       implicit request =>
 
-        val opFilter = OpFilter(request.queryString)
+        val opFilter = OpFilter(request.queryString, Seq(user))
         val filtered = opFilter.filter()
 
         val sorted = filtered.sortBy(o => o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString())
@@ -108,7 +110,7 @@ object Operations extends Controller with Secured {
     implicit request =>
 
       val map = request.queryString
-      val opFilter = OpFilter(map)
+      val opFilter = OpFilter(map, Nil)
       val operations = opFilter.filter()
 
       val rate = map.get("rate").map(_.head.toDouble).getOrElse(Global.uahToUsd)
@@ -132,7 +134,7 @@ object Operations extends Controller with Secured {
   def statistics() = Action {
     implicit request =>
 
-      val opFilter = OpFilter(request.queryString)
+      val opFilter = OpFilter(request.queryString, Nil)
       val operations = opFilter.filter()
 
       val byProject = operations.groupBy(o => o.to.project.name)
@@ -149,7 +151,7 @@ object Operations extends Controller with Secured {
         byProject, byCategory, byGrant, byGrantRow, byProjectAndCategory))
   }
 
-  def update() = withAuthAsync(isAdmin) {
+  def update() = withAuthAsync(isContributor) {
     user =>
       implicit request =>
         updateForm.bindFromRequest.fold(
@@ -162,39 +164,39 @@ object Operations extends Controller with Secured {
 
             val exps = Global.db.exps
 
-            val idFilter = exps.filter(_.id === u.pk.toInt)
+            val opFilter = exps.filter(e => e.id === u.pk.toInt && e.userId === user.id.get)
 
             val cmd = u.name match {
               case "descr" =>
-                idFilter.map(_.descr).update(u.value)
+                opFilter.map(_.descr).update(u.value)
 
               case "amount" =>
-                idFilter.map(_.amount).update(
+                opFilter.map(_.amount).update(
                   Option(u.value).filter(_.nonEmpty).map(x => new java.math.BigDecimal(x))
                 )
 
               case "grant" =>
-                idFilter.map(_.grantId).update(Try(u.value.toInt).toOption)
+                opFilter.map(_.grantId).update(Try(u.value.toInt).toOption)
 
               case "grantItem" =>
-                idFilter.map(_.grantItem).update(Try(u.value.toInt).toOption)
+                opFilter.map(_.grantItem).update(Try(u.value.toInt).toOption)
 
               case "account" =>
-                idFilter.map(_.from).update(u.value.toInt)
+                opFilter.map(_.from).update(u.value.toInt)
 
               case "project" =>
-                idFilter.map(_.projectId).update(u.value.toInt)
+                opFilter.map(_.projectId).update(u.value.toInt)
 
               case "category" =>
-                idFilter.map(_.categoryId).update(u.value.toInt)
+                opFilter.map(_.categoryId).update(u.value.toInt)
 
               case "date" =>
                 val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
                 val dt = formatter.parseDateTime(u.value)
-                idFilter.map(_.date).update(new Timestamp(dt.getMillis))
+                opFilter.map(_.date).update(new Timestamp(dt.getMillis))
 
               case "grantRow" =>
-                idFilter.map(_.grantRow).update(Some(u.value))
+                opFilter.map(_.grantRow).update(Some(u.value))
             }
 
             db.run(cmd).map(r => Ok(u.toString)).recover { case cause => BadRequest(cause.getMessage) }

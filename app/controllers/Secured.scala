@@ -12,7 +12,9 @@ trait Secured {
   def userDao = Global.db.userDao
 
   def user(request: RequestHeader): Option[User] = {
-    request.session.get(Security.username).map(_.trim.toLowerCase).flatMap(userDao.get)
+    request.session.get(Security.username)
+      .map(_.trim.toLowerCase)
+      .flatMap(userDao.get)
   }
 
   def onUnAuthenticated(request: RequestHeader) = Results.Redirect(routes.Login.login())
@@ -32,7 +34,7 @@ trait Secured {
   }
 
   def withAuthAsync(permission: Permission = AllowPermission)
-              (f: => User => Request[AnyContent] => Future[Result]) = {
+                   (f: => User => Request[AnyContent] => Future[Result]) = {
     Security.Authenticated(user, onUnAuthenticated) { user =>
       Action.async(request =>
         if (permission(user))
@@ -46,6 +48,8 @@ trait Secured {
   val AllowPermission = (_: User) => true
 
   def isAdmin(user: User) = user.hasRole("admin")
+
+  def isContributor(user: User) = user.hasAnyRole(Set("admin", "organizer", "contributor"))
 
   def rolePermission(roles: Set[String])(user: User) = user.hasAnyRole(roles)
 

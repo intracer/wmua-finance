@@ -203,8 +203,7 @@ object Operations extends Controller with Secured {
           })
   }
 
-
-  def insert() = withAuthAsync(isAdmin) {
+  def insert() = withAuthAsync(isContributor) {
     user =>
       implicit request =>
         insertForm.bindFromRequest.fold(

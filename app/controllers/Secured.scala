@@ -14,7 +14,7 @@ trait Secured {
   def user(request: RequestHeader): Option[User] = {
     request.session.get(Security.username)
       .map(_.trim.toLowerCase)
-      .flatMap(userDao.get)
+      .flatMap(userDao.byEmail)
   }
 
   def onUnAuthenticated(request: RequestHeader) = Results.Redirect(routes.Login.login())

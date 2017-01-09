@@ -54,7 +54,7 @@
 
             $(document).ready(function () {
 
-                @if(user != null && user.hasRole("admin")) {
+                @if(user != null && user.canContribute) {
                     var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
                 }
 
@@ -200,7 +200,7 @@
                     });
                 };
 
-                @if(user != null && user.hasRole("admin")) {
+                @if(user != null && user.canContribute) {
                     initEditableFunc();
                     initDictEditableFunc();
                 } else {

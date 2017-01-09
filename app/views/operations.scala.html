@@ -4,14 +4,15 @@
         opFilter: OpFilter,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
-@editable(clazz: String) = { @if(user.hasRole("admin")) { class="@clazz xeditable" } else { class="noteditable" } }
+@editable(clazz: String) = {
+@if(user.canContribute) { class="@clazz xeditable" } else { class="noteditable" }
+}
 
 @main(Messages("operations"), user) {
 
+    <div class="row">
 
-        <div class="row">
-
-            @filter(operations, opFilter, url)
+        @filter(operations, opFilter, url)
 
         <div id="msg"></div>
         <table class="table table-striped table-bordered" id="operations" style="background-color: #DDDDDD;">
@@ -30,7 +31,7 @@
 
             <tbody id="operations_body">
 
-                @if(user.hasRole("admin")) {
+                @if(user.canContribute) {
                     @newrow()
                 }
 
@@ -87,10 +88,9 @@
                                 @operation.to.desc
                                 </a>
 
-                                @if(user.hasRole("admin")) {
-                                    <div style="float: right; width: 25px; height: 25px" class="btn-group">
-                                        <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px;
-                                            height: 25px">
+                                @if(user.canContribute) {
+                                    <div style="float: right;width: 25px;height: 25px" class="btn-group">
+                                        <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px;height: 25px">
                                             <span class="fa fa-copy" aria-hidden="true"></span>
                                         </button>
                                     </div>
@@ -105,8 +105,8 @@
                 <tr>
                     <td colspan="4">@Messages("total") </td>
                     <td colspan="2">@org.intracer.finance.Formatter.fmt.format(total) </td>
-        </tr>
-        </tfoot>
+                </tr>
+            </tfoot>
         </table>
-        </div>
-    }
+    </div>
+}

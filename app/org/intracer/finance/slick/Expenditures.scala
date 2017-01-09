@@ -83,7 +83,7 @@ object Expenditures {
                           grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
      ) yield grantItem
 
-     val user = Global.db.userDao.get(userId).get
+     val user = Global.db.userDao.byId(userId).get
 
      Expenditure(id, opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
        maybeGrantId.map(grants), grantItem, descr, logDate, user)

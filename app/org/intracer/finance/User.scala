@@ -23,9 +23,11 @@ case class User(id: Option[Int],
       id == otherUser.id ||
       hasRole(UserObj.ROOT_ROLE)
 
-  def canViewOrgInfo =
-    hasRole(UserObj.ROOT_ROLE) ||
-      hasAnyRole(Set("viewer", "contributor", "organizer", "admin", "root"))
+  def canViewOrgInfo = hasAnyRole(Set("viewer")) || canContribute
+
+  def canContribute = hasAnyRole(Set("contributor", "organizer")) || isAdmin
+
+  def isAdmin = hasAnyRole(Set("admin", "root"))
 
   def description: String = Seq(fullname, wikiAccount.fold("")(u => "User:" + u), email).mkString(" / ")
 }

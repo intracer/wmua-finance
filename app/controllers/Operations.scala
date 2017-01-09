@@ -35,16 +35,22 @@ case class OpFilter(projects: Set[Int],
 
   def filter(): Seq[Operation] = {
 
-    def bySet(set: Set[Int], id: Option[Int]) = set.isEmpty || id.exists(set.contains)
+    def filterOp(op: Operation): Boolean = {
+
+      def bySet(set: Set[Int], id: Option[Int]) = set.isEmpty || id.exists(set.contains)
+
+      val to = op.to
+      bySet(projects, to.project.id) &&
+        bySet(categories, to.category.id) &&
+        bySet(accounts, op.from.id) &&
+        bySet(grants, to.grant.flatMap(_.id)) &&
+        bySet(grantItems, to.grantItem.flatMap(_.id)) &&
+        bySet(users.flatMap(_.id).toSet, to.user.id) &&
+        interval.exists(_.contains(op.date))
+    }
 
     Global.operations
-      .filter(op => bySet(projects, op.to.project.id))
-      .filter(op => bySet(categories, op.to.category.id))
-      .filter(op => bySet(accounts, op.from.id))
-      .filter(op => bySet(grants, op.to.grant.flatMap(_.id)))
-      .filter(op => bySet(grantItems, op.to.grantItem.flatMap(_.id)))
-      .filter(op => interval.exists(_.contains(op.date)))
-      .filter(op => bySet(users.flatMap(_.id).toSet, op.to.user.id))
+      .filter(filterOp)
       .sortBy(_.date.toString())
   }
 }
@@ -52,7 +58,9 @@ case class OpFilter(projects: Set[Int],
 object OpFilter {
   val defaultDateRange: String = "01/01/2016 - 12/31/2016"
 
-  def apply(map: Map[String, Seq[String]], users: Seq[User]) = {
+  def apply(request: Request[_], users: Seq[User]) = {
+
+    val map = request.queryString
 
     def toIntSet(name: String): Set[Int] = {
       val toSet = map.getOrElse(name, Seq.empty[String]).toSet
@@ -78,7 +86,7 @@ object Operations extends Controller with Secured {
     user =>
       implicit request =>
 
-        val opFilter = OpFilter(request.queryString, Seq(user))
+        val opFilter = OpFilter(request, Seq(user))
         val operations = opFilter.filter()
 
         val amounts = operations.map(_.amount.map(_.toDouble).getOrElse(0.0))
@@ -91,7 +99,7 @@ object Operations extends Controller with Secured {
     user =>
       implicit request =>
 
-        val opFilter = OpFilter(request.queryString, Seq(user))
+        val opFilter = OpFilter(request, Seq(user))
         val filtered = opFilter.filter()
 
         val sorted = filtered.sortBy(o => o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString())
@@ -106,11 +114,12 @@ object Operations extends Controller with Secured {
   def byGrantRowStat = Action {
     implicit request =>
 
-      val map = request.queryString
-      val opFilter = OpFilter(map, Nil)
+      val opFilter = OpFilter(request, Nil)
       val operations = opFilter.filter()
 
-      val rate = map.get("rate").map(_.head.toDouble).getOrElse(Global.uahToUsd)
+      val rate = request.queryString.get("rate")
+        .map(_.head.toDouble)
+        .getOrElse(Global.uahToUsd)
 
       Global.uahToUsd = rate
 
@@ -131,16 +140,16 @@ object Operations extends Controller with Secured {
   def statistics() = Action {
     implicit request =>
 
-      val opFilter = OpFilter(request.queryString, Nil)
+      val opFilter = OpFilter(request, Nil)
       val operations = opFilter.filter()
 
-      val byProject = operations.groupBy(o => o.to.project.name)
-      val byCategory = operations.groupBy(o => o.to.category.name)
-      val byGrant = operations.groupBy(o => o.to.grant.map(_.name).getOrElse("No"))
+      val byProject = operations.groupBy(_.to.project.name)
+      val byCategory = operations.groupBy(_.to.category.name)
+      val byGrant = operations.groupBy(_.to.grant.map(_.name).getOrElse("No"))
 
       val byProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
 
-      val byGrantRow = operations.groupBy(o => o.to.grantItem.map(_.description).getOrElse(""))
+      val byGrantRow = operations.groupBy(_.to.grantItem.map(_.description).getOrElse(""))
 
       val total = operations.map(_.amount.map(_.toDouble).getOrElse(0.0)).sum
 

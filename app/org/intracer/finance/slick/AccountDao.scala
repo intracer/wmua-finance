@@ -5,23 +5,23 @@ import slick.driver.JdbcProfile
 import slick.lifted.TableQuery
 import spray.util.pimpFuture
 
-class AccountDao(val mwDb: FinDatabase, val query: TableQuery[Accounts], val driver: JdbcProfile) {
+class AccountDao(val mwDb: FinDatabase, val query: TableQuery[Accounts], val driver: JdbcProfile) extends BaseDao {
 
   import driver.api._
 
-  val db = mwDb.db
-
-  def insert(account: Account): Long = {
-    db.run(query += account).await
+  def insert(account: Account): Int = db {
+    query += account
   }
 
-  def insertAll(accounts: Seq[Account]): Unit = {
-    db.run(query.forceInsertAll(accounts)).await
+  def insertAll(accounts: Seq[Account]): Unit = db {
+    query.forceInsertAll(accounts)
   }
 
-  def list: Seq[Account] = db.run(query.sortBy(_.name).result).await
+  def list: Seq[Account] = db {
+    query.sortBy(_.name).result
+  }
 
-  def get(name: String): Option[Account] =
-    db.run(query.filter(_.name === name).result.headOption).await
-
+  def get(name: String): Option[Account] = db {
+    query.filter(_.name === name).result.headOption
+  }
 }

@@ -13,6 +13,8 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
+  def rev_id = column[Int]("rev_id", O.PrimaryKey, O.AutoInc)
+
   def date = column[Timestamp]("op_date", SqlType("datetime "))
 
   def amount = column[Option[BigDecimal]]("amount")
@@ -43,10 +45,8 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def userId = column[Int]("user_id")
 
-
-  def * = (id.? , date , amount, from, categoryId, projectId, grantId, grantItem, descr, logDate, userId) <>
+  def * = (id.?, date, amount, from, categoryId, projectId, grantId, grantItem, descr, logDate, userId) <>
     ((Expenditures.fromDb _).tupled, Expenditures.toDb)
-
 }
 
 object Expenditures {
@@ -63,30 +63,28 @@ object Expenditures {
 
   def accounts: Map[Int, Account] = Global.db.accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
-  def fromDb(
-              id: Option[Int],
-              opDate: Timestamp,
-              amount: Option[BigDecimal],
-              accountId: Int,
-              categoryId: Int,
-              projectId: Int,
-              maybeGrantId: Option[Int],
-              maybeGrantItemId: Option[Int],
-              descr: String,
-              logDate: Timestamp,
-              userId: Int
-            ): Expenditure = {
+  def fromDb(id: Option[Int],
+             opDate: Timestamp,
+             amount: Option[BigDecimal],
+             accountId: Int,
+             categoryId: Int,
+             projectId: Int,
+             maybeGrantId: Option[Int],
+             maybeGrantItemId: Option[Int],
+             descr: String,
+             logDate: Timestamp,
+             userId: Int): Expenditure = {
 
-     val grantItem = for (grantId <- maybeGrantId;
-                          grantItemId <- maybeGrantItemId;
-                          grantItemsForGrant <- grantItems.get(grantId);
-                          grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
-     ) yield grantItem
+    val grantItem = for (grantId <- maybeGrantId;
+                         grantItemId <- maybeGrantItemId;
+                         grantItemsForGrant <- grantItems.get(grantId);
+                         grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
+    ) yield grantItem
 
-     val user = Global.db.userDao.byId(userId).get
+    val user = Global.db.userDao.byId(userId).get
 
-     Expenditure(id, opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
-       maybeGrantId.map(grants), grantItem, descr, logDate, user)
+    Expenditure(id, opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
+      maybeGrantId.map(grants), grantItem, descr, logDate, user)
   }
 
   def toDb(exp: Expenditure) = {

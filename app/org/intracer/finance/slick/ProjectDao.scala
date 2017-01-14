@@ -5,23 +5,23 @@ import slick.driver.JdbcProfile
 import slick.lifted.TableQuery
 import spray.util.pimpFuture
 
-class ProjectDao(val mwDb: FinDatabase, val query: TableQuery[Projects], val driver: JdbcProfile) {
+class ProjectDao(val mwDb: FinDatabase, val query: TableQuery[Projects], val driver: JdbcProfile) extends BaseDao {
 
   import driver.api._
 
-  val db = mwDb.db
-
-  def insert(project: Project): Long = {
-    db.run(query += project).await
+  def insert(project: Project): Int = db {
+    query += project
   }
 
-  def insertAll(projects: Seq[Project]): Unit = {
-    db.run(query.forceInsertAll(projects)).await
+  def insertAll(projects: Seq[Project]): Unit = db {
+    query.forceInsertAll(projects)
   }
 
-  def list: Seq[Project] = db.run(query.sortBy(_.name).result).await
+  def list: Seq[Project] = db {
+    query.sortBy(_.name).result
+  }
 
-  def get(name: String): Option[Project] =
-    db.run(query.filter(_.name === name).result.headOption).await
-
+  def get(name: String): Option[Project] = db {
+    query.filter(_.name === name).result.headOption
+  }
 }

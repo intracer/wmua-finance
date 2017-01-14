@@ -13,27 +13,28 @@ import spray.util.pimpFuture
 import scala.concurrent.Future
 import scala.util.Try
 
-class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures], val driver: JdbcProfile) {
+class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures], val driver: JdbcProfile) extends BaseDao {
 
   import driver.api._
 
-  val db = mwDb.db
-
-  def insert(exp: Expenditure): Int = {
-    db.run(query += exp).await
+  def insert(exp: Expenditure): Int = db {
+    query += exp
   }
 
-  def insertAll(exps: Seq[Expenditure]): Unit = {
-    db.run(query.forceInsertAll(exps)).await
+  def insertAll(exps: Seq[Expenditure]): Unit = db {
+    query.forceInsertAll(exps)
   }
 
-  def list: Seq[Expenditure] = db.run(query.sortBy(_.date.desc).result).await
+  def list: Seq[Expenditure] = db {
+    query.sortBy(_.date.desc).result
+  }
 
-   def update(upd: Update, user: User): Future[Int] = {
+  def update(upd: Update, user: User): Future[Int] = {
 
-    val opFilter = query.filter { e =>
-      e.id === upd.pk.toInt &&
-        e.userId === user.id.get
+    val opFilter = query.filter {
+      e =>
+        e.id === upd.pk.toInt &&
+          e.userId === user.id.get
     }
 
     val cmd = upd.name match {
@@ -72,7 +73,7 @@ class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures],
         opFilter.map(_.grantRow).update(Some(upd.value))
     }
 
-    db.run(cmd)
+    mwDb.db.run(cmd)
   }
 
   def insert(op: NewOp, user: User) = {
@@ -90,6 +91,6 @@ class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures],
       user = user
     )
 
-    db.run(query += exp)
+    mwDb.db.run(query += exp)
   }
 }

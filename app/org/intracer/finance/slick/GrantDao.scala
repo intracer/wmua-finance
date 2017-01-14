@@ -5,23 +5,24 @@ import slick.driver.JdbcProfile
 import slick.lifted.TableQuery
 import spray.util.pimpFuture
 
-class GrantDao(val mwDb: FinDatabase, val query: TableQuery[Grants], val driver: JdbcProfile) {
+class GrantDao(val mwDb: FinDatabase, val query: TableQuery[Grants], val driver: JdbcProfile) extends BaseDao {
 
   import driver.api._
 
-  val db = mwDb.db
-
-  def insert(grant: Grant): Long = {
-    db.run(query += grant).await
+  def insert(grant: Grant): Int = db {
+    query += grant
   }
 
-  def insertAll(grants: Seq[Grant]): Unit = {
-    db.run(query.forceInsertAll(grants)).await
+  def insertAll(grants: Seq[Grant]): Unit = db {
+    query.forceInsertAll(grants)
   }
 
-  def list: Seq[Grant] = db.run(query.sortBy(_.name).result).await
+  def list: Seq[Grant] = db {
+    query.sortBy(_.name).result
+  }
 
-  def get(name: String): Option[Grant] =
-    db.run(query.filter(_.name === name).result.headOption).await
+  def get(name: String): Option[Grant] = db {
+    query.filter(_.name === name).result.headOption
+  }
 
 }

@@ -26,7 +26,9 @@ case class OpFilter(projects: Set[Int],
 
   val pattern = DateTimeFormat.forPattern("MM/dd/yyyy")
 
-  val dates = dateRange.split("-").map(entry => DateTime.parse(entry.trim, pattern))
+  val dates = dateRange.split("-").map { entry =>
+    DateTime.parse(entry.trim, pattern)
+  }
 
   val interval = if (dates.length >= 2)
     Some(new Interval(dates(0), dates(1)))
@@ -37,7 +39,8 @@ case class OpFilter(projects: Set[Int],
 
     def filterOp(op: Operation): Boolean = {
 
-      def bySet(set: Set[Int], id: Option[Int]) = set.isEmpty || id.exists(set.contains)
+      def bySet(set: Set[Int], id: Option[Int]) =
+        set.isEmpty || id.exists(set.contains)
 
       val to = op.to
       bySet(projects, to.project.id) &&
@@ -82,37 +85,42 @@ object OpFilter {
 
 object Operations extends Controller with Secured {
 
-  def list = withAuth() {
-    user =>
-      implicit request =>
+  def withFilter(f: (User, OpFilter, Seq[Operation]) => Request[AnyContent] => Result) = {
+    withAuth() {
+      user =>
+        implicit request =>
+          val opFilter = OpFilter(request, Seq(user))
+          val operations = opFilter.filter()
 
-        val opFilter = OpFilter(request, Seq(user))
-        val operations = opFilter.filter()
+          f(user, opFilter, operations)(request)
+    }
+  }
+
+  def list = withFilter {
+    (user, opFilter, operations) =>
+      implicit request =>
 
         val total = operations.map(_.toDouble).sum
 
         Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
   }
 
-  def byGrantRow = withAuth() {
-    user =>
+  def byGrantRow = withFilter {
+    (user, opFilter, operations) =>
       implicit request =>
 
-        val opFilter = OpFilter(request, Seq(user))
-        val filtered = opFilter.filter()
+        val sorted = operations.sortBy { o =>
+          o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString()
+        }
 
-        val sorted = filtered.sortBy(o => o.to.grantItem.map(_.name).getOrElse("?????") + o.date.toString())
-
-        val total = filtered.map(_.toDouble).sum
+        val total = operations.map(_.toDouble).sum
 
         Ok(views.html.operations(user, sorted, total, opFilter, "/bygrantrow"))
   }
 
-  def byGrantRowStat = Action {
-    implicit request =>
-
-      val opFilter = OpFilter(request, Nil)
-      val operations = opFilter.filter()
+  def byGrantRowStat = withFilter {
+    (_, opFilter, ops) =>
+      implicit request =>
 
       val rate = request.queryString.get("rate")
         .map(_.head.toDouble)
@@ -120,36 +128,31 @@ object Operations extends Controller with Secured {
 
       Global.uahToUsd = rate
 
-      val operationsByGrantRow = operations.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1))
-
-      val withZeros = operationsByGrantRow
-
-      val total = operations.map(_.toDouble).sum
-
-      val grantItemsMap = Global.db.grantItemDao.listAll().groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
+      val grantItemsMap = Global.db.grantItemDao
+        .listAll()
+        .groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
         Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
 
-      Ok(views.html.grantStatistics(operations, total, opFilter, withZeros, Some(rate), grantItemsMap))
+      Ok(
+        views.html.grantStatistics(ops, ops.map(_.toDouble).sum, opFilter,
+          ops.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1)),
+          Some(rate), grantItemsMap)
+      )
   }
 
-  def statistics() = Action {
-    implicit request =>
+  def statistics() = withFilter {
+    (_, opFilter, ops) =>
+      implicit request =>
 
-      val opFilter = OpFilter(request, Nil)
-      val operations = opFilter.filter()
-
-      val byProject = operations.groupBy(_.to.project.name)
-      val byCategory = operations.groupBy(_.to.category.name)
-      val byGrant = operations.groupBy(_.to.grant.map(_.name).getOrElse("No"))
-
-      val byProjectAndCategory = operations.groupBy(o => o.to.project.name + "." + o.to.category.name)
-
-      val byGrantRow = operations.groupBy(_.to.grantItem.map(_.description).getOrElse(""))
-
-      val total = operations.map(_.toDouble).sum
-
-      Ok(views.html.statistics(operations, total, opFilter,
-        byProject, byCategory, byGrant, byGrantRow, byProjectAndCategory))
+        Ok(
+          views.html.statistics(ops, ops.map(_.toDouble).sum, opFilter,
+            ops.groupBy(_.to.project.name),
+            ops.groupBy(_.to.category.name),
+            ops.groupBy(_.to.grant.map(_.name).getOrElse("No")),
+            ops.groupBy(_.to.grantItem.map(_.description).getOrElse("")),
+            ops.groupBy(o => o.to.project.name + "." + o.to.category.name)
+          )
+        )
   }
 
   def update() = formAction(updateForm, Global.db.expDao.update)

@@ -1,27 +1,26 @@
 package org.intracer.finance.slick
 
 import org.intracer.finance.CategoryF
-import slick.driver.JdbcProfile
-import slick.lifted.TableQuery
-import spray.util.pimpFuture
 
-class CategoryDao(val mwDb: FinDatabase, val query: TableQuery[Categories], val driver: JdbcProfile) extends BaseDao {
+class CategoryDao extends BaseDao {
 
   import driver.api._
 
-  def insert(category: CategoryF): Int = db {
+  val query = TableQuery[Categories]
+
+  def insert(category: CategoryF): Int = run {
     query += category
   }
 
-  def insertAll(categories: Seq[CategoryF]): Unit = db {
+  def insertAll(categories: Seq[CategoryF]): Unit = run {
     query.forceInsertAll(categories)
   }
 
-  def list: Seq[CategoryF] = db {
+  def list: Seq[CategoryF] = run {
     query.sortBy(_.name).result
   }
 
-  def get(name: String): Option[CategoryF] = db {
+  def get(name: String): Option[CategoryF] = run {
     query.filter(_.name === name).result.headOption
   }
 

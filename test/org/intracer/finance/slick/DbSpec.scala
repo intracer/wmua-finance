@@ -2,188 +2,191 @@ package org.intracer.finance.slick
 
 import java.sql.Timestamp
 
-import org.intracer.finance._
-import org.specs2.mutable.{BeforeAfter, Specification}
-import _root_.slick.backend.DatabaseConfig
-import _root_.slick.driver.JdbcProfile
 import client.finance.GrantItem
+import org.intracer.finance._
+import org.specs2.mutable.Specification
 
-class DbSpec extends Specification with BeforeAfter {
+class DbSpec extends Specification with InMemDb {
 
   sequential
 
-  var db: FinDatabase = _
-
-  def categoryDao = db.categoryDao
-
-  def projectDao = db.projectDao
-
-  def grantDao = db.grantDao
-
-  def grantItemDao = db.grantItemDao
-
-  def expDao = db.expDao
-
-  def accountDao = db.accountDao
-
-  def createSchema() = {
-    db.dropTables()
-    db.createTables()
-  }
-
-  override def before = {
-    val dc = DatabaseConfig.forConfig[JdbcProfile]("h2mem")
-    db = new FinDatabase(dc.db, dc.driver)
-    createSchema()
-  }
-
-  override def after = {}
-
   "category" should {
     "insert" in {
-      val category = new CategoryF(name = "name")
+      inMemDbApp {
+        val categoryDao = new CategoryDao
+        val category = CategoryF(name = "name")
 
-      categoryDao.insert(category)
+        categoryDao.insert(category)
 
-      val list = categoryDao.list
-      list.size === 1
+        val list = categoryDao.list
+        list.size === 1
 
-      val fromDb = list.head
+        val fromDb = list.head
 
-      fromDb.id.isDefined === true
-      fromDb.copy(id = None) === category
+        fromDb.id.isDefined === true
+        fromDb.copy(id = None) === category
+      }
     }
   }
 
   "project" should {
     "insert" in {
-      val project = Project(name = "name")
+      inMemDbApp {
+        val projectDao = new ProjectDao
 
-      val id: Long = projectDao.insert(project)
+        val project = Project(name = "name")
 
-      val list = projectDao.list
-      list.size === 1
+        val id: Long = projectDao.insert(project)
 
-      val fromDb = list.head
+        val list = projectDao.list
+        list.size === 1
 
-      fromDb.id.isDefined === true
-      fromDb.copy(id = None) === project
-      fromDb.id === Some(id)
+        val fromDb = list.head
+
+        fromDb.id.isDefined === true
+        fromDb.copy(id = None) === project
+        fromDb.id === Some(id)
+      }
     }
   }
 
   "grants" should {
     "insert" in {
-      val grant = new Grant(name = "name")
+      inMemDbApp {
+        val grantDao = new GrantDao
 
-      val id: Long = grantDao.insert(grant)
+        val grant = Grant(name = "name")
 
-      val list = grantDao.list
-      list.size === 1
+        val id: Long = grantDao.insert(grant)
 
-      val fromDb = list.head
+        val list = grantDao.list
+        list.size === 1
 
-      fromDb.id.isDefined === true
-      fromDb.copy(id = None) === grant
-      fromDb.id === Some(id)
+        val fromDb = list.head
+
+        fromDb.id.isDefined === true
+        fromDb.copy(id = None) === grant
+        fromDb.id === Some(id)
+      }
     }
   }
 
   "accounts" should {
     "insert" in {
-      val account = new Account(name = "name")
+      inMemDbApp {
+        val accountDao = new AccountDao
 
-      val id: Long = accountDao.insert(account)
+        val account = Account(name = "name")
 
-      val list = accountDao.list
-      list.size === 1
+        val id: Long = accountDao.insert(account)
 
-      val fromDb = list.head
+        val list = accountDao.list
+        list.size === 1
 
-      fromDb.id.isDefined === true
-      fromDb.copy(id = None) === account
-      fromDb.id === Some(id)
+        val fromDb = list.head
+
+        fromDb.id.isDefined === true
+        fromDb.copy(id = None) === account
+        fromDb.id === Some(id)
+      }
     }
   }
 
   "grantItems" should {
-    "insert" in {
+    "insertGI" in {
+      inMemDbApp {
+        val grantItemDao = new GrantItemsDao
+        val grantDao = new GrantDao
 
-      val grant = new Grant(name = "name")
-      val grantId = grantDao.insert(grant)
+        val grant = Grant(name = "name")
+        val grantId = grantDao.insert(grant)
 
-      val grantItem = new GrantItem(None, Some(grantId.toInt), "1", "item", BigDecimal.valueOf(100))
+        val grantItem = GrantItem(None, Some(grantId.toInt), "1", "item", BigDecimal.valueOf(100))
 
-      val id: Long = grantItemDao.insert(grantItem)
+        val id: Long = grantItemDao.insert(grantItem)
 
-      val list = accountDao.list
-      list.size === 1
+        val list = grantItemDao.list(grantId)
+        list.size === 1
 
-      val fromDb = list.head
+        val fromDb = list.head
 
-      fromDb.id.isDefined === true
-      fromDb.copy(id = None) === grantItem
-      fromDb.id === Some(id)
+        fromDb.id.isDefined === true
+        fromDb.copy(id = None) === grantItem
+        fromDb.id === Some(id)
+      }
     }
   }
 
   "expenditure" should {
     "insert" in {
-      val category1 = new CategoryF(name = "cat1")
-      val category2 = new CategoryF(name = "cat2")
+      inMemDbApp {
+        val categoryDao = new CategoryDao
+        val projectDao = new ProjectDao
+        val grantDao = new GrantDao
+        val grantItemDao = new GrantItemsDao
+        val expDao = new ExpenditureDao
+        val accountDao = new AccountDao
+        val userDao = new UserDao
 
-      categoryDao.insertAll(Seq(category1, category2))
+        val category1 = CategoryF(name = "cat1")
+        val category2 = CategoryF(name = "cat2")
 
-      val cats = categoryDao.list.groupBy(_.id.get).mapValues(_.head)
-      cats.size === 2
+        categoryDao.insertAll(Seq(category1, category2))
 
-      val project1 = new Project(name = "p1")
-      val project2 = new Project(name = "p2")
-      projectDao.insertAll(Seq(project1, project2))
+        val cats = categoryDao.list.groupBy(_.id.get).mapValues(_.head)
+        cats.size === 2
 
-      val projects = projectDao.list.groupBy(_.id.get).mapValues(_.head)
-      projects.size === 2
+        val project1 = Project(name = "p1")
+        val project2 = Project(name = "p2")
+        projectDao.insertAll(Seq(project1, project2))
 
-      val grant1 = new Grant(name = "Grant1")
-      val grant2 = new Grant(name = "Grant2")
-      grantDao.insertAll(Seq(grant1, grant2))
-      val grants = grantDao.list.groupBy(_.id.get).mapValues(_.head)
+        val projects = projectDao.list.groupBy(_.id.get).mapValues(_.head)
+        projects.size === 2
 
-      val grant = grants.values.find(_.code == "01").get
-      val grantId = grant.id
-      val grantItem1 = new GrantItem(None, grantId, "1", "item1", BigDecimal.valueOf(100))
-      val grantItem2 = new GrantItem(None, grantId, "2", "item2", BigDecimal.valueOf(300))
-      grantItemDao.insertAll(Seq(grantItem1, grantItem2))
+        val grant1 = Grant(name = "Grant1")
+        val grant2 = Grant(name = "Grant2")
+        grantDao.insertAll(Seq(grant1, grant2))
+        val grants = grantDao.list.groupBy(_.id.get).mapValues(_.head)
 
-      val grantItems = grantItemDao.list(grantId.get).groupBy(_.id.get).mapValues(_.head)
+        val grant = grants.values.find(_.name == "Grant1").get
+        val grantId = grant.id
+        val grantItem1 = GrantItem(None, grantId, "1", "item1", BigDecimal.valueOf(100))
+        val grantItem2 = GrantItem(None, grantId, "2", "item2", BigDecimal.valueOf(300))
+        grantItemDao.insertAll(Seq(grantItem1, grantItem2))
 
-      val account1 = new Account(name = "Account1")
-      val account2 = new Account(name = "Account2")
-      accountDao.insertAll(Seq(account1, account2))
-      val accounts = accountDao.list.groupBy(_.id.get).mapValues(_.head)
+        val grantItems = grantItemDao.list(grantId.get).groupBy(_.id.get).mapValues(_.head)
 
-//      Expenditures.accounts = accounts
-//      Expenditures.grants = grants
-//      Expenditures.categories = cats
-//      Expenditures.projects = projects
+        val account1 = Account(name = "Account1")
+        val account2 = Account(name = "Account2")
+        accountDao.insertAll(Seq(account1, account2))
+        val accounts = accountDao.list.groupBy(_.id.get).mapValues(_.head)
 
-      val exp = new Expenditure(
-        None,
-        new Timestamp(0L),
-        Some(BigDecimal(10)),
-        accounts.values.find(_.code == "code1").get,
-        cats.values.find(_.code == "code1").get,
-        projects.values.find(_.code == "code1").get,
-        Some(grant),
-        Some(grantItems.values.head), Some("exp1"),
-        desc = "123"
-      )
+        //      Expenditures.accounts = accounts
+        //      Expenditures.grants = grants
+        //      Expenditures.categories = cats
+        //      Expenditures.projects = projects
 
-      expDao.insert(exp)
+        val user = User(None, "user", "mail@dot.com")
+        val userId = userDao.insert(user)
 
-      val exps = expDao.list
-      exps.size === 1
-      exps.head.copy(id = None) === exp
+        val exp = Expenditure(
+          Some(1),
+          new Timestamp(0L),
+          Some(BigDecimal("10.00")),
+          accounts.values.find(_.name == "Account1").get,
+          cats.values.find(_.name == "cat1").get,
+          projects.values.find(_.name == "p1").get,
+          Some(grant),
+          Some(grantItems.values.head), "exp1",
+          user.copy(id = Some(userId))
+        )
+
+        expDao.insert(exp)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp
+      }
     }
   }
 

@@ -17,20 +17,22 @@ libraryDependencies ++= Seq(
   "com.squants" %% "squants" % "0.4.2",
   "org.sweble.wikitext" % "swc-engine" % "2.0.0",
   "com.typesafe.slick" %% "slick" % "3.1.1",
-  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "ch.qos.logback" % "logback-classic" % "1.1.3",
+
   "com.h2database" % "h2" % "1.4.187",
   "org.scalawiki" %% "scalawiki-core" % scalawikiVersion,
 
-  "com.adrianhurt" %% "play-bootstrap" % "1.0-P24-B3",
-  "com.typesafe.play" %% "play-slick" % "1.1.1",
-  "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
-  "com.typesafe.play" %% "play-mailer" % "4.0.0",
+  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3",
+  "com.typesafe.play" %% "play-slick" % "2.0.2",
+  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.2",
+  "com.typesafe.play" %% "play-mailer" % "5.0.0",
+
   "io.spray" % "spray-util_2.11" % "1.3.3",
   "joda-time" % "joda-time" % "2.7",
   "mysql" % "mysql-connector-java" % "5.1.35",
 
-  "com.google.jimfs" % "jimfs" % "1.0" % "test"
-  , specs2 % Test
+  "com.google.jimfs" % "jimfs" % "1.0" % "test",
+  "com.typesafe.play" %% "play-specs2" % "2.5.12" % "test"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
@@ -48,6 +50,8 @@ packageSummary := "finance tool"
 packageDescription :=  """finance tool""".stripMargin.replace('\n', ' ')
 
 maintainer := "Ilya Korniiko <intracer@gmail.com>"
+
+routesGenerator := StaticRoutesGenerator
 
 debianPackageDependencies in Debian ++= Seq("java8-runtime")
 

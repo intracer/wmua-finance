@@ -1,17 +1,31 @@
 package controllers
 
+import slick.driver.JdbcProfile
 import org.intracer.finance._
-import org.intracer.finance.slick.Expenditures
+import org.intracer.finance.slick._
+import play.api.Play
 import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, Controller}
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object Dictionaries extends Controller with Secured {
+
+object Dictionaries extends Controller with Secured with HasDatabaseConfig[JdbcProfile]{
+  protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+
+  import driver.api._
+
+  def categoryDao = new CategoryDao
+  def projectDao = new ProjectDao
+  def grantDao = new GrantDao
+  def grantItemDao = new GrantItemsDao
+  def expDao = new ExpenditureDao
+  def accountDao = new AccountDao
 
   def list() = withAuth() { user =>
     implicit request =>
@@ -49,14 +63,12 @@ object Dictionaries extends Controller with Secured {
         formWithErrors => // binding failure, you retrieve the form containing errors,
           Future.successful(BadRequest(insertForm.errorsAsJson)),
         u => {
-          import Global.db.driver.api._
 
-          val db = Global.db
 
           val q = u.table match {
-            case "account" => db.db.run(db.accountDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
-            case "project" => db.db.run(db.projectDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
-            case "category" => db.db.run(db.categoryDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+            case "account" => db.run(accountDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+            case "project" => db.run(projectDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+            case "category" => db.run(categoryDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
           }
 
           q.map(r => Ok(u.toString)).recover { case cause => BadRequest(cause.getMessage) }
@@ -70,14 +82,11 @@ object Dictionaries extends Controller with Secured {
         formWithErrors => // binding failure, you retrieve the form containing errors,
           Future.successful(BadRequest(insertForm.errorsAsJson)),
         u => {
-          import Global.db.driver.api._
-
-          val db = Global.db
 
           val q = u.table match {
-            case "account" => db.db.run(db.accountDao.query += Account(name = u.value))
-            case "project" => db.db.run(db.projectDao.query += Project(name = u.value))
-            case "category" => db.db.run(db.categoryDao.query += CategoryF(name = u.value))
+            case "account" => db.run(accountDao.query += Account(name = u.value))
+            case "project" => db.run(projectDao.query += Project(name = u.value))
+            case "category" => db.run(categoryDao.query += CategoryF(name = u.value))
           }
 
           q.map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }

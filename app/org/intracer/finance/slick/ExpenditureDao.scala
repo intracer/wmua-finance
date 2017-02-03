@@ -6,26 +6,25 @@ import controllers.{NewOp, Update}
 import org.intracer.finance.{Expenditure, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import slick.driver.JdbcProfile
-import slick.lifted.TableQuery
-import spray.util.pimpFuture
 
 import scala.concurrent.Future
 import scala.util.Try
 
-class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures], val driver: JdbcProfile) extends BaseDao {
+class ExpenditureDao extends BaseDao {
 
   import driver.api._
 
-  def insert(exp: Expenditure): Int = db {
+  val query = TableQuery[Expenditures]
+
+  def insert(exp: Expenditure): Int = run {
     query += exp
   }
 
-  def insertAll(exps: Seq[Expenditure]): Unit = db {
+  def insertAll(exps: Seq[Expenditure]): Unit = run {
     query.forceInsertAll(exps)
   }
 
-  def list: Seq[Expenditure] = db {
+  def list: Seq[Expenditure] = run {
     query.sortBy(_.date.desc).result
   }
 
@@ -73,7 +72,7 @@ class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures],
         opFilter.map(_.grantRow).update(Some(upd.value))
     }
 
-    mwDb.db.run(cmd)
+    db.run(cmd)
   }
 
   def insert(op: NewOp, user: User) = {
@@ -91,6 +90,6 @@ class ExpenditureDao(val mwDb: FinDatabase, val query: TableQuery[Expenditures],
       user = user
     )
 
-    mwDb.db.run(query += exp)
+    db.run(query += exp)
   }
 }

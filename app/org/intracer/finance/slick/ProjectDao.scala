@@ -1,27 +1,26 @@
 package org.intracer.finance.slick
 
 import org.intracer.finance.Project
-import slick.driver.JdbcProfile
-import slick.lifted.TableQuery
-import spray.util.pimpFuture
 
-class ProjectDao(val mwDb: FinDatabase, val query: TableQuery[Projects], val driver: JdbcProfile) extends BaseDao {
+class ProjectDao() extends BaseDao {
 
   import driver.api._
 
-  def insert(project: Project): Int = db {
+  val query = TableQuery[Projects]
+
+  def insert(project: Project): Int = run {
     query += project
   }
 
-  def insertAll(projects: Seq[Project]): Unit = db {
+  def insertAll(projects: Seq[Project]): Unit = run {
     query.forceInsertAll(projects)
   }
 
-  def list: Seq[Project] = db {
+  def list: Seq[Project] = run {
     query.sortBy(_.name).result
   }
 
-  def get(name: String): Option[Project] = db {
+  def get(name: String): Option[Project] = run {
     query.filter(_.name === name).result.headOption
   }
 }

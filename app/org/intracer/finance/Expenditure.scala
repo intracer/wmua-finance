@@ -4,6 +4,7 @@ import java.sql.Timestamp
 
 import client.finance.GrantItem
 import org.intracer.finance.slick.Expenditures
+import org.joda.time.DateTime
 
 case class Expenditure(id: Option[Int] = None,
                        date: Timestamp,
@@ -14,23 +15,20 @@ case class Expenditure(id: Option[Int] = None,
                        grant: Option[Grant],
                        grantItem: Option[GrantItem],
                        desc: String,
-                       logDate: Timestamp,
-                       user: User
+                       user: User,
+                       logDate: Timestamp = new Timestamp(DateTime.now.getMillis)
                       ) extends OpPoint {
   override def name = desc
 
-  override def toString: String = s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $desc, """
+  override def toString: String =
+    s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $desc, """
 
   def projectName = Expenditures.projects(project.id.get).name
 
   def categoryName = Expenditures.categories(category.id.get).name
 
-  def grantName = grant.map(grant => Expenditures.grants(grant.id.get).name).getOrElse("")
-
-  def grantUrl = {
-    if (grantName.startsWith("Grants:PEG/WM UA/")) {
-      Some(("grant/" + grantName.replaceAll(" ", "_"), grantName.replace("Grants:PEG/WM UA/", "")))
-    } else None
-  }
+  def grantName = grant.map { grant =>
+    Expenditures.grants(grant.id.get).name
+  }.getOrElse("")
 
 }

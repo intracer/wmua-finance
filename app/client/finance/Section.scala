@@ -8,9 +8,8 @@ class Section(val wtSection: WtSection) {
 }
 
 object Section {
-  def apply(wtNode: WtNode) = wtNode match  {
-    case wtSection: WtSection => Some(new Section(wtSection))
-    case _ => None
+  def apply(wtNode: WtNode) = Option(wtNode) collect {
+    case wtSection: WtSection => new Section(wtSection)
   }
 
   def fromTraversable(nodes: TraversableOnce[WtNode]) = nodes.flatMap(Section.apply)

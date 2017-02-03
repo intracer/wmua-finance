@@ -4,6 +4,7 @@ import java.util.Date
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
+import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao}
 import org.intracer.finance.{Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -128,7 +129,7 @@ object Operations extends Controller with Secured {
 
       Global.uahToUsd = rate
 
-      val grantItemsMap = Global.db.grantItemDao
+      val grantItemsMap = new GrantItemsDao()
         .listAll()
         .groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
         Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
@@ -155,9 +156,9 @@ object Operations extends Controller with Secured {
         )
   }
 
-  def update() = formAction(updateForm, Global.db.expDao.update)
+  def update() = formAction(updateForm, new ExpenditureDao().update)
 
-  def insert() = formAction(insertForm, Global.db.expDao.insert)
+  def insert() = formAction(insertForm, new ExpenditureDao().insert)
 
   def formAction[T](form: Form[T],
                     process: (T, User) => Future[Int]): EssentialAction =

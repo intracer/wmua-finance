@@ -2,20 +2,18 @@ package org.intracer.finance.slick
 
 import java.sql.Timestamp
 
+import client.finance.GrantItem
 import slick.driver.H2Driver.api._
 import slick.profile.SqlProfile.ColumnOption.SqlType
 import org.intracer.finance._
-import client.finance.GrantItem
-import controllers.Global
-import org.joda.time.DateTime
 
 class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("op_id")
 
   def rev_id = column[Int]("rev_id", O.PrimaryKey, O.AutoInc)
 
-  def date = column[Timestamp]("op_date", SqlType("datetime "))
+  def date = column[Timestamp]("op_date", SqlType("datetime"))
 
   def amount = column[Option[BigDecimal]]("amount")
 
@@ -33,7 +31,7 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def descr = column[String]("descr")
 
-  def account = foreignKey("ACC_FK", categoryId, TableQuery[Accounts])(_.id)
+  def account = foreignKey("ACC_FK", from, TableQuery[Accounts])(_.id)
 
   def category = foreignKey("CAT_FK", categoryId, TableQuery[Categories])(_.id)
 
@@ -51,17 +49,17 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
 object Expenditures {
 
-  def categories: Map[Int, CategoryF] = Global.db.categoryDao.list.groupBy(_.id.get).mapValues(_.head)
+  def categories: Map[Int, CategoryF] = new CategoryDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  def projects: Map[Int, Project] = Global.db.projectDao.list.groupBy(_.id.get).mapValues(_.head)
+  def projects: Map[Int, Project] = new ProjectDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  lazy val grants: Map[Int, Grant] = Global.db.grantDao.list.groupBy(_.id.get).mapValues(_.head)
+  lazy val grants: Map[Int, Grant] = new GrantDao().list.groupBy(_.id.get).mapValues(_.head)
 
   lazy val grantItems: Map[Int, Seq[GrantItem]] = {
-    Global.db.grantItemDao.listAll().groupBy(_.grantId.get)
+    new GrantItemsDao().listAll().groupBy(_.grantId.get)
   }
 
-  def accounts: Map[Int, Account] = Global.db.accountDao.list.groupBy(_.id.get).mapValues(_.head)
+  def accounts: Map[Int, Account] = new AccountDao().list.groupBy(_.id.get).mapValues(_.head)
 
   def fromDb(id: Option[Int],
              opDate: Timestamp,
@@ -81,10 +79,10 @@ object Expenditures {
                          grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
     ) yield grantItem
 
-    val user = Global.db.userDao.byId(userId).get
+    val user = new UserDao().byId(userId).get
 
     Expenditure(id, opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
-      maybeGrantId.map(grants), grantItem, descr, logDate, user)
+      maybeGrantId.map(grants), grantItem, descr, user, logDate)
   }
 
   def toDb(exp: Expenditure) = {

@@ -19,7 +19,7 @@ case class GrantItem(id: Option[Int] = None,
   //  Number	Item description	Unit	Qty	Cost per unit UAH / USD	Total cost USD	WMF contribution (USD)	Other sources (USD)	Notes
   override def toString: String = s"$number $description $$$totalCost"
 
-  override def name = number + " " + description
+  override def name: String = number + " " + description
 
 }
 
@@ -64,7 +64,7 @@ object GrantItemFactory {
 
   def apply(v: Seq[String]): Option[GrantItem] = {
     if (v.size == 9) {
-      Some(new GrantItem(None, None,
+      Some(GrantItem(None, None,
         number = v(0),
         category = None,
         description = v(1),
@@ -77,7 +77,7 @@ object GrantItemFactory {
         notes = Option(v(8)).filter(_.nonEmpty)))
     } else {
       val parts = v(0).split(" ")
-      Some(new GrantItem(None, None,
+      Some(GrantItem(None, None,
         number = parts.head,
         category = None,
         description = parts.tail.mkString(" "),
@@ -93,13 +93,13 @@ object GrantItemFactory {
   }
 
   def toUSD(s: String): Option[BigDecimal] = {
-    if (s.isEmpty) None
-    else Some(
-      s
-        .replace(",", "")
-        .replace("&nbsp;", "")
-        .toDouble
-    )
+    Option(s)
+      .filter(_.nonEmpty)
+      .map(
+        _.replace(",", "")
+          .replace("&nbsp;", "")
+          .toDouble
+      )
   }
 
   //  def toUSD(s: String): Money = {

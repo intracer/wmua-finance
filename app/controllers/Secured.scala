@@ -1,6 +1,7 @@
 package controllers
 
 import org.intracer.finance.User
+import org.intracer.finance.slick.UserDao
 import play.api.mvc._
 
 import scala.concurrent.Future
@@ -9,7 +10,7 @@ trait Secured {
 
   type Permission = User => Boolean
 
-  def userDao = Global.db.userDao
+  def userDao = new UserDao
 
   def user(request: RequestHeader): Option[User] = {
     request.session.get(Security.username)

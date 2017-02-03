@@ -1,31 +1,30 @@
 package org.intracer.finance.slick
 
 import client.finance.GrantItem
-import slick.driver.JdbcProfile
-import slick.lifted.TableQuery
-import spray.util.pimpFuture
 
-class GrantItemsDao(val mwDb: FinDatabase, val query: TableQuery[GrantItems], val driver: JdbcProfile) extends BaseDao {
+class GrantItemsDao extends BaseDao {
 
   import driver.api._
 
-  def insert(grantItem: GrantItem): Int = db {
+  val query = TableQuery[GrantItems]
+
+  def insert(grantItem: GrantItem): Int = run {
     query += grantItem
   }
 
-  def insertAll(grantItems: Seq[GrantItem]): Unit = db {
+  def insertAll(grantItems: Seq[GrantItem]): Unit = run {
     query.forceInsertAll(grantItems)
   }
 
-  def list(grantId: Int): Seq[GrantItem] = db {
+  def list(grantId: Int): Seq[GrantItem] = run {
     query.filter(_.grantId === grantId).sortBy(_.id).result
   }
 
-  def listAll(): Seq[GrantItem] = db {
+  def listAll(): Seq[GrantItem] = run {
     query.sortBy(_.id).result
   }
 
-  def get(id: Int): Option[GrantItem] = db {
+  def get(id: Int): Option[GrantItem] = run {
     query.filter(_.id === id).result.headOption
   }
 

@@ -8,7 +8,7 @@ resolvers ++= Seq(
   "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
   "Scalaz Bintray Repo"  at "http://dl.bintray.com/scalaz/releases"
 )
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.8")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.12")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
 

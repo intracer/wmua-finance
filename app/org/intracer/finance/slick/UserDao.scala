@@ -4,30 +4,30 @@ import java.math.BigInteger
 import java.security.MessageDigest
 
 import org.intracer.finance.User
-import slick.driver.JdbcProfile
-import slick.lifted.TableQuery
 
-class UserDao(val mwDb: FinDatabase, val query: TableQuery[Users], val driver: JdbcProfile) extends BaseDao {
+class UserDao() extends BaseDao {
 
   import driver.api._
 
-  def insert(user: User): Int = db {
-    query += user
+  val query = TableQuery[Users]
+
+  def insert(user: User): Int = run {
+    query returning query.map(_.id) += user
   }
 
-  def insertAll(users: Seq[User]): Unit = db {
+  def insertAll(users: Seq[User]): Unit = run {
     query.forceInsertAll(users)
   }
 
-  def list: Seq[User] = db {
+  def list: Seq[User] = run {
     query.sortBy(_.fullname).result
   }
 
-  def byEmail(email: String): Option[User] = db {
+  def byEmail(email: String): Option[User] = run {
     query.filter(_.email === email).result.headOption
   }
 
-  def byId(id: Int): Option[User] = db {
+  def byId(id: Int): Option[User] = run {
     query.filter(_.id === id).result.headOption
   }
 

@@ -1,9 +1,7 @@
 package controllers
 
-import _root_.slick.backend.DatabaseConfig
-import _root_.slick.driver.MySQLDriver
 import org.intracer.finance._
-import org.intracer.finance.slick.{Expenditures, FinDatabase}
+import org.intracer.finance.slick.{ExpenditureDao, Expenditures}
 import org.joda.time.DateTime
 import play.api._
 
@@ -12,7 +10,7 @@ import scala.collection.SortedSet
 object Global extends GlobalSettings {
 
   def operations: Seq[Operation] = {
-    db.expDao.list.map { e =>
+    new ExpenditureDao().list.map { e =>
       new Operation(e.from, e, e.amount, new DateTime(e.date.getTime))
     }
   }
@@ -21,10 +19,6 @@ object Global extends GlobalSettings {
 
   val fileDate = "13-NOV-2015"
 
-  val dbConfig: DatabaseConfig[MySQLDriver] = DatabaseConfig.forConfig("slick.dbs.default")
-
-  val db = new FinDatabase(dbConfig.db)
-
   override def onStart(app: Application) {
     Logger.info("Application has started")
   }
@@ -32,7 +26,6 @@ object Global extends GlobalSettings {
   override def onStop(app: Application) {
     Logger.info("Application shutdown...")
   }
-
 
   def projectsJson: String = {
     Expenditures.projects.toSeq.sortBy(_._2.name.toLowerCase).map {

@@ -1,7 +1,7 @@
 package controllers
 
 import client.finance.GrantReader
-import org.intracer.finance.slick.Expenditures
+import org.intracer.finance.slick.{Expenditures, GrantItemsDao}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Controller
@@ -35,7 +35,7 @@ object Grants extends Controller with Secured {
         val grant = Expenditures.grants(id)
         val items = GrantReader.grantItems(grant)
 
-        Global.db.grantItemDao.insertAll(items)
+        new GrantItemsDao().insertAll(items)
 
         Ok(views.html.grantItems(user, grant, items))
 

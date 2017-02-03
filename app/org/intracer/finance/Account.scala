@@ -15,15 +15,16 @@ trait HasName {
   override def toString: String = name
 }
 
-
 case class CategoryF(id: Option[Int] = None, name: String = "") extends HasName
 
-case class Grant(id: Option[Int] = None, name: String = "", url: Option[String] = None) extends HasName {
-  def toUrl = if (name.startsWith("Grants:")) {
-    Some("https://meta.wikimedia.org/wiki/" + name)
-  } else {
-    None
-  }
+case class Grant(id: Option[Int] = None,
+                 name: String = "",
+                 url: Option[String] = None) extends HasName {
+  def toUrl =
+    Option(name)
+      .filter(_.startsWith("Grants:"))
+      .map(n => "https://meta.wikimedia.org/wiki/" + n)
+
 }
 
 case class Project(id: Option[Int] = None, name: String = "") extends HasName
@@ -36,16 +37,19 @@ case class Account(id: Option[Int] = None, name: String) extends OpPoint
 //  def name = detail
 //}
 
-class Operation(
-                 val from: OpPoint,
-                 val to: Expenditure,
-                 val amount: Option[BigDecimal],
-                 val date: DateTime) {
-  override def toString: String = s"${date.toString().substring(0, 10)}: $from -> $to, amount: $amount"
+class Operation(val from: OpPoint,
+                val to: Expenditure,
+                val amount: Option[BigDecimal],
+                val date: DateTime) {
 
-  def amountString = amount.map(_.toDouble).map(Formatter.fmt.format).getOrElse("")
+  override def toString: String =
+    s"${date.toString().substring(0, 10)}: $from -> $to, amount: $amount"
 
-  def toDouble = amount.map(_.toDouble).getOrElse(0.0)
+  def doubleOpt = amount.map(_.toDouble)
+
+  def amountString = doubleOpt.map(Formatter.fmt.format).getOrElse("")
+
+  def toDouble = doubleOpt.getOrElse(0.0)
 }
 
 object Formatter {

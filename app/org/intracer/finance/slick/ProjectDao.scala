@@ -9,7 +9,7 @@ class ProjectDao() extends BaseDao {
   val query = TableQuery[Projects]
 
   def insert(project: Project): Int = run {
-    query += project
+    query returning query.map(_.id) += project
   }
 
   def insertAll(projects: Seq[Project]): Unit = run {

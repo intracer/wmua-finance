@@ -9,7 +9,7 @@ class CategoryDao extends BaseDao {
   val query = TableQuery[Categories]
 
   def insert(category: CategoryF): Int = run {
-    query += category
+    query returning query.map(_.id) += category
   }
 
   def insertAll(categories: Seq[CategoryF]): Unit = run {

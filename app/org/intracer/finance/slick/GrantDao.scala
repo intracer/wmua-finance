@@ -9,7 +9,7 @@ class GrantDao() extends BaseDao {
   val query = TableQuery[Grants]
 
   def insert(grant: Grant): Int = run {
-    query += grant
+    query returning query.map(_.id) += grant
   }
 
   def insertAll(grants: Seq[Grant]): Unit = run {

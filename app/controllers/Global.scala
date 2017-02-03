@@ -1,19 +1,12 @@
 package controllers
 
-import org.intracer.finance._
-import org.intracer.finance.slick.{ExpenditureDao, Expenditures}
-import org.joda.time.DateTime
+import org.intracer.finance.slick.Expenditures
 import play.api._
 
 import scala.collection.SortedSet
 
-object Global extends GlobalSettings {
 
-  def operations: Seq[Operation] = {
-    new ExpenditureDao().list.map { e =>
-      new Operation(e.from, e, e.amount, new DateTime(e.date.getTime))
-    }
-  }
+object Global extends GlobalSettings {
 
   var uahToUsd: Double = 22.0
 

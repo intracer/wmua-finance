@@ -14,17 +14,21 @@ class DbSpec extends Specification with InMemDb {
     "insert" in {
       inMemDbApp {
         val categoryDao = new CategoryDao
-        val category = CategoryF(name = "name")
 
-        categoryDao.insert(category)
+        val names = (1 to 2).map("name" + _)
+        val categories = names.map(n => CategoryF(name = n))
+
+        val ids = categories.map(categoryDao.insert)
+
+        val byName = names.flatMap(categoryDao.get)
+
+        byName.map(_.name) === names
+        byName.flatMap(_.id) === ids
 
         val list = categoryDao.list
-        list.size === 1
+        list.size === 2
 
-        val fromDb = list.head
-
-        fromDb.id.isDefined === true
-        fromDb.copy(id = None) === category
+        list === byName
       }
     }
   }

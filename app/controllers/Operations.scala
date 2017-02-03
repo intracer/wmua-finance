@@ -1,6 +1,7 @@
 package controllers
 
 import java.util.Date
+import javax.inject.{Inject, Singleton}
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
@@ -23,7 +24,8 @@ case class OpFilter(projects: Set[Int],
                     grantItems: Set[Int],
                     accounts: Set[Int],
                     dateRange: String,
-                    users: Seq[User]) {
+                    users: Seq[User],
+                    operations: Seq[Operation]) {
 
   val pattern = DateTimeFormat.forPattern("MM/dd/yyyy")
 
@@ -53,7 +55,7 @@ case class OpFilter(projects: Set[Int],
         interval.exists(_.contains(op.date))
     }
 
-    Global.operations
+    operations
       .filter(filterOp)
       .sortBy(_.date.toString())
   }
@@ -62,7 +64,7 @@ case class OpFilter(projects: Set[Int],
 object OpFilter {
   val defaultDateRange: String = "01/01/2016 - 12/31/2016"
 
-  def apply(request: Request[_], users: Seq[User]) = {
+  def apply(request: Request[_], users: Seq[User], operations: Seq[Operation]) = {
 
     val map = request.queryString
 
@@ -79,18 +81,25 @@ object OpFilter {
 
     val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
 
-    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users)
+    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations)
   }
 
 }
 
-object Operations extends Controller with Secured {
+@Singleton
+class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller with Secured {
+
+  def allOperations: Seq[Operation] = {
+    expenditureDao.list.map { e =>
+      new Operation(e.from, e, e.amount, new DateTime(e.date.getTime))
+    }
+  }
 
   def withFilter(f: (User, OpFilter, Seq[Operation]) => Request[AnyContent] => Result) = {
     withAuth() {
       user =>
         implicit request =>
-          val opFilter = OpFilter(request, Seq(user))
+          val opFilter = OpFilter(request, Seq(user), allOperations)
           val operations = opFilter.filter()
 
           f(user, opFilter, operations)(request)

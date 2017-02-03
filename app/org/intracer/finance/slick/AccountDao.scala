@@ -9,7 +9,7 @@ class AccountDao extends BaseDao {
   val query = TableQuery[Accounts]
 
   def insert(account: Account): Int = run {
-    query += account
+    query returning query.map(_.id) += account
   }
 
   def insertAll(accounts: Seq[Account]): Unit = run {

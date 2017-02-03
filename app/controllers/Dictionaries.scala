@@ -1,5 +1,8 @@
 package controllers
 
+import javax.inject.Inject
+import javax.inject.Singleton
+
 import slick.driver.JdbcProfile
 import org.intracer.finance._
 import org.intracer.finance.slick._
@@ -15,17 +18,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object Dictionaries extends Controller with Secured with HasDatabaseConfig[JdbcProfile]{
+@Singleton
+class Dictionaries @Inject()(val categoryDao: CategoryDao,
+                             val projectDao: ProjectDao,
+                             val grantDao: GrantDao,
+                             val grantItemDao: GrantItemsDao,
+                             val expDao: ExpenditureDao,
+                             val accountDao: AccountDao)
+  extends Controller with Secured with HasDatabaseConfig[JdbcProfile] {
+
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   import driver.api._
-
-  def categoryDao = new CategoryDao
-  def projectDao = new ProjectDao
-  def grantDao = new GrantDao
-  def grantItemDao = new GrantItemsDao
-  def expDao = new ExpenditureDao
-  def accountDao = new AccountDao
 
   def list() = withAuth() { user =>
     implicit request =>

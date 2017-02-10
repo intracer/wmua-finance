@@ -17,7 +17,7 @@ class ExpenditureDao extends BaseDao {
   val query = TableQuery[Expenditures]
 
   def insert(exp: Expenditure): Int = run {
-    query += exp
+    query returning query.map(_.id) += exp
   }
 
   def insertAll(exps: Seq[Expenditure]): Unit = run {

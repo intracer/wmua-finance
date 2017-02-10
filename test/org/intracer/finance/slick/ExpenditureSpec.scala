@@ -34,7 +34,7 @@ class ExpenditureSpec extends Specification with InMemDb {
 
       val grantId = grantDao.list.find(_.name == "Grant1").flatMap(_.id)
       grantItemDao.insertAll((1 to 2).map { i =>
-        GrantItem(None, grantId, i.toString(), "GrantItem" + i, BigDecimal.valueOf(i * 100))
+        GrantItem(None, grantId, i.toString, "GrantItem" + i, BigDecimal.valueOf(i * 100))
       })
 
       accountDao.insertAll((1 to 2).map(i => Account(name = "Account" + i)))
@@ -45,29 +45,34 @@ class ExpenditureSpec extends Specification with InMemDb {
     }
   }
 
+  def newExp(amount: Int, grant: String, account: String, category: String, project: String, grantItem: String, description: String) = {
+    val grant = grantDao.list.find(_.name == grant)
+
+    val exp = Expenditure(
+      None,
+      new Timestamp(0L),
+      Some(BigDecimal(amount + ".00")),
+      accountDao.list.find(_.name == account).get,
+      categoryDao.list.find(_.name == category).get,
+      projectDao.list.find(_.name == project).get,
+      grant,
+      grantItemDao.list(grant.flatMap(_.id).get).find(_.description == grantItem),
+      description,
+      userDao.list.head
+    )
+    exp
+  }
+
   "expenditure" should {
     "insert" in {
       inMemDbApp {
-        val grant  = grantDao.list.find(_.name == "Grant1")
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", "GrantItem1", "exp1")
 
-        val exp = Expenditure(
-          Some(1),
-          new Timestamp(0L),
-          Some(BigDecimal("10.00")),
-          accountDao.list.find(_.name == "Account1").get,
-          categoryDao.list.find(_.name == "Category1").get,
-          projectDao.list.find(_.name == "Project1").get,
-          grant,
-          grantItemDao.list(grant.flatMap(_.id).get).find(_.description == "GrantItem1"),
-          "exp1",
-          userDao.list.head
-        )
-
-        expDao.insert(exp)
+        val id = expDao.insert(exp)
 
         val exps = expDao.list
         exps.size === 1
-        exps.head === exp
+        exps.head === exp.copy(id = Some(id))
       }
     }
   }

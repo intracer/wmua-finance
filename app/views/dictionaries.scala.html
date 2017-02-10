@@ -1,8 +1,11 @@
+@import org.intracer.finance.slick.Schema
 @(user: org.intracer.finance.User,
         table: String,
-        dict: Seq[org.intracer.finance.HasName])(implicit flash: Flash, lang: Lang, messages: Messages)
+        dict: Seq[org.intracer.finance.HasName],
+        schema: Schema
+)(implicit flash: Flash, lang: Lang, messages: Messages)
 
-@main(Messages("Lookup"), user) {
+@main(Messages("Lookup"), user, schema) {
 
     <div class="row">
 

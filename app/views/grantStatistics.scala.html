@@ -2,13 +2,15 @@
 @import org.intracer.finance.AlphaNumOrdering
 @import client.finance.GrantItem
 
+@import org.intracer.finance.slick.Schema
 @(
         operations: Seq[Operation],
         total: Double,
         opFilter: OpFilter,
         operationsByGrantRow: Map[Int, Iterable[Operation]],
         rate: Option[Double] = None,
-        itemsByKey: Map[Int, GrantItem] = Map.empty
+        itemsByKey: Map[Int, GrantItem] = Map.empty,
+        schema: Schema
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @import org.intracer.finance.Formatter.fmt
@@ -72,7 +74,7 @@
 
 
 @main(Messages("operations")) {
-    @filter(operations, opFilter, "/bygrantrowstat", rate)
+    @filter(operations, opFilter, "/bygrantrowstat", rate, schema)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow)
 }
 

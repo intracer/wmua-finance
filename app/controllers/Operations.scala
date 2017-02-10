@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
-import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao}
+import org.intracer.finance.slick.{ExpenditureDao, Schema, UserDao}
 import org.intracer.finance.{Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -87,7 +87,9 @@ object OpFilter {
 }
 
 @Singleton
-class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller with Secured {
+class Operations @Inject()(val schema: Schema,
+                           val expenditureDao: ExpenditureDao,
+                           val userDao: UserDao) extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {
     expenditureDao.list.map { e =>
@@ -112,7 +114,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
 
         val total = operations.map(_.toDouble).sum
 
-        Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
+        Ok(views.html.operations(user, operations, total, opFilter, "/operations", schema))
   }
 
   def byGrantRow = withFilter {
@@ -125,7 +127,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
 
         val total = operations.map(_.toDouble).sum
 
-        Ok(views.html.operations(user, sorted, total, opFilter, "/bygrantrow"))
+        Ok(views.html.operations(user, sorted, total, opFilter, "/bygrantrow", schema))
   }
 
   def byGrantRowStat = withFilter {
@@ -138,7 +140,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
 
       Global.uahToUsd = rate
 
-      val grantItemsMap = new GrantItemsDao()
+      val grantItemsMap = schema.grantItemDao
         .listAll()
         .groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
         Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
@@ -146,7 +148,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
       Ok(
         views.html.grantStatistics(ops, ops.map(_.toDouble).sum, opFilter,
           ops.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1)),
-          Some(rate), grantItemsMap)
+          Some(rate), grantItemsMap, schema)
       )
   }
 
@@ -160,14 +162,15 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
             ops.groupBy(_.to.category.name),
             ops.groupBy(_.to.grant.map(_.name).getOrElse("No")),
             ops.groupBy(_.to.grantItem.map(_.description).getOrElse("")),
-            ops.groupBy(o => o.to.project.name + "." + o.to.category.name)
+            ops.groupBy(o => o.to.project.name + "." + o.to.category.name),
+            schema
           )
         )
   }
 
-  def update() = formAction(updateForm, new ExpenditureDao().update)
+  def update() = formAction(updateForm, expenditureDao.update)
 
-  def insert() = formAction(insertForm, new ExpenditureDao().insert)
+  def insert() = formAction(insertForm, expenditureDao.insert)
 
   def formAction[T](form: Form[T],
                     process: (T, User) => Future[Int]): EssentialAction =

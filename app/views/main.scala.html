@@ -1,5 +1,6 @@
-@(title: String, user: org.intracer.finance.User = null)(content: Html)(implicit lang: Lang, messages: Messages)
-    @import org.intracer.finance.slick.Expenditures
+@import org.intracer.finance.slick.Schema
+@import org.intracer.finance.User
+@(title: String, user: User = null, schema: Schema = null)(content: Html)(implicit lang: Lang, messages: Messages)
 
 <!DOCTYPE html>
 
@@ -124,9 +125,10 @@
                         combodate: { maxYear: 2016 }
                     });
 
+                    @if(schema != null) {
                     $('.edit_project').editable({
                         source: [
-                            @Html(Global.projectsJson)
+                            @Html(schema.projectsJson)
                         ],
                         select2: {
                             placeholder: 'Select a project',
@@ -138,7 +140,7 @@
 
                     $('.edit_category').editable({
                         source: [
-                            @Html(Global.categoriesJson)
+                            @Html(schema.categoriesJson)
                         ],
                         select2: {
                             placeholder: 'Select a category',
@@ -149,10 +151,10 @@
                         showbuttons: false
                     });
 
-                    @for(grant <- Expenditures.grants.values if Expenditures.grantItems.getOrElse(grant.id.get, Seq.empty).nonEmpty) {
+                    @for(grant <- schema.grants.values if schema.grantItems.getOrElse(grant.id.get, Seq.empty).nonEmpty) {
                     $('.edit_grant_item_@grant.id.get').editable({
                         source: [
-                            @Html(Global.grantItemsJson(grant.id.get))
+                            @Html(schema.grantItemsJson(grant.id.get))
                         ],
                         select2: {
                             placeholder: 'Select a grant item',
@@ -166,7 +168,7 @@
 
                     $('.edit_grant').editable({
                         source: [
-                            @Html(Global.grantsJson)
+                            @Html(schema.grantsJson)
                         ],
                         select2: {
                             placeholder: 'Select a grant',
@@ -178,7 +180,7 @@
 
                     $('.edit_account').editable({
                         source: [
-                            @Html(Global.accountsJson)
+                            @Html(schema.accountsJson)
                         ],
                         select2: {
                             placeholder: 'Select an account',
@@ -187,6 +189,7 @@
                         },
                         showbuttons: false
                     });
+                    }
 
                     $('.newrow').on('save.newoperation', function(){
                         var that = this;

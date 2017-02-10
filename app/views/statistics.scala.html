@@ -1,6 +1,5 @@
 @import org.intracer.finance.Operation
-@import org.intracer.finance.slick.Expenditures
-
+@import org.intracer.finance.slick.Schema
 @(operations: Seq[Operation],
         total: Double,
         opFilter: OpFilter,
@@ -8,14 +7,15 @@
         byCategory: Map[String, Iterable[Operation]],
         byGrant: Map[String, Iterable[Operation]],
         byGrantRow: Map[String, Iterable[Operation]],
-        byProjectAndCategory: Map[String, Iterable[Operation]]
+        byProjectAndCategory: Map[String, Iterable[Operation]],
+        schema: Schema
         )(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @main(Messages("operations")) {
-    @filter(operations, opFilter, "/statistics")
-    @statGrid(Messages("by.project"), Messages("project"), Expenditures.projects.map{case (k,v) => (k.toString, v.name)}, byProject, total)
-    @statGrid(Messages("by.category"), Messages("category"), Expenditures.categories.map{case (k,v) => (k.toString, v.name)}, byCategory, total)
-    @statGrid(Messages("by.grant"), Messages("grant"), Expenditures.grants.map{case (k,v) => (k.toString, v.name)}, byGrant, total)
+    @filter(operations, opFilter, "/statistics", schema = schema)
+    @statGrid(Messages("by.project"), Messages("project"), schema.projects.map{case (k,v) => (k.toString, v.name)}, byProject, total)
+    @statGrid(Messages("by.category"), Messages("category"), schema.categories.map{case (k,v) => (k.toString, v.name)}, byCategory, total)
+    @statGrid(Messages("by.grant"), Messages("grant"), schema.grants.map{case (k,v) => (k.toString, v.name)}, byGrant, total)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), byGrantRow.keySet.map(k => (k,k)).toMap, byGrantRow, total)
 }
 

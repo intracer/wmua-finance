@@ -99,7 +99,7 @@ class DbLookupSpec extends Specification with InMemDb {
   "grantItems" should {
     "insertGI" in {
       inMemDbApp {
-        val grantItemDao = new GrantItemsDao
+        val grantItemDao = new GrantItemDao
         val grantDao = new GrantDao
 
         val grant = Grant(name = "name")

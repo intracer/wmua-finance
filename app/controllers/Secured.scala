@@ -10,7 +10,7 @@ trait Secured {
 
   type Permission = User => Boolean
 
-  def userDao = new UserDao
+  def userDao: UserDao
 
   def user(request: RequestHeader): Option[User] = {
     request.session.get(Security.username)

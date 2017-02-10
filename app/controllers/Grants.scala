@@ -1,44 +1,41 @@
 package controllers
 
+import javax.inject.{Inject, Singleton}
+
 import client.finance.GrantReader
-import org.intracer.finance.slick.{Expenditures, GrantItemsDao}
+import org.intracer.finance.slick.{Schema, UserDao}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Controller
 
-object Grants extends Controller with Secured {
+@Singleton
+class Grants @Inject()(val schema: Schema, val userDao: UserDao) extends Controller with Secured {
 
   def items(id: Int) = withAuth() {
     user =>
       implicit request =>
-
-        val grant = Expenditures.grants(id)
+        val grant = schema.grants(id)
         val items = GrantReader.grantItems(grant)
-
-        Ok(views.html.grantItems(user, grant, items))
+        Ok(views.html.grantItems(user, grant, items, schema))
   }
 
   def list() = withAuth() {
     user =>
       implicit request =>
-
-        val grants = Expenditures.grants.values.toSeq
-
+        val grants = schema.grants.values.toSeq
         Ok(views.html.grants(user, grants))
-
   }
 
   def importItems(id: Int) = withAuth() {
     user =>
       implicit request =>
 
-        val grant = Expenditures.grants(id)
+        val grant = schema.grants(id)
         val items = GrantReader.grantItems(grant)
 
-        new GrantItemsDao().insertAll(items)
+        schema.grantItemDao.insertAll(items)
 
-        Ok(views.html.grantItems(user, grant, items))
-
+        Ok(views.html.grantItems(user, grant, items, schema))
   }
 
 }

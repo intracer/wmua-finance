@@ -2,22 +2,18 @@ package org.intracer.finance.slick
 
 import java.math.BigInteger
 import java.security.MessageDigest
+import javax.inject.Inject
 
 import org.intracer.finance.User
+import play.api.db.slick.DatabaseConfigProvider
 
-class UserDao() extends BaseDao {
+class UserDao @Inject()(val dbConfigProvider: DatabaseConfigProvider,
+                        val schema: Schema)
+  extends BaseDao[User] {
 
   import driver.api._
 
-  val query = TableQuery[Users]
-
-  def insert(user: User): Int = run {
-    query returning query.map(_.id) += user
-  }
-
-  def insertAll(users: Seq[User]): Unit = run {
-    query.forceInsertAll(users)
-  }
+  val query = schema.usersQuery
 
   def list: Seq[User] = run {
     query.sortBy(_.fullname).result

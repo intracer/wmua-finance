@@ -14,7 +14,7 @@ class ExpenditureSpec extends Specification with InMemDb {
   var categoryDao: CategoryDao = _
   var projectDao: ProjectDao = _
   var grantDao: GrantDao = _
-  var grantItemDao: GrantItemsDao = _
+  var grantItemDao: GrantItemDao = _
   var expDao: ExpenditureDao = _
   var accountDao: AccountDao = _
   var userDao: UserDao = _
@@ -24,7 +24,7 @@ class ExpenditureSpec extends Specification with InMemDb {
       categoryDao = new CategoryDao
       projectDao = new ProjectDao
       grantDao = new GrantDao
-      grantItemDao = new GrantItemsDao
+      grantItemDao = new GrantItemDao
       expDao = new ExpenditureDao
       accountDao = new AccountDao
       userDao = new UserDao

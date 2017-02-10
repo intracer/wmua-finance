@@ -6,6 +6,6 @@
         asUser: User = null
 )(implicit lang: Lang, messages: Messages)
 
-@main("error", user) {
+@main("error", user, null) {
     <div class="alert alert-danger"> @Messages(message) </div>
 }

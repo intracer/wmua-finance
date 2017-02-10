@@ -1,28 +1,25 @@
 package org.intracer.finance.slick
 
 import java.sql.Timestamp
+import javax.inject.Inject
 
 import controllers.{NewOp, Update}
 import org.intracer.finance.{Expenditure, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import play.api.db.slick.DatabaseConfigProvider
+import slick.profile.SqlProfile.ColumnOption.SqlType
 
 import scala.concurrent.Future
 import scala.util.Try
 
-class ExpenditureDao extends BaseDao {
+class ExpenditureDao @Inject()(val dbConfigProvider: DatabaseConfigProvider,
+                               val schema: Schema)
+  extends BaseDao[Expenditure] {
 
   import driver.api._
 
-  val query = TableQuery[Expenditures]
-
-  def insert(exp: Expenditure): Int = run {
-    query returning query.map(_.id) += exp
-  }
-
-  def insertAll(exps: Seq[Expenditure]): Unit = run {
-    query.forceInsertAll(exps)
-  }
+  val query = schema.expendituresQuery
 
   def list: Seq[Expenditure] = run {
     query.sortBy(_.date.desc).result
@@ -80,11 +77,11 @@ class ExpenditureDao extends BaseDao {
     val exp = Expenditure(
       date = new Timestamp(op.date.getTime),
       amount = op.amount,
-      from = op.account.flatMap(Expenditures.accounts.get).orNull,
-      category = Expenditures.categories.get(op.category).orNull,
-      project = Expenditures.projects.get(op.project).orNull,
-      grant = op.grant.flatMap(Expenditures.grants.get),
-      grantItem = op.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
+      account = op.account.flatMap(schema.accounts.get).orNull,
+      category = schema.categories.get(op.category).orNull,
+      project = schema.projects.get(op.project).orNull,
+      grant = op.grant.flatMap(schema.grants.get),
+      grantItem = op.grantItem.flatMap(item => schema.grantItems(17).find(_.id.exists(_ == item))),
       desc = op.descr.orNull,
       logDate = new Timestamp(DateTime.now().getMillis),
       user = user

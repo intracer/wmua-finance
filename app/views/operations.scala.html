@@ -1,18 +1,20 @@
+@import org.intracer.finance.slick.Schema
 @(user: org.intracer.finance.User,
         operations: Seq[org.intracer.finance.Operation],
         total: Double,
         opFilter: OpFilter,
-        url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
+        url: String,
+        schema: Schema)(implicit flash: Flash, lang: Lang, messages: Messages)
 
 @editable(clazz: String) = {
 @if(user.canContribute) { class="@clazz xeditable" } else { class="noteditable" }
 }
 
-@main(Messages("operations"), user) {
+@main(Messages("operations"), user, schema) {
 
     <div class="row">
 
-        @filter(operations, opFilter, url)
+        @filter(operations, opFilter, url, schema = schema)
 
         <div id="msg"></div>
         <table class="table table-striped table-bordered" id="operations" style="background-color: #DDDDDD;">

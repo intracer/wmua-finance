@@ -1,5 +1,8 @@
 package controllers
 
+import javax.inject.{Inject, Singleton}
+
+import org.intracer.finance.slick.{Schema, UserDao}
 import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
@@ -8,7 +11,8 @@ import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Results._
 import play.api.mvc._
 
-object Login extends Controller with Secured {
+@Singleton
+class Login @Inject()(val schema: Schema, val userDao: UserDao) extends Controller with Secured {
 
   def index = Action {
     implicit request =>

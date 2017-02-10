@@ -2,7 +2,7 @@ package org.intracer.finance.slick
 
 import org.intracer.finance.Project
 
-class ProjectDao() extends BaseDao {
+class ProjectDao extends BaseDao {
 
   import driver.api._
 

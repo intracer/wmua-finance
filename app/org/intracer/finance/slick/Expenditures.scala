@@ -87,7 +87,7 @@ object Expenditures {
 
   def toDb(exp: Expenditure) = {
     Some((exp.id, exp.date, exp.amount,
-      exp.from.id.get,
+      exp.account.id.get,
       exp.category.id.get,
       exp.project.id.get,
       exp.grant.flatMap(_.id),

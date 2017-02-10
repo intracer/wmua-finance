@@ -91,7 +91,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
 
   def allOperations: Seq[Operation] = {
     expenditureDao.list.map { e =>
-      new Operation(e.from, e, e.amount, new DateTime(e.date.getTime))
+      new Operation(e.account, e, e.amount, new DateTime(e.date.getTime))
     }
   }
 

@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 case class Expenditure(id: Option[Int] = None,
                        date: Timestamp,
                        amount: Option[BigDecimal],
-                       from: Account,
+                       account: Account,
                        category: CategoryF,
                        project: Project,
                        grant: Option[Grant],

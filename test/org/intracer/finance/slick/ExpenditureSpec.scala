@@ -48,7 +48,8 @@ class ExpenditureSpec extends Specification with InMemDb {
 
   def user = userDao.list.head
 
-  def newExp(amount: Int, grantName: String, account: String, category: String, project: String, grantItem: String, description: String) = {
+  def newExp(amount: Int, grantName: String, account: String, category: String,
+             project: String, grantItem: Option[String], description: String) = {
     val grant = grantDao.list.find(_.name == grantName)
 
     Expenditure(
@@ -59,7 +60,9 @@ class ExpenditureSpec extends Specification with InMemDb {
       categoryDao.list.find(_.name == category).get,
       projectDao.list.find(_.name == project).get,
       grant,
-      grantItemDao.list(grant.flatMap(_.id).get).find(_.description == grantItem),
+      grantItem.flatMap { description =>
+        grantItemDao.list(grant.flatMap(_.id).get).find(_.description == description)
+      },
       description,
       userDao.list.head
     )
@@ -68,7 +71,7 @@ class ExpenditureSpec extends Specification with InMemDb {
   "expenditure" should {
     "insert" in {
       inMemDbApp {
-        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", "GrantItem1", "exp1")
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", Some("GrantItem1"), "exp1")
 
         val id = expDao.insert(exp)
 
@@ -80,7 +83,7 @@ class ExpenditureSpec extends Specification with InMemDb {
 
     "update amount in" in {
       inMemDbApp {
-        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", "GrantItem1", "exp1")
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", Some("GrantItem1"), "exp1")
         val id = expDao.insert(exp)
 
         expDao.update(Update("amount", id, "20"), user)
@@ -90,5 +93,36 @@ class ExpenditureSpec extends Specification with InMemDb {
         exps.head === exp.copy(id = Some(id), amount = Some(BigDecimal("20.00")))
       }
     }
+
+    "update grant in" in {
+      inMemDbApp {
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
+        val id = expDao.insert(exp)
+
+        val grant2 = grantDao.list.find(_.name == "Grant2")
+        val grant2Id = grant2.flatMap(_.id)
+        expDao.update(Update("grant", id, grant2Id.get.toString), user)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp.copy(id = Some(id), grant = grant2)
+      }
+    }
+
+    "update account in" in {
+      inMemDbApp {
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
+        val id = expDao.insert(exp)
+
+        val account2 = accountDao.list.find(_.name == "Account2").get
+        val account2Id = account2.id
+        expDao.update(Update("account", id, account2Id.get.toString), user)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp.copy(id = Some(id), account = account2)
+      }
+    }
+
   }
 }

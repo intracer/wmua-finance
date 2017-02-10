@@ -33,7 +33,7 @@ class ExpenditureSpec extends Specification with InMemDb {
       projectDao.insertAll((1 to 2).map(i => Project(name = "Project" + i)))
       grantDao.insertAll((1 to 2).map(i => Grant(name = "Grant" + i)))
 
-      val grantId = grantDao.list.find(_.name == "Grant1").flatMap(_.id)
+      val grantId = grantDao.get("Grant1").flatMap(_.id)
       grantItemDao.insertAll((1 to 2).map { i =>
         GrantItem(None, grantId, i.toString, "GrantItem" + i, BigDecimal.valueOf(i * 100))
       })
@@ -50,15 +50,15 @@ class ExpenditureSpec extends Specification with InMemDb {
 
   def newExp(amount: Int, grantName: String, account: String, category: String,
              project: String, grantItem: Option[String], description: String) = {
-    val grant = grantDao.list.find(_.name == grantName)
+    val grant = grantDao.get(grantName)
 
     Expenditure(
       None,
       new Timestamp(0L),
       Some(BigDecimal(amount + ".00")),
-      accountDao.list.find(_.name == account).get,
-      categoryDao.list.find(_.name == category).get,
-      projectDao.list.find(_.name == project).get,
+      accountDao.get(account).get,
+      categoryDao.get(category).get,
+      projectDao.get(project).get,
       grant,
       grantItem.flatMap { description =>
         grantItemDao.list(grant.flatMap(_.id).get).find(_.description == description)
@@ -99,7 +99,7 @@ class ExpenditureSpec extends Specification with InMemDb {
         val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
         val id = expDao.insert(exp)
 
-        val grant2 = grantDao.list.find(_.name == "Grant2")
+        val grant2 = grantDao.get("Grant2")
         val grant2Id = grant2.flatMap(_.id)
         expDao.update(Update("grant", id, grant2Id.get.toString), user)
 
@@ -114,7 +114,7 @@ class ExpenditureSpec extends Specification with InMemDb {
         val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
         val id = expDao.insert(exp)
 
-        val account2 = accountDao.list.find(_.name == "Account2").get
+        val account2 = accountDao.get("Account2").get
         val account2Id = account2.id
         expDao.update(Update("account", id, account2Id.get.toString), user)
 

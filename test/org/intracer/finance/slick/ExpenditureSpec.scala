@@ -3,6 +3,7 @@ package org.intracer.finance.slick
 import java.sql.Timestamp
 
 import client.finance.GrantItem
+import controllers.Update
 import org.intracer.finance._
 import org.specs2.mutable.Specification
 
@@ -45,10 +46,12 @@ class ExpenditureSpec extends Specification with InMemDb {
     }
   }
 
-  def newExp(amount: Int, grant: String, account: String, category: String, project: String, grantItem: String, description: String) = {
-    val grant = grantDao.list.find(_.name == grant)
+  def user = userDao.list.head
 
-    val exp = Expenditure(
+  def newExp(amount: Int, grantName: String, account: String, category: String, project: String, grantItem: String, description: String) = {
+    val grant = grantDao.list.find(_.name == grantName)
+
+    Expenditure(
       None,
       new Timestamp(0L),
       Some(BigDecimal(amount + ".00")),
@@ -60,7 +63,6 @@ class ExpenditureSpec extends Specification with InMemDb {
       description,
       userDao.list.head
     )
-    exp
   }
 
   "expenditure" should {
@@ -73,6 +75,19 @@ class ExpenditureSpec extends Specification with InMemDb {
         val exps = expDao.list
         exps.size === 1
         exps.head === exp.copy(id = Some(id))
+      }
+    }
+
+    "update amount in" in {
+      inMemDbApp {
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", "GrantItem1", "exp1")
+        val id = expDao.insert(exp)
+
+        expDao.update(Update("amount", id, "20"), user)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp.copy(id = Some(id), amount = Some(BigDecimal("20.00")))
       }
     }
   }

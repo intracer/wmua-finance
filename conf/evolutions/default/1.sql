@@ -21,8 +21,8 @@ CREATE TABLE "grant_list" (
 );
 
 CREATE TABLE "operation" (
-  "rev_id" SERIAL NOT NULL PRIMARY KEY,
-  "op_id" INT NOT NULL,
+  "id" SERIAL NOT NULL PRIMARY KEY,
+-- "op_id" INT NOT NULL,
   "op_date"    timestamp    NOT NULL,
   "amount"     DECIMAL(20, 2),
   "account_id" INT,

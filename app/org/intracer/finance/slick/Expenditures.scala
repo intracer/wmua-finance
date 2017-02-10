@@ -9,9 +9,9 @@ import org.intracer.finance._
 
 class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
-  def id = column[Int]("op_id")
+  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
-  def rev_id = column[Int]("rev_id", O.PrimaryKey, O.AutoInc)
+//  def rev_id = column[Int]("rev_id", O.PrimaryKey, O.AutoInc)
 
   def date = column[Timestamp]("op_date", SqlType("datetime"))
 

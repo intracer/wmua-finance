@@ -92,7 +92,7 @@ object Expenditures {
       exp.project.id.get,
       exp.grant.flatMap(_.id),
       exp.grantItem.flatMap(_.id),
-      exp.desc,
+      exp.description,
       exp.logDate,
       exp.user.id.get))
   }

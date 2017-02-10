@@ -85,7 +85,7 @@ class ExpenditureDao extends BaseDao {
       project = Expenditures.projects.get(op.project).orNull,
       grant = op.grant.flatMap(Expenditures.grants.get),
       grantItem = op.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
-      desc = op.descr.orNull,
+      description = op.descr.orNull,
       logDate = new Timestamp(DateTime.now().getMillis),
       user = user
     )

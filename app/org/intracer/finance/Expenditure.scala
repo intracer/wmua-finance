@@ -14,14 +14,14 @@ case class Expenditure(id: Option[Int] = None,
                        project: Project,
                        grant: Option[Grant],
                        grantItem: Option[GrantItem],
-                       desc: String,
+                       description: String,
                        user: User,
                        logDate: Timestamp = new Timestamp(DateTime.now.getMillis)
                       ) extends OpPoint {
-  override def name = desc
+  override def name = description
 
   override def toString: String =
-    s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $desc, """
+    s"""project: $projectName, category: $categoryName, grant: $grantName, description: + $description, """
 
   def projectName = Expenditures.projects(project.id.get).name
 

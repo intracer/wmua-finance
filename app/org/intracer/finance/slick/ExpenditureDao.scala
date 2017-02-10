@@ -80,7 +80,7 @@ class ExpenditureDao extends BaseDao {
     val exp = Expenditure(
       date = new Timestamp(op.date.getTime),
       amount = op.amount,
-      from = op.account.flatMap(Expenditures.accounts.get).orNull,
+      account = op.account.flatMap(Expenditures.accounts.get).orNull,
       category = Expenditures.categories.get(op.category).orNull,
       project = Expenditures.projects.get(op.project).orNull,
       grant = op.grant.flatMap(Expenditures.grants.get),

@@ -8,15 +8,15 @@ GET         /                      controllers.Login.index
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file          controllers.Assets.at(path="/public", file)
 
-GET         /operations            controllers.Operations.list
+GET         /operations            @controllers.Operations.list
 
-GET         /bygrantrow            controllers.Operations.byGrantRow
+GET         /bygrantrow            @controllers.Operations.byGrantRow
 
-GET         /bygrantrowstat        controllers.Operations.byGrantRowStat
+GET         /bygrantrowstat        @controllers.Operations.byGrantRowStat
 
 GET         /resolutions           controllers.Resolutions.list
 
-GET         /statistics            controllers.Operations.statistics
+GET         /statistics            @controllers.Operations.statistics
 
 GET         /logout                controllers.Login.logout()
 
@@ -32,18 +32,18 @@ POST        /grant/import          controllers.Grants.importItems(id: Int)
 
 GET         /grants                controllers.Grants.list
 
-POST        /update_op             controllers.Operations.update()
+POST        /update_op             @controllers.Operations.update()
 
-POST        /update_dict           controllers.Dictionaries.update()
+POST        /update_dict           @controllers.Dictionaries.update()
 
-POST        /newoperation          controllers.Operations.insert()
+POST        /newoperation          @controllers.Operations.insert()
 
-POST        /newdict               controllers.Dictionaries.insert()
+POST        /newdict               @controllers.Dictionaries.insert()
 
-GET         /dicts                 controllers.Dictionaries.list()
+GET         /dicts                 @controllers.Dictionaries.list()
 
-GET         /accounts              controllers.Dictionaries.accounts()
+GET         /accounts              @controllers.Dictionaries.accounts()
 
-GET         /categories            controllers.Dictionaries.categories()
+GET         /categories            @controllers.Dictionaries.categories()
 
-GET         /projects              controllers.Dictionaries.projects()
+GET         /projects              @controllers.Dictionaries.projects()

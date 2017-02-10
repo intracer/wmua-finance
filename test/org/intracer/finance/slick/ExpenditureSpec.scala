@@ -49,7 +49,7 @@ class ExpenditureSpec extends Specification with InMemDb {
   def user = userDao.list.head
 
   def newExp(amount: Int, grantName: String, account: String, category: String,
-             project: String, grantItem: Option[String], description: String) = {
+             project: String, grantItem: Option[String], description: String): Expenditure = {
     val grant = grantDao.get(grantName)
 
     Expenditure(
@@ -115,8 +115,7 @@ class ExpenditureSpec extends Specification with InMemDb {
         val id = expDao.insert(exp)
 
         val account2 = accountDao.get("Account2").get
-        val account2Id = account2.id
-        expDao.update(Update("account", id, account2Id.get.toString), user)
+        expDao.update(Update("account", id, account2.id.get.toString), user)
 
         val exps = expDao.list
         exps.size === 1
@@ -124,5 +123,45 @@ class ExpenditureSpec extends Specification with InMemDb {
       }
     }
 
+    "update category in" in {
+      inMemDbApp {
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
+        val id = expDao.insert(exp)
+
+        val category2 = categoryDao.get("Category2").get
+        expDao.update(Update("category", id, category2.id.get.toString), user)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp.copy(id = Some(id), category = category2)
+      }
+    }
+
+    "update project in" in {
+      inMemDbApp {
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
+        val id = expDao.insert(exp)
+
+        val project2 = projectDao.get("Project2").get
+        expDao.update(Update("project", id, project2.id.get.toString), user)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp.copy(id = Some(id), project = project2)
+      }
+    }
+
+    "update description in" in {
+      inMemDbApp {
+        val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
+        val id = expDao.insert(exp)
+
+        expDao.update(Update("descr", id, "descr2"), user)
+
+        val exps = expDao.list
+        exps.size === 1
+        exps.head === exp.copy(id = Some(id), description = "descr2")
+      }
+    }
   }
 }

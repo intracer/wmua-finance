@@ -7,17 +7,29 @@ import slick.driver.H2Driver.api._
 import slick.profile.SqlProfile.ColumnOption.SqlType
 import org.intracer.finance._
 
+case class OpId(opId: Option[Int] = None,
+                lastRevId: Option[Int] = None)
+
+class OpIds(tag: Tag) extends Table[OpId](tag, "op_id") {
+
+  def opId = column[Int]("id", O.PrimaryKey, O.AutoInc)
+
+  def revId = column[Option[Int]]("rev_id")
+
+  def * = (opId.?, revId) <> (OpId.tupled, OpId.unapply)
+}
+
 class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
-//  def rev_id = column[Int]("rev_id", O.PrimaryKey, O.AutoInc)
+  def opId = column[Int]("op_id")
 
   def date = column[Timestamp]("op_date", SqlType("datetime"))
 
   def amount = column[Option[BigDecimal]]("amount")
 
-  def from = column[Int]("account_id")
+  def accountId = column[Int]("account_id")
 
   def categoryId = column[Int]("cat_id")
 
@@ -31,7 +43,7 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def descr = column[String]("descr")
 
-  def account = foreignKey("ACC_FK", from, TableQuery[Accounts])(_.id)
+  def account = foreignKey("ACC_FK", accountId, TableQuery[Accounts])(_.id)
 
   def category = foreignKey("CAT_FK", categoryId, TableQuery[Categories])(_.id)
 
@@ -43,7 +55,7 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
   def userId = column[Int]("user_id")
 
-  def * = (id.?, date, amount, from, categoryId, projectId, grantId, grantItem, descr, logDate, userId) <>
+  def * = (id.?, opId, date, amount, accountId, categoryId, projectId, grantId, grantItem, descr, logDate, userId) <>
     ((Expenditures.fromDb _).tupled, Expenditures.toDb)
 }
 
@@ -62,6 +74,7 @@ object Expenditures {
   def accounts: Map[Int, Account] = new AccountDao().list.groupBy(_.id.get).mapValues(_.head)
 
   def fromDb(id: Option[Int],
+             opId: Int,
              opDate: Timestamp,
              amount: Option[BigDecimal],
              accountId: Int,
@@ -81,12 +94,12 @@ object Expenditures {
 
     val user = new UserDao().byId(userId).get
 
-    Expenditure(id, opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
+    Expenditure(id, Some(opId), opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
       maybeGrantId.map(grants), grantItem, descr, user, logDate)
   }
 
   def toDb(exp: Expenditure) = {
-    Some((exp.id, exp.date, exp.amount,
+    Some((exp.id, exp.opId.get, exp.date, exp.amount,
       exp.account.id.get,
       exp.category.id.get,
       exp.project.id.get,

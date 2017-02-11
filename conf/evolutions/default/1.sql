@@ -22,7 +22,6 @@ CREATE TABLE "grant_list" (
 
 CREATE TABLE "operation" (
   "id" SERIAL NOT NULL PRIMARY KEY,
--- "op_id" INT NOT NULL,
   "op_date"    timestamp    NOT NULL,
   "amount"     DECIMAL(20, 2),
   "account_id" INT,
@@ -36,11 +35,4 @@ CREATE TABLE "operation" (
   FOREIGN KEY ("grant_id") REFERENCES "grant_list" ("id")
 );
 
-
 ALTER TABLE "operation" add COLUMN "grant_row" VARCHAR(20);
-
-ALTER TABLE "operation"
-  ADD CONSTRAINT "operation_project_id_id_fk"
-FOREIGN KEY ("proj_id") REFERENCES "project" ("id");
-
-

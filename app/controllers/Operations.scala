@@ -90,7 +90,7 @@ object OpFilter {
 class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {
-    expenditureDao.list.map { e =>
+    expenditureDao.log.map { e =>
       new Operation(e.account, e, e.amount, new DateTime(e.date.getTime))
     }
   }

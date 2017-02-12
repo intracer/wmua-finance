@@ -9,6 +9,8 @@ import org.joda.time.format.DateTimeFormat
 
 import scala.concurrent.Future
 import scala.util.Try
+import spray.util.pimpFuture
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ExpenditureDao extends BaseDao {
 
@@ -43,6 +45,17 @@ class ExpenditureDao extends BaseDao {
 
   def log: Seq[Expenditure] = run {
     query.sortBy(_.id.desc).result
+  }
+
+  def list: Seq[Expenditure] = {
+    db.run {
+      (opIdQuery
+        join query on (_.revId === _.id)
+        sortBy { case (opId, exp) => opId.opId }
+        ).result
+    }.map { r =>
+      r.map { case (opId, exp) => exp }
+    }.await
   }
 
   def revisions(opId: Int): Seq[Expenditure] = run {

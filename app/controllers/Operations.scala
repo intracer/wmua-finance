@@ -90,7 +90,7 @@ object OpFilter {
 class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {
-    expToOps(expenditureDao.log)
+    expToOps(expenditureDao.list)
   }
 
   def expToOps(exps: Seq[Expenditure]): Seq[Operation] = {

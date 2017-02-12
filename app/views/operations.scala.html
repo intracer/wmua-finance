@@ -31,7 +31,7 @@
 
             <tbody id="operations_body">
 
-                @if(user.canContribute) {
+                @if(user.canContribute && url.contains("/operations")) {
                     @newrow()
                 }
 

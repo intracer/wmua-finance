@@ -94,7 +94,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
   }
 
   def operationsWithRevisions: Seq[Operation] = {
-    expToOps(expenditureDao.list)
+    expToOps(expenditureDao.log)
   }
 
   def expToOps(exps: Seq[Expenditure]): Seq[Operation] = {

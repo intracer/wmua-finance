@@ -23,6 +23,10 @@ class UserDao() extends BaseDao {
     query.sortBy(_.fullname).result
   }
 
+  def count: Int = run {
+    query.countDistinct.result
+  }
+
   def byEmail(email: String): Option[User] = run {
     query.filter(_.email === email).result.headOption
   }

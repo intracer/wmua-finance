@@ -7,7 +7,7 @@ import slick.driver.JdbcProfile
 import spray.util.pimpFuture
 
 trait BaseDao extends HasDatabaseConfig[JdbcProfile] {
-  protected val dbConfig =  DatabaseConfigProvider.get[JdbcProfile](Play.current)
+  val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   def run[R, E <: Effect](a: DBIOAction[R, NoStream, E]): R =
     db.run(a).await

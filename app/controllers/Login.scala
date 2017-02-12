@@ -1,5 +1,6 @@
 package controllers
 
+import org.intracer.finance.User
 import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
@@ -7,16 +8,19 @@ import play.api.i18n.Lang
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Results._
 import play.api.mvc._
+import slick.driver.H2Driver
 
 object Login extends Controller with Secured {
 
-  def index = Action {
-    implicit request =>
-      Ok(views.html.index(loginForm))
-  }
+  def index = login
 
   def login = Action {
     implicit request =>
+      if (userDao.count == 0 &&
+        userDao.dbConfig.driver == H2Driver) {
+        val dev = User(None, "developer", "dev@dot.com", password = Some(userDao.sha1("123")))
+        userDao.insert(dev)
+      }
       Ok(views.html.index(loginForm))
   }
 

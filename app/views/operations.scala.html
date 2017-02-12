@@ -93,11 +93,14 @@
                             <td>
                                 @operation.to.user.fullname
                                 <div style="float: right;width: 50px;height: 25px" class="btn-group">
+                                @if(!url.contains("/revisions")) {
                                     <a href="@routes.Operations.revisions(operation.to.opId.get)">
-                                    <button type="button" class="btn btn-default btn-xs history-btn" style="width: 25px;height: 25px">
-                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
-                                    </button>
+                                        <button type="button" class="btn btn-default btn-xs history-btn" style="width: 25px;
+                                            height: 25px">
+                                            <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                        </button>
                                     </a>
+                                }
                                 @if(user.canContribute) {
                                         <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px;height: 25px">
                                             <span class="fa fa-copy" aria-hidden="true"></span>

@@ -46,7 +46,7 @@ class ExpenditureDao extends BaseDao {
   }
 
   def revisions(opId: Int): Seq[Expenditure] = run {
-    query.filter(_.opId === opId).sortBy(_.date.desc).result
+    query.filter(_.opId === opId).sortBy(_.logDate.desc).result
   }
 
   def update(upd: Update, user: User): Future[Int] = {

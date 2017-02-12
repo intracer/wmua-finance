@@ -4,13 +4,12 @@
         opFilter: OpFilter,
         url: String)(implicit flash: Flash, lang: Lang, messages: Messages)
 
-@editable(clazz: String) = {
-@if(user.canContribute) { class="@clazz xeditable" } else { class="noteditable" }
-}
+@editable(clazz: String) = {@if(user.canContribute) { class="@clazz xeditable" } else { class="noteditable" }}
 
 @main(Messages("operations"), user) {
 
-    <div class="row">
+    <div class="container-fluid">
+    <div class="row" style="padding: 50px">
 
         @filter(operations, opFilter, url)
 
@@ -88,13 +87,16 @@
                                 @operation.to.description
                                 </a>
 
+                                <div style="float: right;width: 50px;height: 25px" class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs history-btn" style="width: 25px;height: 25px">
+                                        <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+                                    </button>
                                 @if(user.canContribute) {
-                                    <div style="float: right;width: 25px;height: 25px" class="btn-group">
                                         <button type="button" class="btn btn-default btn-xs copy-btn" style="width: 25px;height: 25px">
                                             <span class="fa fa-copy" aria-hidden="true"></span>
                                         </button>
-                                    </div>
                                 }
+                                </div>
 
                             </td>
                         </tr>
@@ -108,5 +110,6 @@
                 </tr>
             </tfoot>
         </table>
+    </div>
     </div>
 }

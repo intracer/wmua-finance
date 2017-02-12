@@ -72,8 +72,10 @@
 
 
 @main(Messages("operations")) {
+    <div class="container">
     @filter(operations, opFilter, "/bygrantrowstat", rate)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), operationsByGrantRow)
+    </div>
 }
 
 

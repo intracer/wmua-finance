@@ -126,7 +126,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
     (user, opFilter, operations) =>
       implicit request =>
         val total = operations.map(_.toDouble).sum
-        Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
+        Ok(views.html.operations(user, operations, total, opFilter, "/log"))
   }
 
   def revisions(id: Int) = withAuth() {

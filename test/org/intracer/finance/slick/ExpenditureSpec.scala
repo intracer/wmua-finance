@@ -139,7 +139,7 @@ class ExpenditureSpec extends Specification with InMemDb {
         v2.copy(id = None, opId = None) === exp
 
         v1.opId.isDefined === true
-        v1.copy(id = None, amount = None) === v2.copy(id = None, amount = None)
+        v1.copy(id = None, grant = None) === v2.copy(id = None, grant = None)
       }
     }
 
@@ -155,8 +155,8 @@ class ExpenditureSpec extends Specification with InMemDb {
         exps.size === 2
         val (v1, v2) = (exps.head, exps.last)
 
-        v1.account.name === Some("Account2")
-        v2.account.name === Some("Account1")
+        v1.account.name === "Account2"
+        v2.account.name === "Account1"
         v2.copy(id = None, opId = None) === exp
 
         v1.opId.isDefined === true
@@ -176,8 +176,8 @@ class ExpenditureSpec extends Specification with InMemDb {
         exps.size === 2
         val (v1, v2) = (exps.head, exps.last)
 
-        v1.category.name === Some("Category2")
-        v2.category.name === Some("Category1")
+        v1.category.name === "Category2"
+        v2.category.name === "Category1"
         v2.copy(id = None, opId = None) === exp
 
         v1.opId.isDefined === true
@@ -197,8 +197,8 @@ class ExpenditureSpec extends Specification with InMemDb {
         exps.size === 2
         val (v1, v2) = (exps.head, exps.last)
 
-        v1.project.name === Some("Project2")
-        v2.project.name === Some("Project1")
+        v1.project.name === "Project2"
+        v2.project.name === "Project1"
         v2.copy(id = None, opId = None) === exp
 
         v1.opId.isDefined === true
@@ -217,8 +217,8 @@ class ExpenditureSpec extends Specification with InMemDb {
         exps.size === 2
         val (v1, v2) = (exps.head, exps.last)
 
-        v1.description === Some("descr2")
-        v2.description === Some("descr1")
+        v1.description === "descr2"
+        v2.description === "descr1"
         v2.copy(id = None, opId = None) === exp
 
         v1.opId.isDefined === true

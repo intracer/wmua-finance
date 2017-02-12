@@ -25,6 +25,7 @@
                     <th>@Messages("amount")</th>
                     <th>@Messages("account")</th>
                     <th>@Messages("descr")</th>
+                    <th>@Messages("last edited")</th>
                 </tr>
             </thead>
 
@@ -86,7 +87,9 @@
                                 <a href="#" @editable("editable") data-type="text" data-pk="@id" data-url="/update_op" data-title="@Messages("desc")" data-name="descr">
                                 @operation.to.description
                                 </a>
-
+                            </td>
+                            <td>
+                                @operation.to.user.fullname
                                 <div style="float: right;width: 50px;height: 25px" class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs history-btn" style="width: 25px;height: 25px">
                                         <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>

@@ -6,7 +6,7 @@ import javax.inject.{Inject, Singleton}
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
 import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao}
-import org.intracer.finance.{Operation, User}
+import org.intracer.finance.{Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
@@ -18,14 +18,14 @@ import play.api.mvc._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class OpFilter(projects: Set[Int],
-                    categories: Set[Int],
-                    grants: Set[Int],
-                    grantItems: Set[Int],
-                    accounts: Set[Int],
-                    dateRange: String,
-                    users: Seq[User],
-                    operations: Seq[Operation]) {
+case class OpFilter(projects: Set[Int] = Set.empty,
+                    categories: Set[Int] = Set.empty,
+                    grants: Set[Int] = Set.empty,
+                    grantItems: Set[Int] = Set.empty,
+                    accounts: Set[Int] = Set.empty,
+                    dateRange: String = "01/01/2016 - 12/31/2016",
+                    users: Seq[User] = Seq.empty,
+                    operations: Seq[Operation] = Seq.empty) {
 
   val pattern = DateTimeFormat.forPattern("MM/dd/yyyy")
 
@@ -90,7 +90,11 @@ object OpFilter {
 class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {
-    expenditureDao.log.map { e =>
+    expToOps(expenditureDao.log)
+  }
+
+  def expToOps(exps: Seq[Expenditure]): Seq[Operation] = {
+    exps.map { e =>
       new Operation(e.account, e, e.amount, new DateTime(e.date.getTime))
     }
   }
@@ -113,6 +117,15 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
         val total = operations.map(_.toDouble).sum
 
         Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
+  }
+
+  def revisions(id: Int) = withAuth() {
+    user =>
+      implicit request =>
+
+        val operations = expenditureDao.revisions(id)
+
+        Ok(views.html.operations(user, expToOps(operations), 0.0d, new OpFilter(), "/revisions"))
   }
 
   def byGrantRow = withFilter {

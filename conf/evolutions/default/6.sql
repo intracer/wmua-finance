@@ -13,3 +13,8 @@ ALTER TABLE "operation" ADD COLUMN "op_id" INT NOT NULL;
 ALTER TABLE "operation"
   ADD CONSTRAINT "operation_op_id_id_fk"
 FOREIGN KEY ("op_id") REFERENCES "op_id" ("id");
+
+UPDATE operation set op_id = id;
+
+insert into op_id(id, rev_id)
+select op_id, id from operation

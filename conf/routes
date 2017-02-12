@@ -10,6 +10,8 @@ GET         /assets/*file          controllers.Assets.at(path="/public", file)
 
 GET         /operations            @controllers.Operations.list
 
+GET         /revisions             @controllers.Operations.revisions(id: Int)
+
 GET         /bygrantrow            @controllers.Operations.byGrantRow
 
 GET         /bygrantrowstat        @controllers.Operations.byGrantRowStat

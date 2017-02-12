@@ -55,7 +55,9 @@
             $(document).ready(function () {
 
                 @if(user != null && user.canContribute) {
+                if (document.getElementById("tr_new") != null) {
                     var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
+                }
                 }
 
                 $("tr").each(function() {

@@ -93,13 +93,18 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
     expToOps(expenditureDao.list)
   }
 
+  def operationsWithRevisions: Seq[Operation] = {
+    expToOps(expenditureDao.list)
+  }
+
   def expToOps(exps: Seq[Expenditure]): Seq[Operation] = {
     exps.map { e =>
       new Operation(e.account, e, e.amount, new DateTime(e.date.getTime))
     }
   }
 
-  def withFilter(f: (User, OpFilter, Seq[Operation]) => Request[AnyContent] => Result) = {
+  def withFilter(loader: => Seq[Operation] = allOperations)
+                (f: (User, OpFilter, Seq[Operation]) => Request[AnyContent] => Result) = {
     withAuth() {
       user =>
         implicit request =>
@@ -110,12 +115,17 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
     }
   }
 
-  def list = withFilter {
+  def list = withFilter() {
     (user, opFilter, operations) =>
       implicit request =>
-
         val total = operations.map(_.toDouble).sum
+        Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
+  }
 
+  def log = withFilter(operationsWithRevisions) {
+    (user, opFilter, operations) =>
+      implicit request =>
+        val total = operations.map(_.toDouble).sum
         Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
   }
 
@@ -128,7 +138,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
         Ok(views.html.operations(user, expToOps(operations), 0.0d, new OpFilter(), "/revisions"))
   }
 
-  def byGrantRow = withFilter {
+  def byGrantRow = withFilter() {
     (user, opFilter, operations) =>
       implicit request =>
 
@@ -141,7 +151,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
         Ok(views.html.operations(user, sorted, total, opFilter, "/bygrantrow"))
   }
 
-  def byGrantRowStat = withFilter {
+  def byGrantRowStat = withFilter() {
     (_, opFilter, ops) =>
       implicit request =>
 
@@ -163,7 +173,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
       )
   }
 
-  def statistics() = withFilter {
+  def statistics() = withFilter() {
     (_, opFilter, ops) =>
       implicit request =>
 

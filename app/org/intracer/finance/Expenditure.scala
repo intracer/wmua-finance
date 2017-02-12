@@ -27,5 +27,5 @@ case class Expenditure(id: Option[Int] = None,
 
   def categoryName = category.name
 
-  def grantName = grant.fold("")(_.name)
+  def grantName = grant.fold("")(_.name).split("/").last
 }

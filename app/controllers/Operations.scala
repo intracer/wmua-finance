@@ -108,7 +108,7 @@ class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller wi
     withAuth() {
       user =>
         implicit request =>
-          val opFilter = OpFilter(request, Seq(user), allOperations)
+          val opFilter = OpFilter(request, Seq(user), loader)
           val operations = opFilter.filter()
 
           f(user, opFilter, operations)(request)

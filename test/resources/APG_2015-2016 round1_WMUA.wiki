@@ -1,0 +1,307 @@
+<!-- From https://meta.wikimedia.org/wiki/Grants:APG/Proposals/2015-2016_round1/Wikimedia_Ukraine/Proposal_form/Detailed_budget -->
+<languages/>
+{|
+| colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:1-->
+2016 Budget plan - Wikimedia Ukraine</translate>'''
+|-
+| colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:2-->
+REVENUES</translate>'''
+|-
+|style="background:#C1FFC1;"|''<translate><!--T:3-->
+Item</translate>''|| style="background:#C1FFC1;"|''<translate><!--T:4-->
+USD</translate>'' ||style="background:#C1FFC1;"|''<translate><!--T:5-->
+Notes</translate>''
+|-
+|<translate><!--T:6-->
+Grants (APG)</translate>|| 75,000.00 ||
+|-
+|<translate><!--T:7-->
+Donations and contributions</translate> || 1,000.00 ||
+|-
+|<translate><!--T:8-->
+Membership fees</translate> ||200.00 ||
+|-
+|style="background:#C1FFC1;"|'''<translate><!--T:9-->
+Total revenues</translate>'''|| colspan="2"  style="background:#C1FFC1;"|'''76,200.00'''
+|-
+| colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:10-->
+EXPENSES</translate>'''
+|-
+|colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:11-->
+Program 1: Outreach</translate>'''
+|-
+|''<translate><!--T:12-->
+Item</translate>''|| ''<translate><!--T:13-->
+USD</translate>'' ||''<translate><!--T:14-->
+Notes</translate>''
+|-
+|<translate><!--T:15-->
+1.1 Wikimedia Education programme and Wikiworkshops</translate> || 2,000.00 ||
+|-
+|<translate><!--T:16-->
+1.2 GLAM outreach</translate> || 1,000.00 ||
+|-
+|<translate><!--T:17-->
+1.3 Wikiexpeditions</translate> || 3,000.00 ||
+|-
+|style="background:#C1FFC1;"|'''<translate><!--T:18-->
+Total</translate>'''|| colspan="2"  style="background:#C1FFC1;"|''' 6,000.00 '''
+|-
+|colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:19-->
+Program 2: Contests</translate>'''
+|-
+|''<translate><!--T:20-->
+Item</translate>''|| ''<translate><!--T:21-->
+USD</translate>'' ||''<translate><!--T:22-->
+Notes</translate>''
+|-
+|style="background:#CAFF70;"|<translate><!--T:23-->
+2.1 Article Contests</translate>|| style="background:#CAFF70;"|5,000.00  || style="background:#CAFF70;"|
+|-
+|style="background:#9AFF9A;"|2.1.1 <translate><!--T:24-->
+CEE Spring 2016</translate> || style="background:#9AFF9A;"|1,050.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:25-->
+2.1.1.1 Hall rent for Awards Ceremony & Press event</translate> || 100.00  ||
+|-
+| <translate><!--T:26-->
+2.1.1.2 Travel costs (jury members, participants)</translate> || 150.00  ||
+|-
+| <translate><!--T:27-->
+2.1.1.3 Prizes (incl. diplomas)</translate> || 750.00  ||
+|-
+| <translate><!--T:28-->
+2.1.1.4 Food & beverages (coffee break or stand-up party)</translate> || 50.00  ||
+|-
+|style="background:#9AFF9A;"|<translate><!--T:29-->
+2.1.2 Wiki Loves Monuments article contest</translate> || style="background:#9AFF9A;"|1,050.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:30-->
+2.1.2.1 Hall rent for Awards Ceremony & Press event</translate> || 100.00  ||
+|-
+| <translate><!--T:31-->
+2.1.2.2 Travel costs (jury members, participants)</translate> || 150.00  ||
+|-
+| <translate><!--T:32-->
+2.1.2.3 Prizes (incl. diplomas)</translate> || 750.00  ||
+|-
+| <translate><!--T:33-->
+2.1.2.4 Food & beverages (coffee break or stand-up party)</translate> || 50.00  ||
+|-
+|style="background:#9AFF9A;"|<translate><!--T:34-->
+2.1.3 Wiki Loves Earth article contest</translate> || style="background:#9AFF9A;"|1,050.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:35-->
+2.1.3.1 Hall rent for Awards Ceremony & Press event</translate> || 100.00  ||
+|-
+| <translate><!--T:36-->
+2.1.3.2 Travel costs (jury members, participants)</translate> || 150.00  ||
+|-
+| <translate><!--T:37-->
+2.1.3.3 Prizes (incl. diplomas)</translate> || 750.00  ||
+|-
+| <translate><!--T:38-->
+2.1.3.4 Food & beverages (coffee break or stand-up party)</translate> || 50.00  ||
+|-
+|style="background:#9AFF9A;"|<translate><!--T:39-->
+2.1.4 WikiScienceContest</translate> || style="background:#9AFF9A;"|1,850.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:40-->
+2.1.4.1 Hall rent for Awards Ceremony & Press event</translate> || 100.00  ||
+|-
+| <translate><!--T:41-->
+2.1.4.2 Travel costs (jury members, participants)</translate> || 150.00  ||
+|-
+| <translate><!--T:42-->
+2.1.4.3 Prizes (incl. diplomas)</translate> || 1250.00  ||
+|-
+| <translate><!--T:43-->
+2.1.4.4 Food & beverages (coffee break or stand-up party)</translate> || 50.00  ||
+|-
+| <translate><!--T:44-->
+2.1.4.5 Professional jury reimbursements</translate> || 300.00  ||
+|-
+|style="background:#CAFF70;"|<translate><!--T:45-->
+2.2 Photo Contests (Wiki Loves Earth International part)</translate> || style="background:#CAFF70;"|12,600.00 || style="background:#CAFF70;"|<translate><!--T:46-->
+To have a fiscal sponsor for this part (8,300.00) would be less expensive and easier for us</translate>
+|-
+| <translate><!--T:47-->
+2.2.1 Prizes (incl. diplomas)</translate> || 5,000.00  ||
+|-
+| <translate><!--T:48-->
+2.2.2 International post expenses</translate> || 1,500.00  ||
+|-
+| <translate><!--T:49-->
+2.2.3 Technical support</translate> || 1,500.00  ||
+|-
+| <translate><!--T:50-->
+2.2.4 Gifts for international jury</translate> || 200.00  ||
+|-
+| <translate><!--T:51-->
+2.2.5 International presentations (Wikimania, Wikimedia Conference)</translate> || 1,800.00  ||
+|-
+| <translate><!--T:52-->
+2.2.6 Publishing WLE calendars</translate> || 1,300.00  ||
+|-
+| <translate><!--T:53-->
+2.2.7 Publishing WLE post cards</translate> || 500.00  ||
+|-
+| <translate><!--T:54-->
+2.2.8 Support to local organising teams</translate> || 800.00  ||
+|-
+|style="background:#CAFF70;"|<translate><!--T:55-->
+2.3 Photo Contests (National)</translate> || style="background:#CAFF70;"|13,200.00 || style="background:#CAFF70;"|
+|-
+|style="background:#9AFF9A;"|<translate><!--T:56-->
+2.3.1 Wiki Loves Earth in Ukraine</translate> || style="background:#9AFF9A;"|5,500.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:57-->
+2.3.1.1 Hall rent for Awards Ceremony & Press event</translate> || 150.00  ||
+|-
+| <translate><!--T:58-->
+2.3.1.2 Hall decorations (printing photos)</translate> || 150.00  ||
+|-
+| <translate><!--T:59-->
+2.3.1.3 Travel costs (jury members, participants)</translate> || 500.00  ||
+|-
+| <translate><!--T:60-->
+2.3.1.4 Main Prizes (incl. diplomas)</translate> || 1,600.00  ||
+|-
+| <translate><!--T:61-->
+2.3.1.5 Medium Prizes (incl. diplomas)</translate> || 1,000.00  ||
+|-
+| <translate><!--T:62-->
+2.3.1.6 Small Prizes (incl. diplomas)</translate> || 700.00  ||
+|-
+| <translate><!--T:63-->
+2.3.1.7 Regional Prizes & Awards (incl. diplomas)</translate> || 500.00  ||
+|-
+| <translate><!--T:64-->
+2.3.1.8 Special nominations prizes (incl. diplomas)</translate> || 300.00  ||
+|-
+| <translate><!--T:65-->
+2.3.1.9 Food & beverages (coffee break or stand-up party)</translate> || 100.00  ||
+|-
+| <translate><!--T:66-->
+2.3.1.10 Local presentation events (press conference, exhibitions etc.)</translate> || 500.00  ||
+|-
+|style="background:#9AFF9A;"|<translate><!--T:67-->
+2.3.2 Wiki Loves Monuments in Ukraine</translate> || style="background:#9AFF9A;"|5,575.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:68-->
+2.3.2.1 Hall rent for Awards Ceremony & Press event</translate> || 150.00  ||
+|-
+| <translate><!--T:69-->
+2.3.2.2 Hall decorations (printing photos)</translate> || 125.00  ||
+|-
+| <translate><!--T:70-->
+2.3.2.3 Travel costs (jury members, participants)</translate> || 500.00  ||
+|-
+| <translate><!--T:71-->
+2.3.2.4 Main Prizes (incl. diplomas)</translate> || 1,600.00  ||
+|-
+| <translate><!--T:72-->
+2.3.2.5 Medium Prizes (incl. diplomas)</translate> || 1,000.00  ||
+|-
+| <translate><!--T:73-->
+2.3.2.6 Small Prizes (incl. diplomas)</translate> || 700.00  ||
+|-
+| <translate><!--T:74-->
+2.3.2.7 Regional Prizes & Awards (incl. diplomas)</translate> || 500.00  ||
+|-
+| <translate><!--T:75-->
+2.3.2.8 Special nominations prizes (incl. diplomas)</translate> || 300.00  ||
+|-
+| <translate><!--T:76-->
+2.3.2.9 Food & beverages (coffee break or stand-up party)</translate> || 100.00  ||
+|-
+| <translate><!--T:77-->
+2.3.2.10 Local presentation events (press conference, exhibitions etc.)</translate> || 600.00  ||
+|-
+|style="background:#9AFF9A;"|<translate><!--T:78-->
+2.3.3 European Science Photo Competition in Ukraine</translate> || style="background:#9AFF9A;"|2,125.00  || style="background:#9AFF9A;"|
+|-
+| <translate><!--T:79-->
+2.3.3.1 Hall rent for Awards Ceremony & Press event</translate> || 100.00  ||
+|-
+| <translate><!--T:80-->
+2.3.3.2 Hall decorations (printing photos)</translate> || 125.00  ||
+|-
+| <translate><!--T:81-->
+2.3.3.3 Travel costs (jury members, participants)</translate> || 300.00  ||
+|-
+| <translate><!--T:82-->
+2.3.3.4 Prizes (incl. diplomas)</translate> || 1,200.00  ||
+|-
+| <translate><!--T:83-->
+2.3.3.5 Food & beverages (coffee break or stand-up party)</translate> || 100.00  ||
+|-
+| <translate><!--T:84-->
+2.3.3.6 Local presentation events (press conference, exhibitions etc.)</translate> || 300.00  ||
+|-
+|style="background:#CAFF70;"|<translate><!--T:85-->
+2.4 Thematic (collaboration) weeks and months</translate> || style="background:#CAFF70;"|1,000.00 || style="background:#CAFF70;"|
+|-
+| <translate><!--T:86-->
+2.4.1 Organising local offline edit-a-thons</translate> || 500.00  ||
+|-
+| <translate><!--T:87-->
+2.4.2 Small gifts for international weeks (e.g. Asian Month, Ukrainian-Armenian week etc.)</translate> || 400.00  ||
+|-
+| <translate><!--T:88-->
+2.4.3 Presentation events for regional weeks (e.g. Luhansk Oblast thematic week)</translate> || 100.00  ||
+|-
+|style="background:#C1FFC1;"|'''<translate><!--T:89-->
+Total</translate>'''|| colspan="2"  style="background:#C1FFC1;"|'''31,800.00'''
+|-
+|colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:90-->
+Program 3: Community Support</translate>'''
+|-
+|''<translate><!--T:91-->
+Item</translate>''|| ''<translate><!--T:92-->
+USD</translate>'' ||''<translate><!--T:93-->
+Notes</translate>''
+|-
+| <translate><!--T:94-->
+3.1 Publishing and Souvenirs</translate> || 7,000.00 ||
+|-
+| <translate><!--T:95-->
+3.2 Microgrants</translate> || 3,000.00 ||
+|-
+| <translate><!--T:96-->
+3.3 Scholarships</translate> || 5,000.00 ||
+|-
+| <translate><!--T:97-->
+3.4 Community Events (WikiConference, General Meeting etc.)</translate> || 5,000.00 ||
+|-
+| <translate><!--T:98-->
+3.5 Trainings for Volunteers</translate> || 1,000.00 ||
+|-
+|style="background:#C1FFC1;"|'''<translate><!--T:99-->
+Total</translate>'''|| colspan="2"  style="background:#C1FFC1;"|'''21,000.00'''
+|-
+|colspan="3" style="background:#C1FFC1;"|'''<translate><!--T:100-->
+Administrative costs</translate>'''
+|-
+|''<translate><!--T:101-->
+Item</translate>''|| ''<translate><!--T:102-->
+USD</translate>'' ||''<translate><!--T:103-->
+Notes</translate>''
+|-
+|<translate><!--T:104-->
+4.1 Operations (excludes staff and programs)</translate> || 7,368.00 ||
+|-
+|<translate><!--T:105-->
+4.2 Staff</translate> || 10,032.00 ||
+|-
+|style="background:#C1FFC1;"|'''<translate><!--T:106-->
+Total</translate>'''|| colspan="2"  style="background:#C1FFC1;"|'''17,400.00'''
+|-
+|style="background:#C1FFC1;"|'''<translate><!--T:107-->
+Total expenses</translate>'''|| colspan="2"  style="background:#C1FFC1;"|'''76,200.00'''
+|-
+| colspan="3"| <translate><!--T:108-->
+Contact:</translate> director{{@}}wikimediaukraine.org.ua, treasurer{{@}}wikimediaukraine.org.ua
+|}
+
+[[Category:Annual plan grants or proposals by Wikimedia Ukraine for 2015-2016 Round 1{{#translation:}}]]

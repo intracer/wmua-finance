@@ -50,6 +50,10 @@ object GrantReader extends SwebleParser {
 
     val text = bot.await(bot.pageText(budgetPage))
 
+    parseBudget(grant, title, text)
+  }
+
+  def parseBudget(grant: Grant, title: String, text: String) = {
     val simple = text.contains("{{Grants budget table simple}}")
     val replaced = text
       .replace("{{Grants budget table simple}}", tableHeader)

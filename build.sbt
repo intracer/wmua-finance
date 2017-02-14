@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
 
   "com.h2database" % "h2" % "1.4.187",
   "org.scalawiki" %% "scalawiki-core" % scalawikiVersion,
+  "com.github.tototoshi" %% "scala-csv" % "1.3.4",
 
   "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3",
   "com.typesafe.play" %% "play-slick" % "2.0.2",

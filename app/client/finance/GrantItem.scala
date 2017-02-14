@@ -95,17 +95,8 @@ object GrantItemFactory {
   def toUSD(s: String): Option[BigDecimal] = {
     Option(s)
       .filter(_.nonEmpty)
-      .map(
-        _.replace(",", "")
-          .replace("&nbsp;", "")
-          .toDouble
-      )
+      .map { s =>
+        BigDecimal(s.replace(",", "").replace("&nbsp;", ""))
+      }
   }
-
-  //  def toUSD(s: String): Money = {
-  //    if (s.isEmpty)
-  //      USD(0)
-  //    else
-  //      USD(s.toDouble)
-  //  }
 }

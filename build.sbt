@@ -7,7 +7,7 @@ scalacOptions += "-target:jvm-1.8"
 
 scalaVersion := "2.11.8"
 
-val scalawikiVersion = "0.4.3"
+val scalawikiVersion = "0.5-M5"
 
 resolvers += Resolver.bintrayRepo("intracer", "maven")
 resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"

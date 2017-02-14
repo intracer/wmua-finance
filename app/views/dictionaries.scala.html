@@ -10,47 +10,54 @@
             <li> <a href="/accounts">Accounts</a> </li>
             <li> <a href="/categories">Categories</a> </li>
             <li> <a href="/projects">Projects</a> </li>
+            <li> <a href="/grants">Grants</a> </li>
         </ul>
 
-        <table class="table table-striped table-bordered" id="dictionary">
-            <thead>
-                <tr>
-                    <th>@Messages("n")</th>
-                    <th>@Messages("name")</th>
-                </tr>
-            </thead>
-            <tbody id="dictionary_body">
+        @if(dict.nonEmpty) {
 
-                @if(user.hasRole("admin")) {
-                    <tr id="tr_new" class="tr_new">
-                        <td>
-                            <a href="#" class="newrow new_required dict_editable @{
-                                table
-                            }_editable" data-type="text" data-url="/update_op" data-title="@Messages("table")" data-name="table" style="display: none;">@table</a>
-                        </td>
-                        <td>
-                            <a href="#" class="newrow new_required dict_editable @{
-                                table
-                            }_editable" data-type="text" data-url="/update_op" data-title="@Messages("name")" data-name="name">
-                            </a>
-
-                            @saveReset("dict-save-btn")
-                        </td>
-                    </tr>
-                }
-
-                @for(e <- dict) {
+            <table class="table table-striped table-bordered" id="dictionary">
+                <thead>
                     <tr>
-                        <td> @e.code </td>
-                        <td>
-                            <a href="#" @if(user.hasRole("admin")) {class="dict_editable @{table}_editable" data-type="text" data-pk="@e.code" data-url="/update_dict" data-title="@Messages("name")" data-name="name" }>
-                            @e.name
-                            </a>
-                        </td>
+                        <th>@Messages("n")</th>
+                        <th>@Messages("name")</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="dictionary_body">
+
+                    @if(user.hasRole("admin")) {
+                        <tr id="tr_new" class="tr_new">
+                            <td>
+                                <a href="#" class="newrow new_required dict_editable @{
+                                    table
+                                }_editable" data-type="text" data-url="/update_op" data-title="@Messages("table")" data-name="table" style="display: none;">@table</a>
+                            </td>
+                            <td>
+                                <a href="#" class="newrow new_required dict_editable @{
+                                    table
+                                }_editable" data-type="text" data-url="/update_op" data-title="@Messages("name")" data-name="name">
+                                </a>
+
+                                @saveReset("dict-save-btn")
+                            </td>
+                        </tr>
+                    }
+
+                    @for(e <- dict) {
+                        <tr>
+                            <td> @e.code </td>
+                            <td>
+                                <a href="#" @if(user.hasRole("admin")) {
+                                    class="dict_editable @{
+                                        table
+                                    }_editable" data-type="text" data-pk="@e.code" data-url="/update_dict" data-title="@Messages("name")" data-name="name" }>
+                                @e.name
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
     </div>
 }

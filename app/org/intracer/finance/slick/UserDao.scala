@@ -1,9 +1,7 @@
 package org.intracer.finance.slick
 
-import java.math.BigInteger
-import java.security.MessageDigest
-
 import org.intracer.finance.User
+import play.api.libs.Codecs
 
 class UserDao() extends BaseDao {
 
@@ -47,11 +45,5 @@ class UserDao() extends BaseDao {
   def hash(user: User, password: String): String =
     sha1(password)
 
-  def sha1(input: String) = {
-    val digest = MessageDigest.getInstance("SHA-1")
-
-    digest.update(input.getBytes, 0, input.length())
-
-    new BigInteger(1, digest.digest()).toString(16)
-  }
+  def sha1(input: String) = Codecs.sha1(input.getBytes)
 }

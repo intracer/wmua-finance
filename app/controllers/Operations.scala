@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
-import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao}
+import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao, UserDao}
 import org.intracer.finance.{Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -87,7 +87,9 @@ object OpFilter {
 }
 
 @Singleton
-class Operations @Inject()(expenditureDao: ExpenditureDao) extends Controller with Secured {
+class Operations @Inject()(val expenditureDao: ExpenditureDao,
+                           val userDao: UserDao)
+  extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {
     expToOps(expenditureDao.list)

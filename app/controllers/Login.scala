@@ -1,6 +1,8 @@
 package controllers
 
+import com.google.inject.{Inject, Singleton}
 import org.intracer.finance.User
+import org.intracer.finance.slick.UserDao
 import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
@@ -10,7 +12,8 @@ import play.api.mvc.Results._
 import play.api.mvc._
 import slick.driver.H2Driver
 
-object Login extends Controller with Secured {
+@Singleton
+class Login @Inject()(val userDao: UserDao) extends Controller with Secured {
 
   def index = login
 

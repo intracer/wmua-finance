@@ -1,12 +1,15 @@
 package controllers
 
 import client.finance.GrantReader
-import org.intracer.finance.slick.{Expenditures, GrantItemsDao}
+import org.intracer.finance.slick.{Expenditures, GrantItemsDao, UserDao}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Controller
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Grants extends Controller with Secured {
+@Singleton
+class Grants @Inject()(val userDao: UserDao) extends Controller with Secured {
 
   def items(id: Int) = withAuth() {
     user =>
@@ -23,9 +26,7 @@ object Grants extends Controller with Secured {
       implicit request =>
 
         val grants = Expenditures.grants.values.toSeq
-
         Ok(views.html.grants(user, grants))
-
   }
 
   def importItems(id: Int) = withAuth() {
@@ -38,7 +39,5 @@ object Grants extends Controller with Secured {
         new GrantItemsDao().insertAll(items)
 
         Ok(views.html.grantItems(user, grant, items))
-
   }
-
 }

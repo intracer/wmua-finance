@@ -24,7 +24,8 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
                              val grantDao: GrantDao,
                              val grantItemDao: GrantItemsDao,
                              val expDao: ExpenditureDao,
-                             val accountDao: AccountDao)
+                             val accountDao: AccountDao,
+                             val userDao: UserDao)
   extends Controller with Secured with HasDatabaseConfig[JdbcProfile] {
 
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)

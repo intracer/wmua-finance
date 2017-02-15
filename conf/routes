@@ -3,14 +3,14 @@
 # ~~~~
 
 # Home page
-GET         /                      controllers.Login.index
+GET         /                      @controllers.Login.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file          controllers.Assets.at(path="/public", file)
 
 GET         /operations            @controllers.Operations.list
 
-GET         /log                    @controllers.Operations.log
+GET         /log                   @controllers.Operations.log
 
 GET         /revisions             @controllers.Operations.revisions(id: Int)
 
@@ -18,23 +18,23 @@ GET         /bygrantrow            @controllers.Operations.byGrantRow
 
 GET         /bygrantrowstat        @controllers.Operations.byGrantRowStat
 
-GET         /resolutions           controllers.Resolutions.list
+GET         /resolutions           @controllers.Resolutions.list
 
 GET         /statistics            @controllers.Operations.statistics
 
-GET         /logout                controllers.Login.logout()
+GET         /logout                @controllers.Login.logout()
 
-POST        /auth                  controllers.Login.auth()
+POST        /auth                  @controllers.Login.auth()
 
-GET         /auth                  controllers.Login.login()
+GET         /auth                  @controllers.Login.login()
 
-GET         /error                 controllers.Login.error(message: String ?= "Unknown error")
+GET         /error                 @controllers.Login.error(message: String ?= "Unknown error")
 
-GET         /grant                 controllers.Grants.items(id: Int)
+GET         /grant                 @controllers.Grants.items(id: Int)
 
-POST        /grant/import          controllers.Grants.importItems(id: Int)
+POST        /grant/import          @controllers.Grants.importItems(id: Int)
 
-GET         /grants                controllers.Grants.list
+GET         /grants                @controllers.Grants.list
 
 POST        /update_op             @controllers.Operations.update()
 

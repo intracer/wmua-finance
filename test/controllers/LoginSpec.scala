@@ -7,7 +7,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{PlaySpecification, WebDriverFactory, WithBrowser}
 
-class LoginSpec extends PlaySpecification with Mockito with DaoUtil {
+class LoginSpec extends PlaySpecification with Mockito with WebSpecUtil {
 
   val userDao = mockUserDao()
   val expenditureDao = mockExpenditureDao()
@@ -20,13 +20,9 @@ class LoginSpec extends PlaySpecification with Mockito with DaoUtil {
 
   "login" should {
     "login" in new WithBrowser(webDriver = WebDriverFactory(HTMLUNIT), app = app) {
+      login(browser)
+      waitForUrl("/operations", browser)
 
-      browser.goTo("/")
-        .fill("#login").`with`(defaultEmail)
-        .fill("#password").`with`(defaultPassword)
-        .submit("#submit")
-
-      browser.waitUntil(browser.url() == "/operations")
       browser.url() === "/operations"
     }
   }

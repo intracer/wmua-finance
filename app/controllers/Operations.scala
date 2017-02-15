@@ -6,7 +6,7 @@ import javax.inject.{Inject, Singleton}
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
 import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao, UserDao}
-import org.intracer.finance.{Expenditure, Operation, User}
+import org.intracer.finance.{Dictionary, Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
@@ -25,7 +25,8 @@ case class OpFilter(projects: Set[Int] = Set.empty,
                     accounts: Set[Int] = Set.empty,
                     dateRange: String = "01/01/2016 - 12/31/2016",
                     users: Seq[User] = Seq.empty,
-                    operations: Seq[Operation] = Seq.empty) {
+                    operations: Seq[Operation] = Seq.empty,
+                    dictionary: Dictionary = Dictionary()) {
 
   val pattern = DateTimeFormat.forPattern("MM/dd/yyyy")
 
@@ -81,7 +82,8 @@ object OpFilter {
 
     val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
 
-    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations)
+    val dictionary = Dictionary()
+    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations, dictionary)
   }
 
 }
@@ -192,7 +194,7 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   def update() = formAction(updateForm, new ExpenditureDao().update)
 
-  def insert() = formAction(insertForm, new ExpenditureDao().insert)
+  def insert() = formAction(insertForm, new ExpenditureDao().insertCmd)
 
   def formAction[T](form: Form[T],
                     process: (T, User) => Future[Int]): EssentialAction =

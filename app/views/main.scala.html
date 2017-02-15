@@ -1,6 +1,12 @@
-@(title: String, user: org.intracer.finance.User = null)(content: Html)(implicit lang: Lang, messages: Messages)
-    @import org.intracer.finance.slick.Expenditures
-
+@(title: String,
+        user: org.intracer.finance.User = null,
+        projectsJson: String = "{}",
+        categoriesJson: String = "{}",
+        grantItemsJson: Map[Int, String] = Map.empty,
+        grantsJson: String = "{}",
+        accountsJson: String = "{}"
+//        : String = "{}"
+)(content: Html)(implicit lang: Lang, messages: Messages)
 <!DOCTYPE html>
 
 <html>
@@ -128,7 +134,7 @@
 
                     $('.edit_project').editable({
                         source: [
-                            @Html(Global.projectsJson)
+                            @Html(projectsJson)
                         ],
                         select2: {
                             placeholder: 'Select a project',
@@ -140,7 +146,7 @@
 
                     $('.edit_category').editable({
                         source: [
-                            @Html(Global.categoriesJson)
+                            @Html(categoriesJson)
                         ],
                         select2: {
                             placeholder: 'Select a category',
@@ -151,10 +157,10 @@
                         showbuttons: false
                     });
 
-                    @for(grant <- Expenditures.grants.values if Expenditures.grantItems.getOrElse(grant.id.get, Seq.empty).nonEmpty) {
-                    $('.edit_grant_item_@grant.id.get').editable({
+                    @for((grantId, itemsJson) <- grantItemsJson.toSeq) {
+                    $('.edit_grant_item_@grantId').editable({
                         source: [
-                            @Html(Global.grantItemsJson(grant.id.get))
+                            @Html(itemsJson)
                         ],
                         select2: {
                             placeholder: 'Select a grant item',
@@ -168,7 +174,7 @@
 
                     $('.edit_grant').editable({
                         source: [
-                            @Html(Global.grantsJson)
+                            @Html(grantsJson)
                         ],
                         select2: {
                             placeholder: 'Select a grant',
@@ -180,7 +186,7 @@
 
                     $('.edit_account').editable({
                         source: [
-                            @Html(Global.accountsJson)
+                            @Html(accountsJson)
                         ],
                         select2: {
                             placeholder: 'Select an account',

@@ -1,8 +1,12 @@
 package controllers
 
 import org.intracer.finance.{Expenditure, User}
-import org.intracer.finance.slick.{ExpenditureDao, UserDao}
+import org.intracer.finance.slick._
 import org.specs2.mock.Mockito
+import play.api.db.DBApi
+import play.api.db.slick.{SlickApi, SlickModule}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.Codecs
 import play.api.test.TestBrowser
 
@@ -12,10 +16,34 @@ trait WebSpecUtil extends Mockito {
   val defaultUserId = 12
   val defaultUser = User(Some(defaultUserId), "Dev", defaultEmail, password = Some(defaultPassword))
 
-  def login(browser: TestBrowser) =
+  val accountDao = mock[AccountDao]
+  val categoryDao = mock[CategoryDao]
+  val grantDao = mock[GrantDao]
+  val grantItemsDao = mock[GrantItemsDao]
+  val projectDao = mock[ProjectDao]
+  val userDao = mockUserDao()
+  val expenditureDao = mockExpenditureDao()
+
+  def noDbApp = new GuiceApplicationBuilder()
+    .disable(classOf[SlickModule])
+    .disable(classOf[play.api.db.evolutions.EvolutionsModule])
+    .disable(classOf[play.api.db.slick.evolutions.EvolutionsModule])
+    .bindings(bind(classOf[DBApi]).to(mock[DBApi]))
+    .bindings(bind(classOf[play.api.db.Database]).to(mock[play.api.db.Database]))
+    .bindings(bind(classOf[play.db.Database]).to(mock[play.db.Database]))
+    .bindings(bind(classOf[SlickApi]).to(mock[SlickApi]))
+    .bindings(bind[AccountDao].to(accountDao))
+    .bindings(bind[CategoryDao].to(categoryDao))
+    .bindings(bind[ExpenditureDao].to(expenditureDao))
+    .bindings(bind[GrantDao].to(grantDao))
+    .bindings(bind[GrantItemsDao].to(grantItemsDao))
+    .bindings(bind[ProjectDao].to(projectDao))
+    .bindings(bind[UserDao].to(userDao))
+
+  def login(browser: TestBrowser, user: User = defaultUser) =
     browser.goTo("/")
-      .fill("#login").`with`(defaultEmail)
-      .fill("#password").`with`(defaultPassword)
+      .fill("#login").`with`(user.email)
+      .fill("#password").`with`(user.password.get)
       .submit("#submit")
 
   def waitForUrl(url: String, browser: TestBrowser) =

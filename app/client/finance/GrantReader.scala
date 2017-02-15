@@ -43,7 +43,7 @@ object GrantReader extends SwebleParser {
     val title = grant.name
 
     val budgetPage = if (title.startsWith("Grants:APG")) {
-      "Grants:APG/Proposals/2015-2016 round1/Wikimedia Ukraine/Proposal form/Detailed budget"
+      "Grants:APG/Proposals/2016-2017 round 1/Wikimedia Ukraine/Proposal form/Detailed budget"
     } else {
       title
     }

@@ -33,10 +33,15 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.35",
 
   "com.google.jimfs" % "jimfs" % "1.0" % "test",
-  "com.typesafe.play" %% "play-specs2" % "2.5.12" % "test"
+  "com.typesafe.play" %% "play-specs2" % "2.5.12" % "test",
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+
+//(managedClasspath in IntegrationTest) += (packageBin in Assets).value
+// workaround for https://youtrack.jetbrains.com/issue/SCL-11141
+unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
 
 organization := "org.intracer"
 

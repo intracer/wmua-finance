@@ -1,75 +1,75 @@
-1,17,1.1,Wikimedia Education programme and Wikiworkshops,2000.00,
-2,17,1.2,GLAM outreach,1000.00,
-3,17,1.3,Wikiexpeditions,3000.00,
-4,17,2.1,Article Contests,5000.00,
-5,17,2.1.1,CEE Spring 2016,1050.00,
-6,17,2.1.1.1,Hall rent for Awards Ceremony & Press event,100.00,
-7,17,2.1.1.2,"Travel costs (jury members, participants)",150.00,
-8,17,2.1.1.3,Prizes (incl. diplomas),750.00,
-9,17,2.1.1.4,Food & beverages (coffee break or stand-up party),50.00,
-10,17,2.1.2,Wiki Loves Monuments article contest,1050.00,
-11,17,2.1.2.1,Hall rent for Awards Ceremony & Press event,100.00,
-12,17,2.1.2.2,"Travel costs (jury members, participants)",150.00,
-13,17,2.1.2.3,Prizes (incl. diplomas),750.00,
-14,17,2.1.2.4,Food & beverages (coffee break or stand-up party),50.00,
-15,17,2.1.3,Wiki Loves Earth article contest,1050.00,
-16,17,2.1.3.1,Hall rent for Awards Ceremony & Press event,100.00,
-17,17,2.1.3.2,"Travel costs (jury members, participants)",150.00,
-18,17,2.1.3.3,Prizes (incl. diplomas),750.00,
-19,17,2.1.3.4,Food & beverages (coffee break or stand-up party),50.00,
-20,17,2.1.4,WikiScienceContest,1850.00,
-21,17,2.1.4.1,Hall rent for Awards Ceremony & Press event,100.00,
-22,17,2.1.4.2,"Travel costs (jury members, participants)",150.00,
-23,17,2.1.4.3,Prizes (incl. diplomas),1250.00,
-24,17,2.1.4.4,Food & beverages (coffee break or stand-up party),50.00,
-25,17,2.1.4.5,Professional jury reimbursements,300.00,
-26,17,2.2,Photo Contests (Wiki Loves Earth International part),12600.00,"To have a fiscal sponsor for this part (8,300.00) would be less expensive and easier for us"
-27,17,2.2.1,Prizes (incl. diplomas),5000.00,
-28,17,2.2.2,International post expenses,1500.00,
-29,17,2.2.3,Technical support,1500.00,
-30,17,2.2.4,Gifts for international jury,200.00,
-31,17,2.2.5,"International presentations (Wikimania, Wikimedia Conference)",1800.00,
-32,17,2.2.6,Publishing WLE calendars,1300.00,
-33,17,2.2.7,Publishing WLE post cards,500.00,
-34,17,2.2.8,Support to local organising teams,800.00,
-35,17,2.3,Photo Contests (National),13200.00,
-36,17,2.3.1,Wiki Loves Earth in Ukraine,5500.00,
-37,17,2.3.1.1,Hall rent for Awards Ceremony & Press event,150.00,
-38,17,2.3.1.2,Hall decorations (printing photos),150.00,
-39,17,2.3.1.3,"Travel costs (jury members, participants)",500.00,
-40,17,2.3.1.4,Main Prizes (incl. diplomas),1600.00,
-41,17,2.3.1.5,Medium Prizes (incl. diplomas),1000.00,
-42,17,2.3.1.6,Small Prizes (incl. diplomas),700.00,
-43,17,2.3.1.7,Regional Prizes & Awards (incl. diplomas),500.00,
-44,17,2.3.1.8,Special nominations prizes (incl. diplomas),300.00,
-45,17,2.3.1.9,Food & beverages (coffee break or stand-up party),100.00,
-46,17,2.3.1.10,"Local presentation events (press conference, exhibitions etc.)",500.00,
-47,17,2.3.2,Wiki Loves Monuments in Ukraine,5575.00,
-48,17,2.3.2.1,Hall rent for Awards Ceremony & Press event,150.00,
-49,17,2.3.2.2,Hall decorations (printing photos),125.00,
-50,17,2.3.2.3,"Travel costs (jury members, participants)",500.00,
-51,17,2.3.2.4,Main Prizes (incl. diplomas),1600.00,
-52,17,2.3.2.5,Medium Prizes (incl. diplomas),1000.00,
-53,17,2.3.2.6,Small Prizes (incl. diplomas),700.00,
-54,17,2.3.2.7,Regional Prizes & Awards (incl. diplomas),500.00,
-55,17,2.3.2.8,Special nominations prizes (incl. diplomas),300.00,
-56,17,2.3.2.9,Food & beverages (coffee break or stand-up party),100.00,
-57,17,2.3.2.10,"Local presentation events (press conference, exhibitions etc.)",600.00,
-58,17,2.3.3,European Science Photo Competition in Ukraine,2125.00,
-59,17,2.3.3.1,Hall rent for Awards Ceremony & Press event,100.00,
-60,17,2.3.3.2,Hall decorations (printing photos),125.00,
-61,17,2.3.3.3,"Travel costs (jury members, participants)",300.00,
-62,17,2.3.3.4,Prizes (incl. diplomas),1200.00,
-63,17,2.3.3.5,Food & beverages (coffee break or stand-up party),100.00,
-64,17,2.3.3.6,"Local presentation events (press conference, exhibitions etc.)",300.00,
-65,17,2.4,Thematic (collaboration) weeks and months,1000.00,
-66,17,2.4.1,Organising local offline edit-a-thons,500.00,
-67,17,2.4.2,"Small gifts for international weeks (e.g. Asian Month, Ukrainian-Armenian week etc.)",400.00,
-68,17,2.4.3,Presentation events for regional weeks (e.g. Luhansk Oblast thematic week),100.00,
-69,17,3.1,Publishing and Souvenirs,7000.00,
-70,17,3.2,Microgrants,3000.00,
-71,17,3.3,Scholarships,5000.00,
-72,17,3.4,"Community Events (WikiConference, General Meeting etc.)",5000.00,
-73,17,3.5,Trainings for Volunteers,1000.00,
-74,17,4.1,Operations (excludes staff and programs),7368.00,
-75,17,4.2,Staff,10032.00
+1.1,Wikimedia Education programme and Wikiworkshops,2000.00
+1.2,GLAM outreach,1000.00
+1.3,Wikiexpeditions,3000.00
+2.1,Article Contests,5000.00
+2.1.1,CEE Spring 2016,1050.00
+2.1.1.1,Hall rent for Awards Ceremony & Press event,100.00
+2.1.1.2,"Travel costs (jury members, participants)",150.00
+2.1.1.3,Prizes (incl. diplomas),750.00
+2.1.1.4,Food & beverages (coffee break or stand-up party),50.00
+2.1.2,Wiki Loves Monuments article contest,1050.00
+2.1.2.1,Hall rent for Awards Ceremony & Press event,100.00
+2.1.2.2,"Travel costs (jury members, participants)",150.00
+2.1.2.3,Prizes (incl. diplomas),750.00
+2.1.2.4,Food & beverages (coffee break or stand-up party),50.00
+2.1.3,Wiki Loves Earth article contest,1050.00
+2.1.3.1,Hall rent for Awards Ceremony & Press event,100.00
+2.1.3.2,"Travel costs (jury members, participants)",150.00
+2.1.3.3,Prizes (incl. diplomas),750.00
+2.1.3.4,Food & beverages (coffee break or stand-up party),50.00
+2.1.4,WikiScienceContest,1850.00
+2.1.4.1,Hall rent for Awards Ceremony & Press event,100.00
+2.1.4.2,"Travel costs (jury members, participants)",150.00
+2.1.4.3,Prizes (incl. diplomas),1250.00
+2.1.4.4,Food & beverages (coffee break or stand-up party),50.00
+2.1.4.5,Professional jury reimbursements,300.00
+2.2,Photo Contests (Wiki Loves Earth International part),12600.00
+2.2.1,Prizes (incl. diplomas),5000.00
+2.2.2,International post expenses,1500.00
+2.2.3,Technical support,1500.00
+2.2.4,Gifts for international jury,200.00
+2.2.5,"International presentations (Wikimania, Wikimedia Conference)",1800.00
+2.2.6,Publishing WLE calendars,1300.00
+2.2.7,Publishing WLE post cards,500.00
+2.2.8,Support to local organising teams,800.00
+2.3,Photo Contests (National),13200.00
+2.3.1,Wiki Loves Earth in Ukraine,5500.00
+2.3.1.1,Hall rent for Awards Ceremony & Press event,150.00
+2.3.1.2,Hall decorations (printing photos),150.00
+2.3.1.3,"Travel costs (jury members, participants)",500.00
+2.3.1.4,Main Prizes (incl. diplomas),1600.00
+2.3.1.5,Medium Prizes (incl. diplomas),1000.00
+2.3.1.6,Small Prizes (incl. diplomas),700.00
+2.3.1.7,Regional Prizes & Awards (incl. diplomas),500.00
+2.3.1.8,Special nominations prizes (incl. diplomas),300.00
+2.3.1.9,Food & beverages (coffee break or stand-up party),100.00
+2.3.1.10,"Local presentation events (press conference, exhibitions etc.)",500.00
+2.3.2,Wiki Loves Monuments in Ukraine,5575.00
+2.3.2.1,Hall rent for Awards Ceremony & Press event,150.00
+2.3.2.2,Hall decorations (printing photos),125.00
+2.3.2.3,"Travel costs (jury members, participants)",500.00
+2.3.2.4,Main Prizes (incl. diplomas),1600.00
+2.3.2.5,Medium Prizes (incl. diplomas),1000.00
+2.3.2.6,Small Prizes (incl. diplomas),700.00
+2.3.2.7,Regional Prizes & Awards (incl. diplomas),500.00
+2.3.2.8,Special nominations prizes (incl. diplomas),300.00
+2.3.2.9,Food & beverages (coffee break or stand-up party),100.00
+2.3.2.10,"Local presentation events (press conference, exhibitions etc.)",600.00
+2.3.3,European Science Photo Competition in Ukraine,2125.00
+2.3.3.1,Hall rent for Awards Ceremony & Press event,100.00
+2.3.3.2,Hall decorations (printing photos),125.00
+2.3.3.3,"Travel costs (jury members, participants)",300.00
+2.3.3.4,Prizes (incl. diplomas),1200.00
+2.3.3.5,Food & beverages (coffee break or stand-up party),100.00
+2.3.3.6,"Local presentation events (press conference, exhibitions etc.)",300.00
+2.4,Thematic (collaboration) weeks and months,1000.00
+2.4.1,Organising local offline edit-a-thons,500.00
+2.4.2,"Small gifts for international weeks (e.g. Asian Month, Ukrainian-Armenian week etc.)",400.00
+2.4.3,Presentation events for regional weeks (e.g. Luhansk Oblast thematic week),100.00
+3.1,Publishing and Souvenirs,7000.00
+3.2,Microgrants,3000.00
+3.3,Scholarships,5000.00
+3.4,"Community Events (WikiConference, General Meeting etc.)",5000.00
+3.5,Trainings for Volunteers,1000.00
+4.1,Operations (excludes staff and programs),7368.00
+4.2,Staff,10032.00

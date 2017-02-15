@@ -1,7 +1,5 @@
 package client.finance
 
-import java.io.File
-
 import com.github.tototoshi.csv.CSVReader
 import org.intracer.finance.Grant
 import org.specs2.mutable.Specification
@@ -26,9 +24,9 @@ class GrantReaderSpec extends Specification {
 
     lines.map { l =>
       GrantItem(
-        number = l(2),
-        description = l(3),
-        totalCost = BigDecimal(l(4)),
+        number = l.head,
+        description = l(1),
+        totalCost = BigDecimal(l(2)),
         grantId = Some(grantId)
       )
     }
@@ -45,6 +43,21 @@ class GrantReaderSpec extends Specification {
       items.nonEmpty === true
       items.flatMap(_.grantId).toSet === Set(grantId)
       items.size === 75
+
+      val csv = readCsv(grantName + ".csv", grantId)
+      items.map(_.copy(notes = None)) === csv
+    }
+
+    "read 2017 WMUA budget" in {
+      val grantId = 15
+      val grantName = "APG_2016-2017 round1_WMUA"
+      val text = resourceAsString(grantName + ".wiki")
+      val grant = Grant(Some(grantId), grantName)
+
+      val items = GrantReader.parseBudget(grant, "Grants:" + grantName, text)
+      items.nonEmpty === true
+      items.flatMap(_.grantId).toSet === Set(grantId)
+      items.size === 71
 
       val csv = readCsv(grantName + ".csv", grantId)
       items.map(_.copy(notes = None)) === csv

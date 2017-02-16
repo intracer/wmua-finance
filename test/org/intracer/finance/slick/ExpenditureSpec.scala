@@ -33,7 +33,7 @@ class ExpenditureSpec extends Specification with InMemDb {
       projectDao.insertAll((1 to 2).map(i => Project(name = "Project" + i)))
       grantDao.insertAll((1 to 2).map(i => Grant(name = "Grant" + i)))
 
-      val grantId = grantDao.get("Grant1").flatMap(_.id)
+      val grantId = grantDao.byName("Grant1").flatMap(_.id)
       grantItemDao.insertAll((1 to 2).map { i =>
         GrantItem(None, grantId, i.toString, "GrantItem" + i, BigDecimal.valueOf(i * 100))
       })
@@ -50,7 +50,7 @@ class ExpenditureSpec extends Specification with InMemDb {
 
   def newExp(amount: Int, grantName: String, account: String, category: String,
              project: String, grantItem: Option[String], description: String): Expenditure = {
-    val grant = grantDao.get(grantName)
+    val grant = grantDao.byName(grantName)
 
     Expenditure(
       None,
@@ -126,7 +126,7 @@ class ExpenditureSpec extends Specification with InMemDb {
         val exp = newExp(10, "Grant1", "Account1", "Category1", "Project1", None, "exp1")
         val id = expDao.insertWithOpId(exp)
 
-        val grant2 = grantDao.get("Grant2")
+        val grant2 = grantDao.byName("Grant2")
         val grant2Id = grant2.flatMap(_.id)
         expDao.update(Update("grant", id, grant2Id.get.toString), user)
 

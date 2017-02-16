@@ -1,12 +1,7 @@
+@import org.intracer.finance.Dictionary
 @(title: String,
         user: org.intracer.finance.User = null,
-        projectsJson: String = "{}",
-        categoriesJson: String = "{}",
-        grantItemsJson: Map[Int, String] = Map.empty,
-        grantsJson: String = "{}",
-        accountsJson: String = "{}"
-//        : String = "{}"
-)(content: Html)(implicit lang: Lang, messages: Messages)
+        dictionary: Dictionary = Dictionary())(content: Html)(implicit lang: Lang, messages: Messages)
 <!DOCTYPE html>
 
 <html>
@@ -134,7 +129,7 @@
 
                     $('.edit_project').editable({
                         source: [
-                            @Html(projectsJson)
+                            @Html(dictionary.projectsJson)
                         ],
                         select2: {
                             placeholder: 'Select a project',
@@ -146,7 +141,7 @@
 
                     $('.edit_category').editable({
                         source: [
-                            @Html(categoriesJson)
+                            @Html(dictionary.categoriesJson)
                         ],
                         select2: {
                             placeholder: 'Select a category',
@@ -157,7 +152,7 @@
                         showbuttons: false
                     });
 
-                    @for((grantId, itemsJson) <- grantItemsJson.toSeq) {
+                    @for((grantId, itemsJson) <- dictionary.grantItemsJsonMap.toSeq) {
                     $('.edit_grant_item_@grantId').editable({
                         source: [
                             @Html(itemsJson)
@@ -174,7 +169,7 @@
 
                     $('.edit_grant').editable({
                         source: [
-                            @Html(grantsJson)
+                            @Html(dictionary.grantsJson)
                         ],
                         select2: {
                             placeholder: 'Select a grant',
@@ -186,7 +181,7 @@
 
                     $('.edit_account').editable({
                         source: [
-                            @Html(accountsJson)
+                            @Html(dictionary.accountsJson)
                         ],
                         select2: {
                             placeholder: 'Select an account',

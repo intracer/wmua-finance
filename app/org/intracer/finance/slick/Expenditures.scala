@@ -61,9 +61,9 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
 object Expenditures {
 
-  def categories: Map[Int, CategoryF] = new CategoryDao().list.groupBy(_.id.get).mapValues(_.head)
+  lazy val categories: Map[Int, CategoryF] = new CategoryDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  def projects: Map[Int, Project] = new ProjectDao().list.groupBy(_.id.get).mapValues(_.head)
+  lazy val projects: Map[Int, Project] = new ProjectDao().list.groupBy(_.id.get).mapValues(_.head)
 
   lazy val grants: Map[Int, Grant] = new GrantDao().list.groupBy(_.id.get).mapValues(_.head)
 
@@ -71,7 +71,9 @@ object Expenditures {
     new GrantItemsDao().listAll().groupBy(_.grantId.get)
   }
 
-  def accounts: Map[Int, Account] = new AccountDao().list.groupBy(_.id.get).mapValues(_.head)
+  lazy val accounts: Map[Int, Account] = new AccountDao().list.groupBy(_.id.get).mapValues(_.head)
+
+  lazy val users: Map[Int, User] = new UserDao().list.groupBy(_.id.get).mapValues(_.head)
 
   def fromDb(id: Option[Int],
              opId: Int,
@@ -92,7 +94,7 @@ object Expenditures {
                          grantItem <- grantItemsForGrant.find(_.id.exists(_ == grantItemId))
     ) yield grantItem
 
-    val user = new UserDao().byId(userId).get
+    val user = users.getOrElse(userId, User(None, "-", "-"))
 
     Expenditure(id, Some(opId), opDate, amount, accounts(accountId), categories(categoryId), projects(projectId),
       maybeGrantId.map(grants), grantItem, descr, user, logDate)

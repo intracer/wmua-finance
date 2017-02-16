@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
-import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao, UserDao}
+import org.intracer.finance.slick.{ExpenditureDao, Expenditures, GrantItemsDao, UserDao}
 import org.intracer.finance.{Dictionary, Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -82,7 +82,13 @@ object OpFilter {
 
     val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
 
-    val dictionary = Dictionary()
+    val dictionary = Dictionary(
+      Expenditures.accounts,
+      Expenditures.categories,
+      Expenditures.grants,
+      Expenditures.grantItems,
+      Expenditures.projects
+    )
     new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations, dictionary)
   }
 

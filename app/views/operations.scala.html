@@ -6,7 +6,7 @@
 
 @editable(clazz: String) = {@if(user.canContribute) { class="@clazz xeditable" } else { class="noteditable" }}
 
-@main(Messages("operations"), user) {
+@main(Messages("operations"), user, opFilter.dictionary) {
 
     <div class="container-fluid">
     <div class="row" style="padding: 50px">

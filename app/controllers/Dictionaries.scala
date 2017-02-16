@@ -41,7 +41,7 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   def accounts() = withAuth() { user =>
     implicit request =>
 
-      val accounts = Expenditures.accounts.values.toSeq.sortBy(_.id)
+      val accounts = accountDao.list.sortBy(_.id)
 
       Ok(views.html.dictionaries(user, "account", accounts))
   }
@@ -49,7 +49,7 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   def categories() = withAuth() { user =>
     implicit request =>
 
-      val categories = Expenditures.categories.values.toSeq.sortBy(_.id)
+      val categories = categoryDao.list.sortBy(_.id)
 
       Ok(views.html.dictionaries(user, "category", categories))
   }
@@ -57,7 +57,7 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   def projects() = withAuth() { user =>
     implicit request =>
 
-      val projects = Expenditures.projects.values.toSeq.sortBy(_.id)
+      val projects = projectDao.list.sortBy(_.id)
 
       Ok(views.html.dictionaries(user, "project", projects))
   }

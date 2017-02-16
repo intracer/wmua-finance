@@ -60,12 +60,10 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
       grantItemMap,
       projectMap,
       userMap)
-
   }
 
   def list() = withAuth() { user =>
     implicit request =>
-
       Ok(views.html.dictionaries(user, "", Seq.empty))
   }
 
@@ -99,15 +97,13 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
         formWithErrors => // binding failure, you retrieve the form containing errors,
           Future.successful(BadRequest(insertForm.errorsAsJson)),
         u => {
-
-
           val q = u.table match {
-            case "account" => db.run(accountDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
-            case "project" => db.run(projectDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
-            case "category" => db.run(categoryDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value))
+            case "account" => accountDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value)
+            case "project" => projectDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value)
+            case "category" => categoryDao.query.filter(_.id === u.pk.toInt).map(_.name).update(u.value)
           }
 
-          q.map(r => Ok(u.toString)).recover { case cause => BadRequest(cause.getMessage) }
+          db.run(q).map(_ => Ok(u.toString)).recover { case cause => BadRequest(cause.getMessage) }
         })
   }
 
@@ -118,14 +114,13 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
         formWithErrors => // binding failure, you retrieve the form containing errors,
           Future.successful(BadRequest(insertForm.errorsAsJson)),
         u => {
-
           val q = u.table match {
-            case "account" => db.run(accountDao.query += Account(name = u.value))
-            case "project" => db.run(projectDao.query += Project(name = u.value))
-            case "category" => db.run(categoryDao.query += CategoryF(name = u.value))
+            case "account" => accountDao.query += Account(name = u.value)
+            case "project" => projectDao.query += Project(name = u.value)
+            case "category" => categoryDao.query += CategoryF(name = u.value)
           }
 
-          q.map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
+          db.run(q).map(id => Ok(s"""{"id": $id}""")).recover { case cause => BadRequest(cause.getMessage) }
         })
   }
 
@@ -148,5 +143,4 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   case class Update(table: String, name: String, pk: Long, value: String)
 
   case class Insert(table: String, value: String)
-
 }

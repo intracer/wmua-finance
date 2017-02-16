@@ -20,7 +20,11 @@ class GrantDao() extends BaseDao {
     query.sortBy(_.name).result
   }
 
-  def get(name: String): Option[Grant] = run {
+  def byId(id: Int): Option[Grant] = run {
+    query.filter(_.id === id).result.headOption
+  }
+
+  def byName(name: String): Option[Grant] = run {
     query.filter(_.name === name).result.headOption
   }
 

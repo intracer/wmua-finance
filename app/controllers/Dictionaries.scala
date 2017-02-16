@@ -3,6 +3,7 @@ package controllers
 import javax.inject.Inject
 import javax.inject.Singleton
 
+import client.finance.GrantItem
 import slick.driver.JdbcProfile
 import org.intracer.finance._
 import org.intracer.finance.slick._
@@ -31,6 +32,36 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   import driver.api._
+
+
+  def categoryMap: Map[Int, CategoryF] =
+    categoryDao.list.groupBy(_.id.get).mapValues(_.head)
+
+  def projectMap: Map[Int, Project] =
+    projectDao.list.groupBy(_.id.get).mapValues(_.head)
+
+  def grantMap: Map[Int, Grant] =
+    grantDao.list.groupBy(_.id.get).mapValues(_.head)
+
+  def grantItemMap: Map[Int, Seq[GrantItem]] =
+    grantItemDao.listAll().groupBy(_.grantId.get)
+
+  def accountMap: Map[Int, Account] =
+    accountDao.list.groupBy(_.id.get).mapValues(_.head)
+
+  def userMap: Map[Int, User] =
+    userDao.list.groupBy(_.id.get).mapValues(_.head)
+
+  def dictionary(): Dictionary = {
+    Dictionary(
+      accountMap,
+      categoryMap,
+      grantMap,
+      grantItemMap,
+      projectMap,
+      userMap)
+
+  }
 
   def list() = withAuth() { user =>
     implicit request =>

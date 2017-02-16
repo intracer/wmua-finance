@@ -14,9 +14,9 @@
 @main(Messages("operations")) {
     <div class="container">
     @filter(operations, opFilter, "/statistics")
-    @statGrid(Messages("by.project"), Messages("project"), Expenditures.projects.map{case (k,v) => (k.toString, v.name)}, byProject, total)
-    @statGrid(Messages("by.category"), Messages("category"), Expenditures.categories.map{case (k,v) => (k.toString, v.name)}, byCategory, total)
-    @statGrid(Messages("by.grant"), Messages("grant"), Expenditures.grants.map{case (k,v) => (k.toString, v.name)}, byGrant, total)
+    @statGrid(Messages("by.project"), Messages("project"), opFilter.dictionary.projectMap.map{case (k,v) => (k.toString, v.name)}, byProject, total)
+    @statGrid(Messages("by.category"), Messages("category"), opFilter.dictionary.categoryMap.map{case (k,v) => (k.toString, v.name)}, byCategory, total)
+    @statGrid(Messages("by.grant"), Messages("grant"), opFilter.dictionary.grantMap.map{case (k,v) => (k.toString, v.name)}, byGrant, total)
     @statGrid(Messages("by.grant.row"), Messages("grant.row"), byGrantRow.keySet.map(k => (k,k)).toMap, byGrantRow, total)
     </div>
 }

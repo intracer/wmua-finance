@@ -113,26 +113,6 @@ class ExpenditureDao extends BaseDao {
     db.run(cmd)
   }
 
-  def insertCmd(op: NewOp, user: User): Future[Int] = {
-
-    val exp = Expenditure(
-      date = new Timestamp(op.date.getTime),
-      opId = None,
-      amount = op.amount,
-      account = op.account.flatMap(Expenditures.accounts.get).orNull,
-      category = Expenditures.categories.get(op.category).orNull,
-      project = Expenditures.projects.get(op.project).orNull,
-      grant = op.grant.flatMap(Expenditures.grants.get),
-      grantItem = op.grantItem.flatMap(item => Expenditures.grantItems(17).find(_.id.exists(_ == item))),
-      description = op.descr.orNull,
-      logDate = new Timestamp(DateTime.now().getMillis),
-      user = user
-    )
-
-    val result = insertWithOpId(exp)
-    Future.successful(result) // TODO async
-  }
-
   def insertWithOpId(exp: Expenditure): Int  = {
     val opId = insertOpId()
     val withOpId = exp.copy(opId = Some(opId))

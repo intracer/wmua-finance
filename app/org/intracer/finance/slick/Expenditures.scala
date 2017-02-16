@@ -61,19 +61,19 @@ class Expenditures(tag: Tag) extends Table[Expenditure](tag, "operation") {
 
 object Expenditures {
 
-  lazy val categories: Map[Int, CategoryF] = new CategoryDao().list.groupBy(_.id.get).mapValues(_.head)
+  private lazy val categories: Map[Int, CategoryF] = new CategoryDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  lazy val projects: Map[Int, Project] = new ProjectDao().list.groupBy(_.id.get).mapValues(_.head)
+  private lazy val projects: Map[Int, Project] = new ProjectDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  lazy val grants: Map[Int, Grant] = new GrantDao().list.groupBy(_.id.get).mapValues(_.head)
+  private lazy val grants: Map[Int, Grant] = new GrantDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  lazy val grantItems: Map[Int, Seq[GrantItem]] = {
+  private lazy val grantItems: Map[Int, Seq[GrantItem]] = {
     new GrantItemsDao().listAll().groupBy(_.grantId.get)
   }
 
-  lazy val accounts: Map[Int, Account] = new AccountDao().list.groupBy(_.id.get).mapValues(_.head)
+  private lazy val accounts: Map[Int, Account] = new AccountDao().list.groupBy(_.id.get).mapValues(_.head)
 
-  lazy val users: Map[Int, User] = new UserDao().list.groupBy(_.id.get).mapValues(_.head)
+  private lazy val users: Map[Int, User] = new UserDao().list.groupBy(_.id.get).mapValues(_.head)
 
   def fromDb(id: Option[Int],
              opId: Int,

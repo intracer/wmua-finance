@@ -9,7 +9,8 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
                       categoryMap: Map[Int, CategoryF] = Map.empty,
                       grantMap: Map[Int, Grant] = Map.empty,
                       grantItemMap: Map[Int, Seq[GrantItem]] = Map.empty,
-                      projectsMap: Map[Int, Project] = Map.empty) {
+                      projectMap: Map[Int, Project] = Map.empty,
+                      userMap: Map[Int, User] = Map.empty) {
 
   def accountsJson: String = {
     accountMap.toSeq.sortBy(_._2.name.toLowerCase).map {
@@ -23,7 +24,7 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
 
     parents.map { parent =>
       s"""{text: "$parent", children: [""" +
-        Expenditures.categories.toSeq
+        categoryMap.toSeq
           .filter(_._2.name.toLowerCase.startsWith(parent.toLowerCase))
           .sortBy(_._2.name.toLowerCase)
           .map {
@@ -61,7 +62,7 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
   }
 
   def projectsJson: String = {
-    projectsMap.toSeq.sortBy(_._2.name.toLowerCase).map {
+    projectMap.toSeq.sortBy(_._2.name.toLowerCase).map {
       case (id, project) => s"""{ value: "$id", text: "${project.name}"}"""
     }.mkString(", ")
   }

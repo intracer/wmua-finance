@@ -12,7 +12,7 @@
             <div class="col-md-4">
                 <label class="control-label" for="projects_select" style="width: 60pt">@Messages("projects")</label>
                 <select id="projects_select" class="selectpicker" multiple name="projects">
-                @for((id, project) <- filter.dictionary.projectsMap.toSeq.sortBy(_._2.name.toLowerCase)) {
+                @for((id, project) <- filter.dictionary.projectMap.toSeq.sortBy(_._2.name.toLowerCase)) {
                     <option value="@id"@if(filter.projects.contains(id)){ selected}>@project.name</option>
                 }
                 </select>

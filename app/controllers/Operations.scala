@@ -1,5 +1,6 @@
 package controllers
 
+import java.sql.Timestamp
 import java.util.Date
 import javax.inject.{Inject, Singleton}
 
@@ -62,41 +63,10 @@ case class OpFilter(projects: Set[Int] = Set.empty,
   }
 }
 
-object OpFilter {
-  val defaultDateRange: String = "01/01/2016 - 12/31/2016"
-
-  def apply(request: Request[_], users: Seq[User], operations: Seq[Operation]) = {
-
-    val map = request.queryString
-
-    def toIntSet(name: String): Set[Int] = {
-      val toSet = map.getOrElse(name, Seq.empty[String]).toSet
-      toSet.map(_.toInt)
-    }
-
-    val projects = toIntSet("projects")
-    val categories = toIntSet("categories")
-    val grants = toIntSet("grants")
-    val grantItems = toIntSet("grantItems")
-    val accounts = toIntSet("accounts")
-
-    val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
-
-    val dictionary = Dictionary(
-      Expenditures.accounts,
-      Expenditures.categories,
-      Expenditures.grants,
-      Expenditures.grantItems,
-      Expenditures.projects
-    )
-    new OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations, dictionary)
-  }
-
-}
-
 @Singleton
 class Operations @Inject()(val expenditureDao: ExpenditureDao,
-                           val userDao: UserDao)
+                           val userDao: UserDao,
+                           val dictionaries: Dictionaries)
   extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {
@@ -113,12 +83,35 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
     }
   }
 
+  def makeFilter(request: Request[_], users: Seq[User], operations: Seq[Operation]) = {
+    val defaultDateRange: String = "01/01/2016 - 12/31/2016"
+
+    val map = request.queryString
+
+    def toIntSet(name: String): Set[Int] = {
+      val toSet = map.getOrElse(name, Seq.empty[String]).toSet
+      toSet.map(_.toInt)
+    }
+
+    val projects = toIntSet("projects")
+    val categories = toIntSet("categories")
+    val grants = toIntSet("grants")
+    val grantItems = toIntSet("grantItems")
+    val accounts = toIntSet("accounts")
+
+    val dateRange = map.get("daterange").flatMap(_.headOption).getOrElse(defaultDateRange)
+
+    val dictionary = dictionaries.dictionary()
+    OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations, dictionary)
+  }
+
+
   def withFilter(loader: => Seq[Operation] = allOperations)
                 (f: (User, OpFilter, Seq[Operation]) => Request[AnyContent] => Result) = {
     withAuth() {
       user =>
         implicit request =>
-          val opFilter = OpFilter(request, Seq(user), loader)
+          val opFilter = makeFilter(request, Seq(user), loader)
           val operations = opFilter.filter()
 
           f(user, opFilter, operations)(request)
@@ -198,9 +191,9 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
         )
   }
 
-  def update() = formAction(updateForm, new ExpenditureDao().update)
+  def update() = formAction(updateForm, expenditureDao.update)
 
-  def insert() = formAction(insertForm, new ExpenditureDao().insertCmd)
+  def insert() = formAction(insertForm, insertCmd)
 
   def formAction[T](form: Form[T],
                     process: (T, User) => Future[Int]): EssentialAction =
@@ -221,6 +214,29 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
               }
         )
     }
+
+  def insertCmd(op: NewOp, user: User): Future[Int] = {
+
+    val dictionary = dictionaries.dictionary()
+
+    val exp = Expenditure(
+      date = new Timestamp(op.date.getTime),
+      opId = None,
+      amount = op.amount,
+      account = op.account.flatMap(dictionary.accountMap.get).orNull,
+      category = dictionary.categoryMap.get(op.category).orNull,
+      project = dictionary.projectMap.get(op.project).orNull,
+      grant = op.grant.flatMap(dictionary.grantMap.get),
+      grantItem = op.grantItem.flatMap(item => dictionary.grantItemMap(17).find(_.id.exists(_ == item))),
+      description = op.descr.orNull,
+      logDate = new Timestamp(DateTime.now().getMillis),
+      user = user
+    )
+
+    val result = expenditureDao.insertWithOpId(exp)
+    Future.successful(result) // TODO async
+  }
+
 
   import play.api.data.format.Formats._
 

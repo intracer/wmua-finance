@@ -26,13 +26,26 @@ app.controller('UiSelectCtrl', function ($scope) {
 });
 
 app.controller('Ctrl', function ($scope, $filter, $http) {
+    var vm = this;
 
-    $scope.groups = [];
-    $scope.loadGroups = function () {
-        return $scope.groups.length ? null : $http.get('/groups').success(function (data) {
-                $scope.groups = data;
-            });
+    $scope.grantItems = [{
+        value: 0,
+        text: "Nothing"
+    }];
+    vm.grantItems = $scope.grantItems;
+
+    $scope.loadGrantItems = function (grant_id) {
+        $scope.grantItems = [{
+            value: grant_id,
+            text: "GrantItem of " + grant_id
+        }];
+        vm.grantItems = $scope.grantItems;
     };
+
+    $scope.grantUpdated = function (item, model) {
+        $scope.loadGrantItems(model);
+    };
+    vm.grantUpdated = $scope.grantUpdated;
 
     $scope.showGroup = function (user) {
         if (user.group && $scope.groups.length) {
@@ -67,6 +80,21 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         return selected.length ? selected[0].text : 'Not set';
     };
 
+    $scope.showGrantItem = function (operation) {
+        var selected = [];
+        if (operation.grant_item_id) {
+            selected = $filter('filter')($scope.grants, {value: operation.grant_item_id});
+        }
+        return selected.length ? selected[0].text : 'Not set';
+    };
+
+    $scope.showAccount = function (operation) {
+        var selected = [];
+        if (operation.account_id) {
+            selected = $filter('filter')($scope.accounts, {value: operation.account_id});
+        }
+        return selected.length ? selected[0].text : 'Not set';
+    };
 
     $scope.saveOperation = function (data, id) {
         //$scope.user not updated yet
@@ -101,7 +129,7 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
             "grant_id": 8,
             "description": "друк",
             "grant_row": null,
-            "grant_item": 69,
+            "grant_item_id": 69,
             "log_date": "2017-02-12",
             "user_id": 1,
             "parent_rev_id": null,
@@ -117,7 +145,7 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
             "grant_id": 8,
             "description": "податки",
             "grant_row": null,
-            "grant_item": null,
+            "grant_item_id": null,
             "log_date": "2017-02-12 16:43:24",
             "user_id": 1,
             "parent_rev_id": null,
@@ -133,7 +161,7 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
             "grant_id": 8,
             "description": "нотаріус",
             "grant_row": null,
-            "grant_item": null,
+            "grant_item_id": null,
             "log_date": "2017-02-12 16:43:24",
             "user_id": 1,
             "parent_rev_id": null,
@@ -566,6 +594,74 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         {
             value: 21,
             text: "Grants:APG/Proposals/2016-2017 round 1"
+        }
+    ];
+
+    $scope.accounts = [
+        {
+            value: 1,
+            text: "2202",
+            type: "bank"
+        },
+        {
+            value: 2,
+            text: "2200",
+            type: "bank"
+        },
+        {
+            value: 3,
+            text: "2201",
+            type: "bank"
+        },
+        {
+            value: 4,
+            text: "2203",
+            type: "bank"
+        },
+        {
+            value: 5,
+            text: "nana",
+            type: "cash"
+        },
+        {
+            value: 6,
+            text: "ilya",
+            type: "cash"
+        },
+        {
+            value: 7,
+            text: "sasha",
+            type: "cash"
+        },
+        {
+            value: 8,
+            text: "anntinomy",
+            type: "cash"
+        },
+        {
+            value: 11,
+            text: "kharkivian",
+            type: "cash"
+        },
+        {
+            value: 12,
+            text: "liena",
+            type: "cash"
+        },
+        {
+            value: 13,
+            text: "base",
+            type: "cash"
+        },
+        {
+            value: 14,
+            text: "Ata",
+            type: "cash"
+        },
+        {
+            value: 15,
+            text: "visem",
+            type: "cash"
         }
     ];
 

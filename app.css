@@ -5,3 +5,11 @@ form[editable-form] > div {margin: 10px 0;}
 .ui-select-bootstrap > .ui-select-choices {
     max-height: 500px;
 }
+
+.editable-wrap {
+    white-space: normal;
+}
+
+.ui-select-toggle {
+    height: auto !important
+}

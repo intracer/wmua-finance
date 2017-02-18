@@ -25,7 +25,8 @@
 </head>
 <body style="padding: 20px">
 <h4>WMUA Finance 2</h4>
-<div ng-app="app" ng-controller="Ctrl">
+<div ng-app="app" ng-controller="Ctrl as ctrl">
+    GI: {{ctrl.grantItems[0].text}}
     <table class="table table-bordered table-hover table-condensed table-striped">
         <thead>
         <tr>
@@ -33,17 +34,16 @@
             <th>project</th>
             <th>category</th>
             <th>grant</th>
-            <!--            <th>grant item</th>
-                                    <th>amount</th>
-                                    <th>account</th>
-                                    <th>description</th>
-                                    <th>last edited</th> -->
+            <th>grant item</th>
+            <th>amount</th>
+            <th>account</th>
+            <th>description</th>
             <th>Edit</th>
         </tr>
         </thead>
 
         <tr ng-repeat="operation in operations">
-            <td>
+            <td width="90px">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
                        data-e-name="op_date" data-e-form="rowform" data-e-required
@@ -55,9 +55,10 @@
                 </div>
             </td>
             <td>
-                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id" data-e-ng-model="operation.project_id"
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id"
+                     data-e-ng-model="operation.project_id"
                      data-e-form="rowform"
-                     data-e-style="min-width:300px;"  name="project" theme="bootstrap">
+                     data-e-style="min-width:200px;" name="project" theme="bootstrap">
                     {{ showProject(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
@@ -69,36 +70,88 @@
                 </div>
             </td>
             <td>
-                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id" data-e-ng-model="operation.category_id"
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
+                     data-e-ng-model="operation.category_id"
                      data-e-form="rowform" data-e-style="min-width:300px;"
                      name="category" theme="bootstrap">
-                    {{ showCategory(operation) }}
+                    <small> {{ showCategory(operation).split('/')[0] }} </small>
+                    <br>
+                    {{ showCategory(operation).split('/').slice(-1)[0] }}
+
                     <editable-ui-select-match>
-                        <span ng-bind="$select.selected.text"></span>
+                       <small> {{ $select.selected.text.split('/')[0] }} </small>
+                        <br>
+                        {{ $select.selected.text.split('/').slice(-1)[0] }}
                     </editable-ui-select-match>
                     <editable-ui-select-choices
                             group-by="beforeSlash"
                             repeat="category.value as category in (categories | orderBy: 'text' | filter: $select.search)">
-                        <div ng-bind-html="category.text | highlight: $select.search"></div>
+                        <div ng-bind-html="category.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
                     </editable-ui-select-choices>
                 </div>
             </td>
             <td>
-                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id" data-e-ng-model="operation.grant_id"
-                     data-e-form="rowform" data-e-style="min-width:300px;"
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id"
+                     data-e-ng-model="operation.grant_id"
+                     data-e-form="rowform" data-e-style="min-width:250px;"
+                     data-e-on-select="ctrl.grantUpdated($item, $model)"
                      name="grant" theme="bootstrap">
-                    {{ showGrant(operation) }}
+                    {{ showGrant(operation).split('/').slice(-1)[0] }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text.split('/').slice(-1)[0]"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            group-by="beforeSlash"
+                            repeat="grant.value as grant in (grants | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="grant.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+
+            <td>
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_item_id"
+                     data-e-ng-model="operation.grant_item_id"
+                     data-e-form="rowform" data-e-style="min-width:300px;"
+                     name="grant_item" theme="bootstrap">
+                    {{ showGrantItem(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
                     </editable-ui-select-match>
                     <editable-ui-select-choices
                             group-by="beforeSlash"
-                            repeat="grant.value as grant in (grants | orderBy: 'text' | filter: $select.search)">
-                        <div ng-bind-html="grant.text | highlight: $select.search"></div>
+                            repeat="grantItem.value as grantItem in (grantItems | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="grantItem.text | highlight: $select.search"></div>
                     </editable-ui-select-choices>
                 </div>
             </td>
 
+            <td width="100px">
+                <span editable-text="operation.amount" e-name="amount" e-form="rowform" e-required>
+                         {{ operation.amount || 'empty' }}
+                </span>
+            </td>
+
+            <td width="90px">
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.account_id"
+                     data-e-ng-model="operation.account_id"
+                     data-e-form="rowform" data-e-style="min-width:100px;"
+                     name="grant" theme="bootstrap">
+                    {{ showAccount(operation) }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            repeat="account.value as account in (accounts | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="account.text | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+
+            <td>
+                <span editable-text="operation.description" e-name="description" e-form="rowform" e-required>
+                         {{ operation.description || 'empty' }}
+                </span>
+            </td>
 
             <td style="white-space: nowrap">
                 <!-- form -->

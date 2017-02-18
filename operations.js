@@ -6,7 +6,7 @@ app.run(function (editableOptions) {
 
 app.filter('ellipsis', function () {
     return function (text, length) {
-        if (text.length > length) {
+        if (text && text.length && text.length > length) {
             return text.substr(0, length) + "...";
         }
         return text;
@@ -109,6 +109,7 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         return selected.length ? selected[0].text : 'Not set';
     };
 
+
     $scope.saveOperation = function (data, id) {
         //$scope.user not updated yet
         angular.extend(data, {id: id});
@@ -130,6 +131,10 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         };
         $scope.operations.push($scope.inserted);
     };
+
+    $scope.descriptions = [
+        "друк", "податки", "нотаріус"
+    ];
 
     $scope.operations = [
         {

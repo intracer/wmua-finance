@@ -1,0 +1,3 @@
+div[ng-app] { margin: 10px; }
+.table {width: 100% }
+form[editable-form] > div {margin: 10px 0;}

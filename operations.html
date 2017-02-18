@@ -57,7 +57,7 @@
             <td>
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id" data-e-ng-model="operation.project_id"
                      data-e-form="rowform"
-                     data-e-style="min-width:400px;"  name="project" theme="bootstrap">
+                     data-e-style="min-width:300px;"  name="project" theme="bootstrap">
                     {{ showProject(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
@@ -67,12 +67,11 @@
                         <div ng-bind-html="project.text | highlight: $select.search"></div>
                     </editable-ui-select-choices>
                 </div>
-
             </td>
             <td>
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id" data-e-ng-model="operation.category_id"
-                     data-e-form="rowform"
-                     data-e-style="min-width:400px;"  name="category" theme="bootstrap">
+                     data-e-form="rowform" data-e-style="min-width:300px;"
+                     name="category" theme="bootstrap">
                     {{ showCategory(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
@@ -85,11 +84,19 @@
                 </div>
             </td>
             <td>
-                <span editable-select="operation.grant_id" data-e-name="grant"
-                      data-e-form="rowform"
-                      data-e-ng-options="g.value as g.text for g in grants">
-                     {{ showGrant(operation) }}
-                </span>
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id" data-e-ng-model="operation.grant_id"
+                     data-e-form="rowform" data-e-style="min-width:300px;"
+                     name="grant" theme="bootstrap">
+                    {{ showGrant(operation) }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            group-by="beforeSlash"
+                            repeat="grant.value as grant in (grants | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="grant.text | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
             </td>
 
 

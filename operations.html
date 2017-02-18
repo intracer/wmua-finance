@@ -111,16 +111,16 @@
             <td>
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_item_id"
                      data-e-ng-model="operation.grant_item_id"
-                     data-e-form="rowform" data-e-style="min-width:300px;"
+                     data-e-form="rowform" data-e-style="min-width:350px;"
                      name="grant_item" theme="bootstrap">
                     {{ showGrantItem(operation) }}
                     <editable-ui-select-match>
-                        <span ng-bind="$select.selected.text"></span>
+                        <span ng-bind="$select.selected.number + ' ' + $select.selected.description" ></span>
                     </editable-ui-select-match>
                     <editable-ui-select-choices
-                            group-by="beforeSlash"
-                            repeat="grantItem.value as grantItem in (grantItems | orderBy: 'text' | filter: $select.search)">
-                        <div ng-bind-html="grantItem.text | highlight: $select.search"></div>
+                            group-by="grantItemNumber"
+                            repeat="grantItem.id as grantItem in (grantItems2016 | orderBy: 'number' | filter: $select.search)">
+                        <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
                     </editable-ui-select-choices>
                 </div>
             </td>

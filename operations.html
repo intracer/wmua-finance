@@ -6,6 +6,8 @@
     <title>WMUA Finance 2</title>
     <!-- Bootstrap 3 css -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
     <!-- Angular.js -->
     <script src="bower_components/angular/angular.js"></script>
     <!-- Angular-xeditable -->
@@ -153,7 +155,7 @@
                 </span>
             </td>
 
-            <td style="white-space: nowrap">
+            <td style="white-space: nowrap; width: 85px">
                 <!-- form -->
                 <form editable-form name="rowform"
                       onbeforesave="saveOperation($data, operation.id)"
@@ -161,22 +163,15 @@
                       class="form-buttons form-inline"
                       shown="inserted == operation">
                     <button type="submit" ng-disabled="rowform.$waiting"
-                            class="btn btn-primary">
-                        save
-                    </button>
+                            class="btn btn-primary glyphicon glyphicon-floppy-disk"></button>
                     <button type="button" ng-disabled="rowform.$waiting"
                             ng-click="rowform.$cancel()"
-                            class="btn btn-default">
-                        cancel
-                    </button>
+                            class="btn btn-default fa fa-undo"></button>
                 </form>
                 <div class="buttons" ng-show="!rowform.$visible">
-                    <button class="btn btn-primary" ng-click="rowform.$show()">
-                        edit
-                    </button>
-                    <button class="btn btn-danger"
-                            ng-click="removeOperation($index)">del
-                    </button>
+                    <button class="btn btn-primary glyphicon glyphicon-edit" ng-click="rowform.$show()"></button>
+                    <button class="btn btn-danger glyphicon glyphicon-remove"
+                            ng-click="removeOperation($index)"></button>
                 </div>
             </td>
         </tr>

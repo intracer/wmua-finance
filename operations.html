@@ -113,7 +113,7 @@
                      data-e-ng-model="operation.grant_item_id"
                      data-e-form="rowform" data-e-style="min-width:350px;"
                      name="grant_item" theme="bootstrap">
-                    {{ showGrantItem(operation) }}
+                    <div ng-bind-html="showGrantItem(operation)"></div>
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.number + ' ' + $select.selected.description" ></span>
                     </editable-ui-select-match>

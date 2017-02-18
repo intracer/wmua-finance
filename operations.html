@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angular-xeditable Starter Template</title>
+    <title>WMUA Finance 2</title>
     <!-- Bootstrap 3 css -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Angular.js -->
@@ -11,50 +11,59 @@
     <!-- Angular-xeditable -->
     <link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
     <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>    
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <!-- app.js -->
-    <script src="table.js"></script>
+    <script src="operations.js"></script>
 </head>
 <body style="padding: 20px">
-<h4>Angular-xeditable Editable row (Bootstrap 3)</h4>
+<h4>WMUA Finance 2</h4>
 <div ng-app="app" ng-controller="Ctrl">
-    <table class="table table-bordered table-hover table-condensed">
-        <tr style="font-weight: bold">
-            <td style="width:35%">Name</td>
-            <td style="width:20%">Status</td>
-            <td style="width:20%">Group</td>
-            <td style="width:25%">Edit</td>
+    <table class="table table-bordered table-hover table-condensed table-striped">
+        <thead>
+        <tr>
+            <th style="width: 25%">date</th>
+            <th>project</th>
+<!--            <th>category</th>
+            <th>grant</th>
+            <th>grant item</th>
+            <th>amount</th>
+            <th>account</th>
+            <th>description</th>
+            <th>last edited</th> -->
+            <th style="width:25%">Edit</th>
         </tr>
-        <tr ng-repeat="user in users">
+        </thead>
+
+        <tr ng-repeat="operation in operations">
             <td>
-                <!-- editable username (text with validation) -->
-                <span editable-text="user.name" e-name="name" e-form="rowform"
-                      onbeforesave="checkName($data, user.id)" e-required>
-          {{ user.name || 'empty' }}
+
+                <div ng-controller="BsdateCtrl">
+                    <a href="#" editable-bsdate="operation.op_date"
+                       e-name="op_date" e-form="rowform" e-required
+                       e-is-open="opened.$data"
+                       e-ng-click="open($event,'$data')"
+                       e-datepicker-popup="yyyy-MM-dd">
+                        {{ (operation.op_date | date:"yyyy-MM-dd") || 'empty' }}
+                    </a>
+                </div>
         </span>
             </td>
             <td>
                 <!-- editable status (select-local) -->
-                <span editable-select="user.status" e-name="status"
+                <span editable-select="operation.project_id" e-name="project"
                       e-form="rowform"
-                      e-ng-options="s.value as s.text for s in statuses">
-          {{ showStatus(user) }}
+                      e-ng-options="p.value as p.text for p in projects">
+          {{ showProject(operation) }}
         </span>
             </td>
-            <td>
-                <!-- editable group (select-remote) -->
-                <span editable-select="user.group" e-name="group"
-                      onshow="loadGroups()" e-form="rowform"
-                      e-ng-options="g.id as g.text for g in groups">
-          {{ showGroup(user) }}
-        </span>
-            </td>
+
             <td style="white-space: nowrap">
                 <!-- form -->
                 <form editable-form name="rowform"
-                      onbeforesave="saveUser($data, user.id)"
+                      onbeforesave="saveOperation($data, operation.id)"
                       ng-show="rowform.$visible"
-                      class="form-buttons form-inline" shown="inserted == user">
+                      class="form-buttons form-inline" shown="inserted == operation">
                     <button type="submit" ng-disabled="rowform.$waiting"
                             class="btn btn-primary">
                         save
@@ -70,14 +79,14 @@
                         edit
                     </button>
                     <button class="btn btn-danger"
-                            ng-click="removeUser($index)">del
+                            ng-click="removeOperation($index)">del
                     </button>
                 </div>
             </td>
         </tr>
     </table>
 
-    <button class="btn btn-default" ng-click="addUser()">Add row</button>
+    <button class="btn btn-default" ng-click="addOperation()">Add row</button>
 </div>
 </body>
 </html>

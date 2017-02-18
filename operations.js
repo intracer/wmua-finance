@@ -20,9 +20,8 @@ app.controller('BsdateCtrl', function ($scope) {
 });
 
 app.controller('UiSelectCtrl', function ($scope) {
-    $scope.selected = {value: $scope.categories[0]};
-    $scope.beforeSlash = function (category) {
-        return category.text.split("/")[0];
+    $scope.beforeSlash = function (item) {
+        return item.text.split("/")[0];
     };
 });
 

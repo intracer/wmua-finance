@@ -9,7 +9,3 @@ form[editable-form] > div {margin: 10px 0;}
 .editable-wrap {
     white-space: normal;
 }
-
-.ui-select-toggle {
-    height: auto !important
-}

@@ -4,6 +4,15 @@ app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
 });
 
+app.filter('ellipsis', function () {
+    return function (text, length) {
+        if (text.length > length) {
+            return text.substr(0, length) + "...";
+        }
+        return text;
+    }
+});
+
 app.controller('BsdateCtrl', function ($scope) {
     $scope.operation = {
         op_date: new Date($scope.operation.op_date)

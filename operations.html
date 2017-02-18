@@ -74,7 +74,7 @@
                 </div>
             </td>
             <td>
-                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
+                <div class="category-select" ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
                      data-e-form="rowform" data-e-style="min-width:300px;"
                      name="category" theme="bootstrap">
@@ -83,9 +83,7 @@
                     {{ showCategory(operation).split('/').slice(-1)[0] }}
 
                     <editable-ui-select-match>
-                       <small> {{ $select.selected.text.split('/')[0] }} </small>
-                        <br>
-                        {{ $select.selected.text.split('/').slice(-1)[0] }}
+                       {{ $select.selected.text | ellipsis: 35 }}
                     </editable-ui-select-match>
                     <editable-ui-select-choices
                             group-by="beforeSlash"
@@ -119,7 +117,7 @@
                      name="grant_item" theme="bootstrap">
                     <div ng-bind-html="showGrantItem(operation)"></div>
                     <editable-ui-select-match>
-                        <span ng-bind="$select.selected.number + ' ' + $select.selected.description" ></span>
+                        {{$select.selected.number + ' ' + $select.selected.description | ellipsis: 45 }}
                     </editable-ui-select-match>
                     <editable-ui-select-choices
                             group-by="grantItemNumber"
@@ -167,8 +165,18 @@
                     <button type="submit" ng-disabled="rowform.$waiting"
                             class="btn btn-primary glyphicon glyphicon-floppy-disk"></button>
                     <button type="button" ng-disabled="rowform.$waiting"
-                            ng-click="rowform.$cancel()"
-                            class="btn btn-default fa fa-undo"></button>
+                            class="btn btn-default fa fa-undo"
+                            mwl-confirm
+                            title="Confirmation"
+                            message="Do you want to cancel changes?"
+                            confirm-text="Yes"
+                            cancel-text="No"
+                            placement="left"
+                            on-confirm="rowform.$cancel()"
+                            on-cancel="cancelClicked = true"
+                            confirm-button-type="default"
+                            cancel-button-type="default">
+                    </button>
                 </form>
                 <div class="buttons" ng-show="!rowform.$visible">
                     <button class="btn btn-primary glyphicon glyphicon-edit" ng-click="rowform.$show()"></button>

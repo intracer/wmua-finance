@@ -3,5 +3,5 @@ div[ng-app] { margin: 10px; }
 form[editable-form] > div {margin: 10px 0;}
 
 .ui-select-bootstrap > .ui-select-choices {
-    max-height: 600px;
+    max-height: 500px;
 }

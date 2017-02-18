@@ -1,4 +1,4 @@
-var app = angular.module("app", ["xeditable", "ui.bootstrap", "ngMockE2E"]);
+var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", "ngMockE2E"]);
 
 app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
@@ -17,6 +17,10 @@ app.controller('BsdateCtrl', function ($scope) {
 
         $scope.opened[elementOpened] = !$scope.opened[elementOpened];
     };
+});
+
+app.controller('UiSelectCtrl', function($scope) {
+    $scope.selected = { value: $scope.categories[0] }
 });
 
 app.controller('Ctrl', function ($scope, $filter, $http) {

@@ -14,6 +14,10 @@
           rel="stylesheet">
     <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="bower_components/angular-ui-select/dist/select.js"></script>
+    <link href="bower_components/angular-ui-select/dist/select.css" rel="stylesheet" media="screen">
+
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <!-- app.js -->
     <script src="operations.js"></script>
@@ -41,32 +45,38 @@
             <td>
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
-                       e-name="op_date" e-form="rowform" e-required
-                       e-is-open="opened.$data"
-                       e-ng-click="open($event,'$data')"
-                       e-datepicker-popup="yyyy-MM-dd">
+                       data-e-name="op_date" data-e-form="rowform" data-e-required
+                       data-e-is-open="opened.$data"
+                       data-e-ng-click="open($event,'$data')"
+                       data-e-datepicker-popup="yyyy-MM-dd">
                         {{ (operation.op_date | date:"yyyy-MM-dd") || 'empty' }}
                     </a>
                 </div>
             </td>
             <td>
-                <span editable-select="operation.project_id" e-name="project"
-                      e-form="rowform"
-                      e-ng-options="p.value as p.text for p in projects">
+                <span editable-select="operation.project_id" data-e-name="project"
+                      data-e-form="rowform"
+                      data-e-ng-options="p.value as p.text for p in projects">
                      {{ showProject(operation) }}
                 </span>
             </td>
             <td>
-                <span editable-select="operation.category_id" e-name="category"
-                      e-form="rowform"
-                      e-ng-options="c.value as c.text for c in categories">
-                     {{ showCategory(operation) }}
-                </span>
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id" data-e-ng-model="operation.category_id"
+                     data-e-form="rowform"
+                     data-e-style="min-width:300px;"  name="category" theme="bootstrap">
+                    {{ showCategory(operation) }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices repeat="category.value as category in (categories | filter: $select.search)">
+                        <span ng-bind="category.text"></span>
+                    </editable-ui-select-choices>
+                </div>
             </td>
             <td>
-                <span editable-select="operation.grant_id" e-name="grant"
-                      e-form="rowform"
-                      e-ng-options="g.value as g.text for g in grants">
+                <span editable-select="operation.grant_id" data-e-name="grant"
+                      data-e-form="rowform"
+                      data-e-ng-options="g.value as g.text for g in grants">
                      {{ showGrant(operation) }}
                 </span>
             </td>

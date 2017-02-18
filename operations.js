@@ -19,8 +19,11 @@ app.controller('BsdateCtrl', function ($scope) {
     };
 });
 
-app.controller('UiSelectCtrl', function($scope) {
-    $scope.selected = { value: $scope.categories[0] }
+app.controller('UiSelectCtrl', function ($scope) {
+    $scope.selected = {value: $scope.categories[0]};
+    $scope.beforeSlash = function (category) {
+        return category.text.split("/")[0];
+    };
 });
 
 app.controller('Ctrl', function ($scope, $filter, $http) {
@@ -309,263 +312,263 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         }
     ];
 
-    $scope.categories = [        
-            {
-                value: 1,
-                text: "заходи/компенсація витрат на проїзд"
-            },
-            {
-                value: 2,
-                text: "заходи/компенсація витрат на проживання"
-            },
-            {
-                value: 3,
-                text: "заходи/кава-брейк"
-            },
-            {
-                value: 4,
-                text: "заходи/харчування учасників заходів"
-            },
-            {
-                value: 5,
-                text: "заходи/друк матеріалів для заходів"
-            },
-            {
-                value: 6,
-                text: "заходи/оренда приміщення для заходів"
-            },
-            {
-                value: 7,
-                text: "відрядження/транспортні витрати"
-            },
-            {
-                value: 8,
-                text: "відрядження/проживання"
-            },
-            {
-                value: 9,
-                text: "відрядження/добові"
-            },
-            {
-                value: 10,
-                text: "конкурси/Прес-конференція"
-            },
-            {
-                value: 11,
-                text: "конкурси/цінні подарунки"
-            },
-            {
-                value: 12,
-                text: "конкурси/додаткові сувеніри (журі, оргкомітет)"
-            },
-            {
-                value: 13,
-                text: "конкурси/компенсація витрат на проїзд (засідання журі)"
-            },
-            {
-                value: 14,
-                text: "конкурси/компенсація витрат на харчування (засідання журі)"
-            },
-            {
-                value: 15,
-                text: "конкурси/оформлення приміщення"
-            },
-            {
-                value: 16,
-                text: "конкурси/поштові витрати на проект (розсилка запитів, призів)"
-            },
-            {
-                value: 17,
-                text: "конкурси/винагорода (робота зі списками)"
-            },
-            {
-                value: 18,
-                text: "конкурси/розробка логотипу"
-            },
-            {
-                value: 19,
-                text: "адміністративні/банківські витрати"
-            },
-            {
-                value: 20,
-                text: "адміністративні/хостинг"
-            },
-            {
-                value: 21,
-                text: "адміністративні/реєстрація доменного імені"
-            },
-            {
-                value: 22,
-                text: "загальні/видавничі витрати"
-            },
-            {
-                value: 23,
-                text: "адміністративні/бухгалтерські послуги"
-            },
-            {
-                value: 24,
-                text: "конкурси/витрати на зв'язок"
-            },
-            {
-                value: 25,
-                text: "конкурси/транспортні витрати"
-            },
-            {
-                value: 26,
-                text: "конкурси/винагорода"
-            },
-            {
-                value: 27,
-                text: "загальні/вікісувеніри"
-            },
-            {
-                value: 28,
-                text: "загальні/фотокамера"
-            },
-            {
-                value: 29,
-                text: "адміністративні/канцтовари"
-            },
-            {
-                value: 30,
-                text: "адміністративні/транспортні витрати"
-            },
-            {
-                value: 31,
-                text: "адміністративні/операційні витрати"
-            },
-            {
-                value: 32,
-                text: "адміністративні/представницькі витрати"
-            },
-            {
-                value: 33,
-                text: "відрядження/оформлення документів"
-            },
-            {
-                value: 34,
-                text: "оцифрування"
-            },
-            {
-                value: 35,
-                text: "адміністративні/оплачуваний працівник"
-            },
-            {
-                value: 36,
-                text: "загальні/офісне обладнання"
-            },
-            {
-                value: 37,
-                text: "загальні/оренда офісу"
-            },
-            {
-                value: 38,
-                text: "заходи/квитки/акредитації на заходи"
-            },
-            {
-                value: 39,
-                text: "адміністративні/інтернет"
-            },
-            {
-                value: 40,
-                text: "загальні/комунальні"
-            },
-            {
-                value: 41,
-                text: "невизначено"
-            },
-            {
-                value: 42,
-                text: "адміністративні/офісні потреби"
-            },
-            {
-                value: 43,
-                text: "адміністративні/телефон"
-            },
-            {
-                value: 44,
-                text: "прибирання"
-            }
-       ];
+    $scope.categories = [
+        {
+            value: 1,
+            text: "заходи/компенсація витрат на проїзд"
+        },
+        {
+            value: 2,
+            text: "заходи/компенсація витрат на проживання"
+        },
+        {
+            value: 3,
+            text: "заходи/кава-брейк"
+        },
+        {
+            value: 4,
+            text: "заходи/харчування учасників заходів"
+        },
+        {
+            value: 5,
+            text: "заходи/друк матеріалів для заходів"
+        },
+        {
+            value: 6,
+            text: "заходи/оренда приміщення для заходів"
+        },
+        {
+            value: 7,
+            text: "відрядження/транспортні витрати"
+        },
+        {
+            value: 8,
+            text: "відрядження/проживання"
+        },
+        {
+            value: 9,
+            text: "відрядження/добові"
+        },
+        {
+            value: 10,
+            text: "конкурси/Прес-конференція"
+        },
+        {
+            value: 11,
+            text: "конкурси/цінні подарунки"
+        },
+        {
+            value: 12,
+            text: "конкурси/додаткові сувеніри (журі, оргкомітет)"
+        },
+        {
+            value: 13,
+            text: "конкурси/компенсація витрат на проїзд (засідання журі)"
+        },
+        {
+            value: 14,
+            text: "конкурси/компенсація витрат на харчування (засідання журі)"
+        },
+        {
+            value: 15,
+            text: "конкурси/оформлення приміщення"
+        },
+        {
+            value: 16,
+            text: "конкурси/поштові витрати на проект (розсилка запитів, призів)"
+        },
+        {
+            value: 17,
+            text: "конкурси/винагорода (робота зі списками)"
+        },
+        {
+            value: 18,
+            text: "конкурси/розробка логотипу"
+        },
+        {
+            value: 19,
+            text: "адміністративні/банківські витрати"
+        },
+        {
+            value: 20,
+            text: "адміністративні/хостинг"
+        },
+        {
+            value: 21,
+            text: "адміністративні/реєстрація доменного імені"
+        },
+        {
+            value: 22,
+            text: "загальні/видавничі витрати"
+        },
+        {
+            value: 23,
+            text: "адміністративні/бухгалтерські послуги"
+        },
+        {
+            value: 24,
+            text: "конкурси/витрати на зв'язок"
+        },
+        {
+            value: 25,
+            text: "конкурси/транспортні витрати"
+        },
+        {
+            value: 26,
+            text: "конкурси/винагорода"
+        },
+        {
+            value: 27,
+            text: "загальні/вікісувеніри"
+        },
+        {
+            value: 28,
+            text: "загальні/фотокамера"
+        },
+        {
+            value: 29,
+            text: "адміністративні/канцтовари"
+        },
+        {
+            value: 30,
+            text: "адміністративні/транспортні витрати"
+        },
+        {
+            value: 31,
+            text: "адміністративні/операційні витрати"
+        },
+        {
+            value: 32,
+            text: "адміністративні/представницькі витрати"
+        },
+        {
+            value: 33,
+            text: "відрядження/оформлення документів"
+        },
+        {
+            value: 34,
+            text: "оцифрування"
+        },
+        {
+            value: 35,
+            text: "адміністративні/оплачуваний працівник"
+        },
+        {
+            value: 36,
+            text: "загальні/офісне обладнання"
+        },
+        {
+            value: 37,
+            text: "загальні/оренда офісу"
+        },
+        {
+            value: 38,
+            text: "заходи/квитки/акредитації на заходи"
+        },
+        {
+            value: 39,
+            text: "адміністративні/інтернет"
+        },
+        {
+            value: 40,
+            text: "загальні/комунальні"
+        },
+        {
+            value: 41,
+            text: "невизначено"
+        },
+        {
+            value: 42,
+            text: "адміністративні/офісні потреби"
+        },
+        {
+            value: 43,
+            text: "адміністративні/телефон"
+        },
+        {
+            value: 44,
+            text: "прибирання"
+        }
+    ];
 
     $scope.grants = [
-            {
-                value: 0,
-                text: "власні кошти / кошти на статутну діяльність"
-            },
-            {
-                value: 5,
-                text: "волонтерська робота"
-            },
-            {
-                value: 10,
-                text: "Grants:PEG/WM UA/Kolessa recordings digitalisation"
-            },
-            {
-                value: 14,
-                text: "Grants:PEG/WM UA/Programs in Ukraine 2015-1"
-            },
-            {
-                value: 6,
-                text: "Grants:WM UA/Chapter startup"
-            },
-            {
-                value: 9,
-                text: "Grants:PEG/WM UA/Wikimedians to the Games"
-            },
-            {
-                value: 13,
-                text: "Grants:PEG/WM UA/CEE Meeting 2014"
-            },
-            {
-                value: 2,
-                text: "Grants:WM UA/Free Vocal Music concert"
-            },
-            {
-                value: 12,
-                text: "Grants:PEG/WM UA/Wiki Loves Monuments 2014"
-            },
-            {
-                value: 7,
-                text: "членські внески"
-            },
-            {
-                value: 3,
-                text: "Grants:WM UA/Wiki Loves Earth"
-            },
-            {
-                value: 16,
-                text: "Grants:PEG/WM UA/Wiki Loves Monuments 2015"
-            },
-            {
-                value: 11,
-                text: "Grants:PEG/WM UA/Programs in Ukraine 2014"
-            },
-            {
-                value: 8,
-                text: "Grants:PEG/WM UA/Programs in Ukraine 2013"
-            },
-            {
-                value: 4,
-                text: "інші цільові внески (партнери)"
-            },
-            {
-                value: 15,
-                text: "Grants:PEG/WM UA/Wiki Loves Earth 2015"
-            },
-            {
-                value: 1,
-                text: "Grants:WM UA/Programs in Ukraine 2012"
-            },
-            {
-                value: 17,
-                text: "Grants:APG/Proposals/2015-2016 round1"
-            },
-            {
-                value: 21,
-                text: "Grants:APG/Proposals/2016-2017 round 1"
-            }
-        ];
+        {
+            value: 0,
+            text: "власні кошти / кошти на статутну діяльність"
+        },
+        {
+            value: 5,
+            text: "волонтерська робота"
+        },
+        {
+            value: 10,
+            text: "Grants:PEG/WM UA/Kolessa recordings digitalisation"
+        },
+        {
+            value: 14,
+            text: "Grants:PEG/WM UA/Programs in Ukraine 2015-1"
+        },
+        {
+            value: 6,
+            text: "Grants:WM UA/Chapter startup"
+        },
+        {
+            value: 9,
+            text: "Grants:PEG/WM UA/Wikimedians to the Games"
+        },
+        {
+            value: 13,
+            text: "Grants:PEG/WM UA/CEE Meeting 2014"
+        },
+        {
+            value: 2,
+            text: "Grants:WM UA/Free Vocal Music concert"
+        },
+        {
+            value: 12,
+            text: "Grants:PEG/WM UA/Wiki Loves Monuments 2014"
+        },
+        {
+            value: 7,
+            text: "членські внески"
+        },
+        {
+            value: 3,
+            text: "Grants:WM UA/Wiki Loves Earth"
+        },
+        {
+            value: 16,
+            text: "Grants:PEG/WM UA/Wiki Loves Monuments 2015"
+        },
+        {
+            value: 11,
+            text: "Grants:PEG/WM UA/Programs in Ukraine 2014"
+        },
+        {
+            value: 8,
+            text: "Grants:PEG/WM UA/Programs in Ukraine 2013"
+        },
+        {
+            value: 4,
+            text: "інші цільові внески (партнери)"
+        },
+        {
+            value: 15,
+            text: "Grants:PEG/WM UA/Wiki Loves Earth 2015"
+        },
+        {
+            value: 1,
+            text: "Grants:WM UA/Programs in Ukraine 2012"
+        },
+        {
+            value: 17,
+            text: "Grants:APG/Proposals/2015-2016 round1"
+        },
+        {
+            value: 21,
+            text: "Grants:APG/Proposals/2016-2017 round 1"
+        }
+    ];
 
 });
 

@@ -63,12 +63,14 @@
             <td>
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id" data-e-ng-model="operation.category_id"
                      data-e-form="rowform"
-                     data-e-style="min-width:300px;"  name="category" theme="bootstrap">
+                     data-e-style="min-width:400px;"  name="category" theme="bootstrap">
                     {{ showCategory(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
                     </editable-ui-select-match>
-                    <editable-ui-select-choices repeat="category.value as category in (categories | filter: $select.search)">
+                    <editable-ui-select-choices
+                            group-by="beforeSlash"
+                            repeat="category.value as category in (categories | filter: $select.search)">
                         <span ng-bind="category.text"></span>
                     </editable-ui-select-choices>
                 </div>

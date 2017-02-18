@@ -18,6 +18,8 @@
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <link href="bower_components/angular-ui-select/dist/select.css" rel="stylesheet" media="screen">
 
+    <script src="bower_components/angular-bootstrap-confirm/dist/angular-bootstrap-confirm.js"></script>
+
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
@@ -171,7 +173,17 @@
                 <div class="buttons" ng-show="!rowform.$visible">
                     <button class="btn btn-primary glyphicon glyphicon-edit" ng-click="rowform.$show()"></button>
                     <button class="btn btn-danger glyphicon glyphicon-remove"
-                            ng-click="removeOperation($index)"></button>
+                            mwl-confirm
+                            title="Confirmation"
+                            message="Remove this row?"
+                            confirm-text="Yes"
+                            cancel-text="No"
+                            placement="left"
+                            on-confirm="removeOperation($index)"
+                            on-cancel="cancelClicked = true"
+                            confirm-button-type="danger"
+                            cancel-button-type="default">
+                    </button>
                 </div>
             </td>
         </tr>

@@ -1,4 +1,4 @@
-var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", "ngSanitize", "ngMockE2E"]);
+var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", 'mwl.confirm', "ngSanitize", "ngMockE2E"]);
 
 app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';

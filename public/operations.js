@@ -50,7 +50,28 @@ app.controller('UiSelectCtrl', function ($scope) {
 app.controller('Ctrl', function ($scope, $filter, $http) {
     var vm = this;
 
+    $scope.filter_projects = [];
+    $scope.filter_categories = [];
+    $scope.filter_grants = [];
+
     $scope.operations = [];
+
+    $scope.beforeSlash = function (item) {
+        return item.text.split("/")[0];
+    };
+
+    $scope.grantItemNumber = function (item) {
+        var parentNumber = item.number.split('.').slice(0, -1).join('.');
+        var parentItem = $scope.grantItems2016
+            .filter(function(item) {
+                return item.number == parentNumber;
+            })[0];
+        var groupName = parentNumber;
+        if (parentItem && parentItem.description) {
+            groupName += ' ' + parentItem.description;
+        }
+        return groupName;
+    };
 
     $http.get('/operations_ws').success(function(data) {
         $scope.operations = data;

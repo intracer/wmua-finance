@@ -14,6 +14,7 @@ import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
 import play.api.i18n.Messages.Implicits._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -123,6 +124,14 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
       implicit request =>
         val total = operations.map(_.toDouble).sum
         Ok(views.html.operations(user, operations, total, opFilter, "/operations"))
+  }
+
+  def listWs = withFilter() {
+    (user, opFilter, operations) =>
+      implicit request =>
+        import org.intracer.finance.ExpenditureJson._
+
+        Ok(Json.toJson(operations.map(_.to)))
   }
 
   def log = withFilter(operationsWithRevisions) {

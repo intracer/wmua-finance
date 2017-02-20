@@ -60,5 +60,3 @@ object Formatter {
     nf
   }
 }
-
-

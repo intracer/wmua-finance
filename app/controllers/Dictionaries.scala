@@ -18,7 +18,6 @@ import play.api.mvc.{Action, Controller}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
 @Singleton
 class Dictionaries @Inject()(val categoryDao: CategoryDao,
                              val projectDao: ProjectDao,
@@ -32,7 +31,6 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   import driver.api._
-
 
   def categoryMap: Map[Int, CategoryF] =
     categoryDao.list.groupBy(_.id.get).mapValues(_.head)

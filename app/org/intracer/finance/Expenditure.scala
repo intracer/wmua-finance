@@ -4,6 +4,8 @@ import java.sql.Timestamp
 
 import client.finance.GrantItem
 import org.joda.time.DateTime
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class Expenditure(id: Option[Int] = None,
                        opId: Option[Int],
@@ -28,4 +30,57 @@ case class Expenditure(id: Option[Int] = None,
   def categoryName = category.name
 
   def grantName = grant.fold("")(_.name).split("/").last
+}
+
+class ExpenditureJson(dictionary: Dictionary) {
+
+  def dtToTs(dt: DateTime): Timestamp = new Timestamp(dt.getMillis)
+
+  implicit val ExpenditureFromJson: Reads[Expenditure] = (
+    (__ \ "id").readNullable[Int] ~
+      (__ \ "op_id").readNullable[Int] ~
+      (__ \ "date").read[DateTime].map(dtToTs) ~
+      (__ \ "amount").readNullable[BigDecimal] ~
+      (__ \ "account_id").read[Int].map(dictionary.account) ~
+      (__ \ "category_id").read[Int].map(dictionary.category) ~
+      (__ \ "project_id").read[Int].map(dictionary.project) ~
+      (__ \ "grant_id").readNullable[Int].map(_.map(dictionary.grant)) ~
+      (__ \ "grant_item_id").readNullable[Int].map(_.map(dictionary.grantItem)) ~
+      (__ \ "description").read[String] ~
+      (__ \ "user_id").read[Int].map(dictionary.user) ~
+      (__ \ "log_data").read[DateTime].map(dtToTs)
+    ) (Expenditure.apply _)
+}
+
+object ExpenditureJson {
+
+  def tsToDt(ts: Timestamp) = new DateTime(ts.getTime)
+
+  implicit val ExpenditureToJson: Writes[Expenditure] = (
+    (__ \ "id").writeNullable[Int] ~
+      (__ \ "op_id").writeNullable[Int] ~
+      (__ \ "date").write[DateTime] ~
+      (__ \ "amount").writeNullable[BigDecimal] ~
+      (__ \ "account_id").write[Int] ~
+      (__ \ "category_id").write[Int] ~
+      (__ \ "project_id").write[Int] ~
+      (__ \ "grant_id").writeNullable[Int] ~
+      (__ \ "grant_item_id").writeNullable[Int] ~
+      (__ \ "description").write[String] ~
+      (__ \ "user_id").write[Int] ~
+      (__ \ "log_data").write[DateTime]
+    ) ((e: Expenditure) => (
+    e.id,
+    e.opId,
+    tsToDt(e.date),
+    e.amount,
+    e.account.id.get,
+    e.category.id.get,
+    e.project.id.get,
+    e.grant.flatMap(_.id),
+    e.grantItem.flatMap(_.id),
+    e.description,
+    e.user.id.get,
+    tsToDt(e.logDate)
+  ))
 }

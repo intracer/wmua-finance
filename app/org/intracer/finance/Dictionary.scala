@@ -11,6 +11,15 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
                       grantItemMap: Map[Int, Seq[GrantItem]] = Map.empty,
                       projectMap: Map[Int, Project] = Map.empty,
                       userMap: Map[Int, User] = Map.empty) {
+  
+  val grantItemsById: Map[Int, GrantItem] = grantItemMap.values.flatten.groupBy(_.id.get).mapValues(_.head)
+
+  def account(id: Int) = accountMap(id)
+  def category(id: Int) = categoryMap(id)
+  def grant(id: Int) = grantMap(id)
+  def grantItem(id: Int) = grantItemsById(id)
+  def project(id: Int) = projectMap(id)
+  def user(id: Int) = userMap(id)
 
   def accountsJson: String = {
     accountMap.toSeq.sortBy(_._2.name.toLowerCase).map {

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WMUA Finance 2</title>
+    <!-- Bootstrap 3 css -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <!-- Angular.js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <!-- Angular-xeditable -->
+    <link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="bower_components/angular-ui-select/dist/select.js"></script>
+    <link href="bower_components/angular-ui-select/dist/select.css" rel="stylesheet" media="screen">
+
+    <script src="bower_components/angular-bootstrap-confirm/dist/angular-bootstrap-confirm.js"></script>
+
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <!-- app.js -->
+    <script src="operations.js"></script>
+    <link href="app.css" rel="stylesheet" media="screen">
+</head>
+<body style="padding: 20px">
+<h4>WMUA Finance 2</h4>
+<div ng-app="app" ng-controller="Ctrl as ctrl">
+    GI: {{ctrl.grantItems[0].text}}
+    <table class="table table-bordered table-hover table-condensed table-striped">
+        <thead>
+        <tr>
+            <th width="10%">date</th>
+            <th>project</th>
+            <th>category</th>
+            <th>grant</th>
+            <th>grant item</th>
+            <th>amount</th>
+            <th>account</th>
+            <th>description</th>
+            <th>Edit</th>
+        </tr>
+        </thead>
+
+        <tr ng-repeat="operation in operations">
+            <td width="90px">
+                <div ng-controller="BsdateCtrl">
+                    <a href="#" editable-bsdate="operation.op_date"
+                       data-e-name="op_date" data-e-form="rowform" data-e-required
+                       data-e-is-open="opened.$data"
+                       data-e-ng-click="open($event,'$data')"
+                       data-e-datepicker-popup="yyyy-MM-dd">
+                        {{ (operation.op_date | date:"yyyy-MM-dd") || 'empty' }}
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id"
+                     data-e-ng-model="operation.project_id"
+                     data-e-form="rowform"
+                     data-e-style="min-width:200px;" name="project" theme="bootstrap">
+                    {{ showProject(operation) }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            repeat="project.value as project in (projects | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="project.text | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+            <td>
+                <div class="category-select" ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
+                     data-e-ng-model="operation.category_id"
+                     data-e-form="rowform" data-e-style="min-width:300px;"
+                     name="category" theme="bootstrap">
+                    <small> {{ showCategory(operation).split('/')[0] }} </small>
+                    <br>
+                    {{ showCategory(operation).split('/').slice(-1)[0] }}
+
+                    <editable-ui-select-match>
+                       {{ $select.selected.text | ellipsis: 35 }}
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            group-by="beforeSlash"
+                            repeat="category.value as category in (categories | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="category.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+            <td>
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id"
+                     data-e-ng-model="operation.grant_id"
+                     data-e-form="rowform" data-e-style="min-width:250px;"
+                     data-e-on-select="ctrl.grantUpdated($item, $model)"
+                     name="grant" theme="bootstrap">
+                    {{ showGrant(operation).split('/').slice(-1)[0] }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text.split('/').slice(-1)[0]"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            group-by="beforeSlash"
+                            repeat="grant.value as grant in (grants | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="grant.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+
+            <td>
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_item_id"
+                     data-e-ng-model="operation.grant_item_id"
+                     data-e-form="rowform" data-e-style="min-width:350px;"
+                     name="grant_item" theme="bootstrap">
+                    <div ng-bind-html="showGrantItem(operation)"></div>
+                    <editable-ui-select-match>
+                        {{$select.selected.number + ' ' + $select.selected.description | ellipsis: 45 }}
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            group-by="grantItemNumber"
+                            repeat="grantItem.id as grantItem in (grantItems2016 | orderBy: 'number' | filter: $select.search)">
+                        <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+
+            <td width="100px">
+                <span editable-text="operation.amount" e-name="amount" e-form="rowform" e-required>
+                         {{ operation.amount || 'empty' }}
+                </span>
+            </td>
+
+            <td width="90px">
+                <div ng-controller="UiSelectCtrl" editable-ui-select="operation.account_id"
+                     data-e-ng-model="operation.account_id"
+                     data-e-form="rowform" data-e-style="min-width:100px;"
+                     name="grant" theme="bootstrap">
+                    {{ showAccount(operation) }}
+                    <editable-ui-select-match>
+                        <span ng-bind="$select.selected.text"></span>
+                    </editable-ui-select-match>
+                    <editable-ui-select-choices
+                            repeat="account.value as account in (accounts | orderBy: 'text' | filter: $select.search)">
+                        <div ng-bind-html="account.text | highlight: $select.search"></div>
+                    </editable-ui-select-choices>
+                </div>
+            </td>
+
+            <td>
+                <span editable-text="operation.description" e-name="description" e-form="rowform" e-required>
+                         {{ operation.description || 'empty' }}
+                </span>
+            </td>
+
+            <td style="white-space: nowrap; width: 85px">
+                <!-- form -->
+                <form editable-form name="rowform"
+                      onbeforesave="saveOperation($data, operation.id)"
+                      ng-show="rowform.$visible"
+                      class="form-buttons form-inline"
+                      shown="inserted == operation">
+                    <button type="submit" ng-disabled="rowform.$waiting"
+                            class="btn btn-primary glyphicon glyphicon-floppy-disk"></button>
+                    <button type="button" ng-disabled="rowform.$waiting"
+                            class="btn btn-default fa fa-undo"
+                            mwl-confirm
+                            title="Confirmation"
+                            message="Do you want to cancel changes?"
+                            confirm-text="Yes"
+                            cancel-text="No"
+                            placement="left"
+                            on-confirm="rowform.$cancel()"
+                            on-cancel="cancelClicked = true"
+                            confirm-button-type="default"
+                            cancel-button-type="default">
+                    </button>
+                </form>
+                <div class="buttons" ng-show="!rowform.$visible">
+                    <button class="btn btn-primary glyphicon glyphicon-edit" ng-click="rowform.$show()"></button>
+                    <button class="btn btn-danger glyphicon glyphicon-remove"
+                            mwl-confirm
+                            title="Confirmation"
+                            message="Remove this row?"
+                            confirm-text="Yes"
+                            cancel-text="No"
+                            placement="left"
+                            on-confirm="removeOperation($index)"
+                            on-cancel="cancelClicked = true"
+                            confirm-button-type="danger"
+                            cancel-button-type="default">
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <button class="btn btn-default" ng-click="addOperation()">Add row</button>
+</div>
+</body>
+</html>
+
+

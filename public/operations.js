@@ -1,4 +1,4 @@
-var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", 'mwl.confirm', "ngSanitize", "ngMockE2E"]);
+var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", 'mwl.confirm', "ngSanitize"]);
 
 app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
@@ -49,6 +49,12 @@ app.controller('UiSelectCtrl', function ($scope) {
 
 app.controller('Ctrl', function ($scope, $filter, $http) {
     var vm = this;
+
+    $scope.operations = [];
+
+    $http.get('/operations_ws').success(function(data) {
+        $scope.operations = data;
+    });
 
     $scope.grantItems = [{
         value: 0,
@@ -135,56 +141,6 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
     $scope.descriptions = [
         "друк", "податки", "нотаріус"
     ];
-
-    $scope.operations = [
-        {
-            "id": 1,
-            "op_date": "2017-03-17",
-            "amount": 3710.00,
-            "account_id": 1,
-            "category_id": 21,
-            "project_id": 1,
-            "grant_id": 17,
-            "description": "друк",
-            "grant_row": null,
-            "grant_item_id": 69,
-            "log_date": "2017-02-12",
-            "user_id": 1,
-            "parent_rev_id": null,
-            "op_id": 1
-        },
-        {
-            "id": 2,
-            "op_date": "2017-03-17",
-            "amount": 987.34,
-            "account_id": 1,
-            "category_id": 21,
-            "project_id": 1,
-            "grant_id": 17,
-            "description": "податки",
-            "grant_row": null,
-            "grant_item_id": 1,
-            "log_date": "2017-02-12 16:43:24",
-            "user_id": 1,
-            "parent_rev_id": null,
-            "op_id": 2
-        },
-        {
-            "id": 3,
-            "op_date": "2017-04-17T22:00:00.000Z",
-            "amount": 65.00,
-            "account_id": 1,
-            "category_id": 19,
-            "project_id": 2,
-            "grant_id": 17,
-            "description": "нотаріус",
-            "grant_row": null,
-            "grant_item_id": 2,
-            "log_date": "2017-02-12 16:43:24",
-            "user_id": 1,
-            "parent_rev_id": null,
-            "op_id": 3
-        }];
 
     $scope.projects = [
         {
@@ -1218,19 +1174,4 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         }
     ];
 
-});
-
-// --------------- mock $http requests ----------------------
-app.run(function ($httpBackend) {
-    $httpBackend.whenGET('/groups').respond([
-        {id: 1, text: 'user'},
-        {id: 2, text: 'customer'},
-        {id: 3, text: 'vip'},
-        {id: 4, text: 'admin'}
-    ]);
-
-    $httpBackend.whenPOST(/\/saveOperation/).respond(function (method, url, data) {
-        data = angular.fromJson(data);
-        return [200, {status: 'ok'}];
-    });
 });

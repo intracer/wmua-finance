@@ -133,7 +133,7 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
       implicit request =>
         import org.intracer.finance.ExpenditureJson._
 
-        Ok(Json.toJson(operations.map(_.to).take(15)))
+        Ok(Json.toJson(operations.map(_.to)))
   }
 
   def log = withFilter(operationsWithRevisions) {

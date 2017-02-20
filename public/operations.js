@@ -50,9 +50,11 @@ app.controller('UiSelectCtrl', function ($scope) {
 app.controller('Ctrl', function ($scope, $filter, $http) {
     var vm = this;
 
-    $scope.filter_projects = [];
-    $scope.filter_categories = [];
-    $scope.filter_grants = [];
+    vm.filter_projects = [];
+    vm.filter_categories = [];
+    vm.filter_grants = [];
+    vm.filter_grant_items = [];
+    vm.filter_accounts = [];
 
     $scope.operations = [];
 
@@ -73,9 +75,22 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         return groupName;
     };
 
-    $http.get('/operations_ws').success(function(data) {
-        $scope.operations = data;
-    });
+    $scope.loadOperations = function () {
+        $http({
+            url: '/operations_ws',
+            method: "GET",
+            params: {
+                projects: vm.filter_projects.join(),
+                categories: vm.filter_categories.join(),
+                grants: vm.filter_grants.join(),
+                grantItems: vm.filter_grant_items.join(),
+                accounts: vm.filter_accounts.join()
+            }
+        }).success(function(data) {
+            $scope.operations = data;
+        });
+    };
+    $scope.loadOperations();
 
     $scope.grantItems = [{
         value: 0,

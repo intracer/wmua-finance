@@ -90,7 +90,9 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
     val map = request.queryString
 
     def toIntSet(name: String): Set[Int] = {
-      val toSet = map.getOrElse(name, Seq.empty[String]).toSet
+      val toSet = map.getOrElse(name, Seq.empty[String])
+        .flatMap(_.split(","))
+        .filter(_.nonEmpty).toSet
       toSet.map(_.toInt)
     }
 
@@ -167,22 +169,22 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
     (_, opFilter, ops) =>
       implicit request =>
 
-      val rate = request.queryString.get("rate")
-        .map(_.head.toDouble)
-        .getOrElse(Global.uahToUsd)
+        val rate = request.queryString.get("rate")
+          .map(_.head.toDouble)
+          .getOrElse(Global.uahToUsd)
 
-      Global.uahToUsd = rate
+        Global.uahToUsd = rate
 
-      val grantItemsMap = new GrantItemsDao()
-        .listAll()
-        .groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
-        Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
+        val grantItemsMap = new GrantItemsDao()
+          .listAll()
+          .groupBy(_.id.getOrElse(-1)).mapValues(_.head) ++
+          Seq(-1 -> GrantItem(Some(-1), None, "", "", BigDecimal.valueOf(0), None))
 
-      Ok(
-        views.html.grantStatistics(ops, ops.map(_.toDouble).sum, opFilter,
-          ops.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1)),
-          Some(rate), grantItemsMap)
-      )
+        Ok(
+          views.html.grantStatistics(ops, ops.map(_.toDouble).sum, opFilter,
+            ops.groupBy(o => o.to.grantItem.flatMap(_.id).getOrElse(-1)),
+            Some(rate), grantItemsMap)
+        )
   }
 
   def statistics() = withFilter() {

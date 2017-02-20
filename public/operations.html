@@ -40,6 +40,8 @@
                     <div class="input-group">
 
                         <ui-select multiple ng-model="ctrl.filter_projects"
+                                   on-select="loadOperations()"
+                                   on-remove="loadOperations()"
                                    theme="bootstrap"
                                    ng-disabled="ctrl.disabled"
                                    reset-search-input="false"
@@ -66,6 +68,8 @@
                     <div class="input-group">
 
                         <ui-select multiple ng-model="ctrl.filter_categories"
+                                   on-select="loadOperations()"
+                                   on-remove="loadOperations()"
                                    theme="bootstrap"
                                    ng-disabled="ctrl.disabled"
                                    reset-search-input="false"
@@ -93,6 +97,8 @@
                     <div class="input-group">
 
                         <ui-select multiple ng-model="ctrl.filter_grants"
+                                   on-select="loadOperations()"
+                                   on-remove="loadOperations()"
                                    theme="bootstrap"
                                    ng-disabled="ctrl.disabled"
                                    reset-search-input="false"
@@ -121,12 +127,14 @@
                     <div class="input-group">
 
                         <ui-select multiple ng-model="ctrl.filter_grant_items"
+                                   on-select="loadOperations()"
+                                   on-remove="loadOperations()"
                                    theme="bootstrap"
                                    ng-disabled="ctrl.disabled"
                                    reset-search-input="false"
                                    title="Projects">
-                            <ui-select-match placeholder="Grant items">{{$item.number + ' ' + $item.description |
-                                ellipsis: 40 }}
+                            <ui-select-match placeholder="Grant items">
+                                {{$item.number + ' ' + $item.description | ellipsis: 40 }}
                             </ui-select-match>
                             <ui-select-choices
                                     group-by="grantItemNumber"
@@ -149,6 +157,8 @@
                 <div class="col-sm-6">
                     <div class="input-group">
                         <ui-select multiple ng-model="ctrl.filter_accounts"
+                                   on-select="loadOperations()"
+                                   on-remove="loadOperations()"
                                    theme="bootstrap"
                                    ng-disabled="ctrl.disabled"
                                    reset-search-input="false"

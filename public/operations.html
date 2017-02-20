@@ -31,76 +31,145 @@
 <h4>WMUA Finance 2</h4>
 <div ng-app="app" ng-controller="Ctrl as ctrl">
 
-    Projects:
-    <ui-select multiple ng-model="ctrl.filter_projects"
-               theme="bootstrap"
-               ng-disabled="ctrl.disabled"
-               reset-search-input="false"
-               style="width: 600px;"
-               title="Projects">
-        <ui-select-match placeholder="Projects">{{$item.text}}</ui-select-match>
-        <ui-select-choices repeat="project.value as project in (projects | orderBy: 'text' | filter: $select.search)">
-            <div ng-bind-html="project.text | highlight: $select.search"></div>
-        </ui-select-choices>
-    </ui-select>
+    <form class="form-horizontal">
+        <fieldset>
 
-    Categories:
-    <ui-select multiple ng-model="ctrl.filter_categories"
-               theme="bootstrap"
-               ng-disabled="ctrl.disabled"
-               reset-search-input="false"
-               style="width: 600px;"
-               title="Projects">
-        <ui-select-match placeholder="Categories">{{$item.text}}</ui-select-match>
-        <ui-select-choices
-                group-by="beforeSlash"
-                repeat="category.value as category in (categories | orderBy: 'text' | filter: $select.search)">
-            <div ng-bind-html="category.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
-        </ui-select-choices>
-    </ui-select>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Projects:</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
 
-    Grants:
-    <ui-select multiple ng-model="ctrl.filter_grants"
-               theme="bootstrap"
-               ng-disabled="ctrl.disabled"
-               reset-search-input="false"
-               style="width: 600px;"
-               title="Projects">
-        <ui-select-match placeholder="Grants">{{$item.text.split('/').slice(-1)[0]}}</ui-select-match>
-        <ui-select-choices
-                group-by="beforeSlash"
-                repeat="grant.value as grant in (grants | orderBy: 'text' | filter: $select.search)">
-            <div ng-bind-html="grant.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
-        </ui-select-choices>
-    </ui-select>
+                        <ui-select multiple ng-model="ctrl.filter_projects"
+                                   theme="bootstrap"
+                                   ng-disabled="ctrl.disabled"
+                                   reset-search-input="false"
+                                   title="Projects">
+                            <ui-select-match placeholder="Projects">{{$item.text}}</ui-select-match>
+                            <ui-select-choices
+                                    repeat="project.value as project in (projects | orderBy: 'text' | filter: $select.search)">
+                                <div ng-bind-html="project.text | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
 
-    Grants items:
-    <ui-select multiple ng-model="ctrl.filter_grant_items"
-               theme="bootstrap"
-               ng-disabled="ctrl.disabled"
-               reset-search-input="false"
-               style="width: 600px;"
-               title="Projects">
-        <ui-select-match placeholder="Grant items">{{$item.number + ' ' + $item.description | ellipsis: 40 }}</ui-select-match>
-        <ui-select-choices
-                group-by="grantItemNumber"
-                repeat="grantItem.id as grantItem in (grantItems2016 | orderBy: 'number' | filter: $select.search)">
-            <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
-        </ui-select-choices>
-    </ui-select>
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="ctrl.filter_projects = []" class="btn btn-default">
+                             <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         </span>
+                    </div>
+                </div>
+            </div>
 
-    Accounts:
-    <ui-select multiple ng-model="ctrl.filter_accounts"
-               theme="bootstrap"
-               ng-disabled="ctrl.disabled"
-               reset-search-input="false"
-               style="width: 600px;"
-               title="Projects">
-        <ui-select-match placeholder="Accounts">{{$item.text}}</ui-select-match>
-        <ui-select-choices repeat="account.value as account in (accounts | orderBy: 'text' | filter: $select.search)">
-            <div ng-bind-html="account.text | highlight: $select.search"></div>
-        </ui-select-choices>
-    </ui-select>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Categories:</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+
+                        <ui-select multiple ng-model="ctrl.filter_categories"
+                                   theme="bootstrap"
+                                   ng-disabled="ctrl.disabled"
+                                   reset-search-input="false"
+                                   title="Projects">
+                            <ui-select-match placeholder="Categories">{{$item.text}}</ui-select-match>
+                            <ui-select-choices
+                                    group-by="beforeSlash"
+                                    repeat="category.value as category in (categories | orderBy: 'text' | filter: $select.search)">
+                                <div ng-bind-html="category.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="ctrl.filter_categories = []" class="btn btn-default">
+                             <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Grants:</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+
+                        <ui-select multiple ng-model="ctrl.filter_grants"
+                                   theme="bootstrap"
+                                   ng-disabled="ctrl.disabled"
+                                   reset-search-input="false"
+                                   title="Projects">
+                            <ui-select-match placeholder="Grants">{{$item.text.split('/').slice(-1)[0]}}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    group-by="beforeSlash"
+                                    repeat="grant.value as grant in (grants | orderBy: 'text' | filter: $select.search)">
+                                <div ng-bind-html="grant.text.split('/').slice(-1)[0] | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="ctrl.filter_grants = []" class="btn btn-default">
+                             <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Grants items:</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+
+                        <ui-select multiple ng-model="ctrl.filter_grant_items"
+                                   theme="bootstrap"
+                                   ng-disabled="ctrl.disabled"
+                                   reset-search-input="false"
+                                   title="Projects">
+                            <ui-select-match placeholder="Grant items">{{$item.number + ' ' + $item.description |
+                                ellipsis: 40 }}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    group-by="grantItemNumber"
+                                    repeat="grantItem.id as grantItem in (grantItems2016 | orderBy: 'number' | filter: $select.search)">
+                                <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="ctrl.filter_grant_items = []" class="btn btn-default">
+                             <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Accounts:</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <ui-select multiple ng-model="ctrl.filter_accounts"
+                                   theme="bootstrap"
+                                   ng-disabled="ctrl.disabled"
+                                   reset-search-input="false"
+                                   title="Projects">
+                            <ui-select-match placeholder="Accounts">{{$item.text}}</ui-select-match>
+                            <ui-select-choices
+                                    repeat="account.value as account in (accounts | orderBy: 'text' | filter: $select.search)">
+                                <div ng-bind-html="account.text | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <span class="input-group-btn">
+                            <button type="button" ng-click="ctrl.filter_accounts = []" class="btn btn-default">
+                             <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         </span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 
     GI: {{ctrl.grantItems[0].text}}
     <table class="table table-bordered table-hover table-condensed table-striped">
@@ -122,7 +191,8 @@
             <td width="100px">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
-                       data-e-name="op_date" data-e-form="rowform" data-e-required data-e-style="min-width:100px;"
+                       data-e-name="op_date" data-e-form="rowform" data-e-required
+                       data-e-style="min-width:100px;"
                        data-e-is-open="opened.$data"
                        data-e-ng-click="open($event,'$data')"
                        data-e-datepicker-popup="yyyy-MM-dd">
@@ -146,16 +216,17 @@
                 </div>
             </td>
             <td width="250px">
-                <div class="category-select" ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
+                <div class="category-select" ng-controller="UiSelectCtrl"
+                     editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
                      data-e-form="rowform" data-e-style="min-width:250px;"
                      data-name="category" theme="bootstrap">
-                    <small> {{ operation.category_name.split('/')[0] }} </small>
+                    <small> {{ operation.category_name.split('/')[0] }}</small>
                     <br>
                     {{ operation.category_name.split('/').slice(-1)[0] }}
 
                     <editable-ui-select-match>
-                       {{ $select.selected.text | ellipsis: 35 }}
+                        {{ $select.selected.text | ellipsis: 35 }}
                     </editable-ui-select-match>
                     <editable-ui-select-choices
                             group-by="beforeSlash"
@@ -223,7 +294,8 @@
             </td>
 
             <td width="350px">
-                <span data-editable-text="operation.description" data-e-name="description" data-e-form="rowform" data-e-required
+                <span data-editable-text="operation.description" data-e-name="description" data-e-form="rowform"
+                      data-e-required
                       data-e-style="min-width:350px;">
                          {{ operation.description || 'empty' }}
                 </span>
@@ -253,7 +325,8 @@
                     </button>
                 </form>
                 <div class="buttons" ng-show="!rowform.$visible">
-                    <button class="btn btn-primary glyphicon glyphicon-edit" ng-click="rowform.$show()"></button>
+                    <button class="btn btn-primary glyphicon glyphicon-edit"
+                            ng-click="rowform.$show()"></button>
                     <button class="btn btn-danger glyphicon glyphicon-remove"
                             mwl-confirm
                             title="Confirmation"

@@ -62,12 +62,18 @@ object ExpenditureJson {
       (__ \ "date").write[DateTime] ~
       (__ \ "amount").writeNullable[BigDecimal] ~
       (__ \ "account_id").write[Int] ~
+      (__ \ "account_name").write[String] ~
       (__ \ "category_id").write[Int] ~
+      (__ \ "category_name").write[String] ~
       (__ \ "project_id").write[Int] ~
+      (__ \ "project_name").write[String] ~
       (__ \ "grant_id").writeNullable[Int] ~
+      (__ \ "grant_name").writeNullable[String] ~
       (__ \ "grant_item_id").writeNullable[Int] ~
+      (__ \ "grant_item_name").writeNullable[String] ~
       (__ \ "description").write[String] ~
       (__ \ "user_id").write[Int] ~
+      (__ \ "user_name").write[String] ~
       (__ \ "log_data").write[DateTime]
     ) ((e: Expenditure) => (
     e.id,
@@ -75,12 +81,18 @@ object ExpenditureJson {
     tsToDt(e.date),
     e.amount,
     e.account.id.get,
+    e.account.name,
     e.category.id.get,
+    e.category.name,
     e.project.id.get,
+    e.project.name,
     e.grant.flatMap(_.id),
+    e.grant.map(_.name),
     e.grantItem.flatMap(_.id),
+    e.grantItem.map(_.name),
     e.description,
     e.user.id.get,
+    e.user.fullname,
     tsToDt(e.logDate)
   ))
 }

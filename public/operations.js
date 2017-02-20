@@ -115,7 +115,6 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         return selected.length ? selected[0].text : 'Not set';
     };
 
-
     $scope.saveOperation = function (data, id) {
         //$scope.user not updated yet
         angular.extend(data, {id: id});

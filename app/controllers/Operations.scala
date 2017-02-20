@@ -147,7 +147,7 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
         val operations = expenditureDao.revisions(id)
 
-        Ok(views.html.operations(user, expToOps(operations), 0.0d, new OpFilter(), "/revisions"))
+        Ok(views.html.operations(user, expToOps(operations), 0.0d, OpFilter(), "/revisions"))
   }
 
   def byGrantRow = withFilter() {

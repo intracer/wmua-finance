@@ -47,10 +47,10 @@
         </thead>
 
         <tr ng-repeat="operation in operations">
-            <td width="90px">
+            <td width="100px">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
-                       data-e-name="op_date" data-e-form="rowform" data-e-required data-e-style="min-width:90px;"
+                       data-e-name="op_date" data-e-form="rowform" data-e-required data-e-style="min-width:100px;"
                        data-e-is-open="opened.$data"
                        data-e-ng-click="open($event,'$data')"
                        data-e-datepicker-popup="yyyy-MM-dd">
@@ -63,7 +63,7 @@
                      data-e-ng-model="operation.project_id"
                      data-e-form="rowform"
                      data-e-style="min-width:150px;" data-name="project" theme="bootstrap">
-                    {{ showProject(operation) }}
+                    {{ operation.project_name }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
                     </editable-ui-select-match>
@@ -76,11 +76,11 @@
             <td width="250px">
                 <div class="category-select" ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
-                     data-e-form="rowform" data-e-style="min-width:300px;"
+                     data-e-form="rowform" data-e-style="min-width:250px;"
                      data-name="category" theme="bootstrap">
-                    <small> {{ showCategory(operation).split('/')[0] }} </small>
+                    <small> {{ operation.category_name.split('/')[0] }} </small>
                     <br>
-                    {{ showCategory(operation).split('/').slice(-1)[0] }}
+                    {{ operation.category_name.split('/').slice(-1)[0] }}
 
                     <editable-ui-select-match>
                        {{ $select.selected.text | ellipsis: 35 }}
@@ -98,7 +98,7 @@
                      data-e-form="rowform" data-e-style="min-width:150px;"
                      data-e-on-select="ctrl.grantUpdated($item, $model)"
                      data-name="grant" theme="bootstrap">
-                    {{ showGrant(operation).split('/').slice(-1)[0] }}
+                    {{ operation.grant_name.split('/').slice(-1)[0] }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text.split('/').slice(-1)[0]"></span>
                     </editable-ui-select-match>
@@ -115,7 +115,7 @@
                      data-e-ng-model="operation.grant_item_id"
                      data-e-form="rowform" data-e-style="min-width:350px;"
                      data-name="grant_item" theme="bootstrap">
-                    <div ng-bind-html="showGrantItem(operation)"></div>
+                    <div ng-bind-html="operation.grant_item_name"></div>
                     <editable-ui-select-match>
                         {{$select.selected.number + ' ' + $select.selected.description | ellipsis: 45 }}
                     </editable-ui-select-match>
@@ -139,7 +139,7 @@
                      data-e-ng-model="operation.account_id"
                      data-e-form="rowform" data-e-style="min-width:100px;"
                      data-name="grant" theme="bootstrap">
-                    {{ showAccount(operation) }}
+                    {{ operation.account_name }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
                     </editable-ui-select-match>

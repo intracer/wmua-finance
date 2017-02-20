@@ -50,7 +50,7 @@
             <td width="90px">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
-                       data-e-name="op_date" data-e-form="rowform" data-e-required
+                       data-e-name="op_date" data-e-form="rowform" data-e-required data-e-style="min-width:90px;"
                        data-e-is-open="opened.$data"
                        data-e-ng-click="open($event,'$data')"
                        data-e-datepicker-popup="yyyy-MM-dd">
@@ -58,11 +58,11 @@
                     </a>
                 </div>
             </td>
-            <td>
+            <td width="150px">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id"
                      data-e-ng-model="operation.project_id"
                      data-e-form="rowform"
-                     data-e-style="min-width:200px;" data-name="project" theme="bootstrap">
+                     data-e-style="min-width:150px;" data-name="project" theme="bootstrap">
                     {{ showProject(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
@@ -73,7 +73,7 @@
                     </editable-ui-select-choices>
                 </div>
             </td>
-            <td>
+            <td width="250px">
                 <div class="category-select" ng-controller="UiSelectCtrl" editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
                      data-e-form="rowform" data-e-style="min-width:300px;"
@@ -92,10 +92,10 @@
                     </editable-ui-select-choices>
                 </div>
             </td>
-            <td>
+            <td width="150px">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id"
                      data-e-ng-model="operation.grant_id"
-                     data-e-form="rowform" data-e-style="min-width:250px;"
+                     data-e-form="rowform" data-e-style="min-width:150px;"
                      data-e-on-select="ctrl.grantUpdated($item, $model)"
                      data-name="grant" theme="bootstrap">
                     {{ showGrant(operation).split('/').slice(-1)[0] }}
@@ -127,8 +127,9 @@
                 </div>
             </td>
 
-            <td width="100px">
-                <span data-editable-text="operation.amount" data-e-name="amount" data-e-form="rowform" data-e-required>
+            <td width="90px">
+                <span data-editable-text="operation.amount" data-e-name="amount" data-e-form="rowform" data-e-required
+                      data-e-style="min-width:90px;">
                          {{ operation.amount || 'empty' }}
                 </span>
             </td>
@@ -149,8 +150,9 @@
                 </div>
             </td>
 
-            <td>
-                <span data-editable-text="operation.description" data-e-name="description" data-e-form="rowform" data-e-required>
+            <td width="350px">
+                <span data-editable-text="operation.description" data-e-name="description" data-e-form="rowform" data-e-required
+                      data-e-style="min-width:350px;">
                          {{ operation.description || 'empty' }}
                 </span>
             </td>

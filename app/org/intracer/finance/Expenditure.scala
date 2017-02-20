@@ -39,7 +39,7 @@ class ExpenditureJson(dictionary: Dictionary) {
   implicit val ExpenditureFromJson: Reads[Expenditure] = (
     (__ \ "id").readNullable[Int] ~
       (__ \ "op_id").readNullable[Int] ~
-      (__ \ "date").read[DateTime].map(dtToTs) ~
+      (__ \ "op_date").read[DateTime].map(dtToTs) ~
       (__ \ "amount").readNullable[BigDecimal] ~
       (__ \ "account_id").read[Int].map(dictionary.account) ~
       (__ \ "category_id").read[Int].map(dictionary.category) ~
@@ -59,7 +59,7 @@ object ExpenditureJson {
   implicit val ExpenditureToJson: Writes[Expenditure] = (
     (__ \ "id").writeNullable[Int] ~
       (__ \ "op_id").writeNullable[Int] ~
-      (__ \ "date").write[DateTime] ~
+      (__ \ "op_date").write[DateTime] ~
       (__ \ "amount").writeNullable[BigDecimal] ~
       (__ \ "account_id").write[Int] ~
       (__ \ "account_name").write[String] ~

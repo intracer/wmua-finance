@@ -2,15 +2,14 @@ package org.intracer.finance.slick
 
 import java.sql.Timestamp
 
-import controllers.{NewOp, Update}
+import controllers.{OpFilter, Update}
 import org.intracer.finance.{Expenditure, User}
-import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import spray.util.pimpFuture
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
-import spray.util.pimpFuture
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class ExpenditureDao extends BaseDao {
 
@@ -51,6 +50,33 @@ class ExpenditureDao extends BaseDao {
     db.run {
       (opIdQuery
         join query on (_.revId === _.id)
+        sortBy { case (opId, exp) => opId.opId }
+        ).result
+    }.map { r =>
+      r.map { case (opId, exp) => exp }
+    }.await
+  }
+
+  def filtered(opFilter: OpFilter): Seq[Expenditure] = {
+    var filtered = opIdQuery join query on (_.revId === _.id)
+    if (opFilter.projects.nonEmpty) {
+      filtered = filtered filter (_._2.projectId inSet opFilter.projects)
+    }
+    if (opFilter.categories.nonEmpty) {
+      filtered = filtered filter (_._2.categoryId inSet opFilter.categories)
+    }
+    if (opFilter.grants.nonEmpty) {
+      filtered = filtered filter (_._2.grantId inSet opFilter.grants)
+    }
+    if (opFilter.grantItems.nonEmpty) {
+      filtered = filtered filter (_._2.grantItem inSet opFilter.grantItems)
+    }
+    if (opFilter.accounts.nonEmpty) {
+      filtered = filtered filter (_._2.accountId inSet opFilter.accounts)
+    }
+
+    db.run {
+      (filtered
         sortBy { case (opId, exp) => opId.opId }
         ).result
     }.map { r =>
@@ -113,7 +139,7 @@ class ExpenditureDao extends BaseDao {
     db.run(cmd)
   }
 
-  def insertWithOpId(exp: Expenditure): Int  = {
+  def insertWithOpId(exp: Expenditure): Int = {
     val opId = insertOpId()
     val withOpId = exp.copy(opId = Some(opId))
     val expId = insertCmd(withOpId)

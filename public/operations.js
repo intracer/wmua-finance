@@ -1,4 +1,4 @@
-var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", 'mwl.confirm', "ngSanitize"]);
+var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", 'mwl.confirm', "ngSanitize", "ngTable"]);
 
 app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
@@ -36,7 +36,7 @@ app.controller('UiSelectCtrl', function ($scope) {
     $scope.grantItemNumber = function (item) {
         var parentNumber = item.number.split('.').slice(0, -1).join('.');
         var parentItem = $scope.grantItems2016
-            .filter(function(item) {
+            .filter(function (item) {
                 return item.number == parentNumber;
             })[0];
         var groupName = parentNumber;
@@ -47,7 +47,7 @@ app.controller('UiSelectCtrl', function ($scope) {
     };
 });
 
-app.controller('Ctrl', function ($scope, $filter, $http) {
+app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function ($scope, $filter, $http, NgTableParams) {
     var vm = this;
 
     vm.filter_projects = [];
@@ -58,6 +58,11 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
 
     $scope.operations = [];
 
+    $scope.tableParams = new NgTableParams({
+        page: 1,
+        count: 10
+    }, {dataset: $scope.operations});
+
     $scope.beforeSlash = function (item) {
         return item.text.split("/")[0];
     };
@@ -65,7 +70,7 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
     $scope.grantItemNumber = function (item) {
         var parentNumber = item.number.split('.').slice(0, -1).join('.');
         var parentItem = $scope.grantItems2016
-            .filter(function(item) {
+            .filter(function (item) {
                 return item.number == parentNumber;
             })[0];
         var groupName = parentNumber;
@@ -86,8 +91,14 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
                 grantItems: vm.filter_grant_items.join(),
                 accounts: vm.filter_accounts.join()
             }
-        }).success(function(data) {
+        }).success(function (data) {
             $scope.operations = data;
+            $scope.tableParams = new NgTableParams({
+                    page: 1,
+                    count: 10
+                },
+                {dataset: data}
+            );
         });
     };
     $scope.loadOperations();
@@ -140,7 +151,7 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         if (operation.grant_item_id && $scope.grantItems2016.length) {
             selected = $filter('filter')($scope.grantItems2016, {id: operation.grant_item_id});
         }
-        return  selected.length ? '<i>' + selected[0].number + '</i><br>' + selected[0].description : 'Not set';
+        return selected.length ? '<i>' + selected[0].number + '</i><br>' + selected[0].description : 'Not set';
     };
 
     $scope.showAccount = function (operation) {
@@ -1209,4 +1220,4 @@ app.controller('Ctrl', function ($scope, $filter, $http) {
         }
     ];
 
-});
+}]);

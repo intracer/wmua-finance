@@ -22,7 +22,8 @@
 
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 
-    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.css">
+    <script src="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.js"></script>
     <!-- app.js -->
     <script src="operations.js"></script>
     <link href="stylesheets/app.css" rel="stylesheet" media="screen">
@@ -182,8 +183,8 @@
     </form>
 
     GI: {{ctrl.grantItems[0].text}}
-    <table class="table table-bordered table-hover table-condensed table-striped">
-        <thead>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered table-hover table-condensed table-striped">
+      <!--  <thead>
         <tr>
             <th width="10%">date</th>
             <th>project</th>
@@ -195,10 +196,10 @@
             <th>description</th>
             <th>Edit</th>
         </tr>
-        </thead>
+        </thead> -->
 
-        <tr ng-repeat="operation in operations">
-            <td width="100px">
+        <tr ng-repeat="operation in $data">
+            <td width="100px" title="'Date'" sortable="'op_date'">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
                        data-e-name="op_date" data-e-form="rowform" data-e-required
@@ -210,7 +211,7 @@
                     </a>
                 </div>
             </td>
-            <td width="150px">
+            <td width="150px" title="'Project'" filter="{ project_name: 'text'}" sortable="'project_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id"
                      data-e-ng-model="operation.project_id"
                      data-e-form="rowform"
@@ -225,7 +226,7 @@
                     </editable-ui-select-choices>
                 </div>
             </td>
-            <td width="250px">
+            <td width="250px" title="'Category'" filter="{ category_name: 'text'}" sortable="'category_name'">
                 <div class="category-select" ng-controller="UiSelectCtrl"
                      editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
@@ -245,7 +246,7 @@
                     </editable-ui-select-choices>
                 </div>
             </td>
-            <td width="150px">
+            <td width="150px" title="'Grant'" filter="{ grant_name: 'text'}" sortable="'grant_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id"
                      data-e-ng-model="operation.grant_id"
                      data-e-form="rowform" data-e-style="min-width:150px;"
@@ -263,7 +264,7 @@
                 </div>
             </td>
 
-            <td>
+            <td title="'Grant item'" filter="{ grant_item_name: 'text'}" sortable="'grant_item_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_item_id"
                      data-e-ng-model="operation.grant_item_id"
                      data-e-form="rowform" data-e-style="min-width:350px;"
@@ -280,14 +281,14 @@
                 </div>
             </td>
 
-            <td width="90px">
+            <td width="90px" title="'Amount'" filter="{ amount: 'text'}" sortable="'amount'">
                 <span data-editable-text="operation.amount" data-e-name="amount" data-e-form="rowform" data-e-required
                       data-e-style="min-width:90px;">
                          {{ operation.amount || 'empty' }}
                 </span>
             </td>
 
-            <td width="90px">
+            <td width="90px" title="'Account'" filter="{ account_name: 'text'}" sortable="'account_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.account_id"
                      data-e-ng-model="operation.account_id"
                      data-e-form="rowform" data-e-style="min-width:100px;"
@@ -303,7 +304,7 @@
                 </div>
             </td>
 
-            <td width="350px">
+            <td width="350px" title="'Description'" filter="{ description: 'text'}" sortable="'description'">
                 <span data-editable-text="operation.description" data-e-name="description" data-e-form="rowform"
                       data-e-required
                       data-e-style="min-width:350px;">
@@ -311,7 +312,7 @@
                 </span>
             </td>
 
-            <td style="white-space: nowrap; width: 85px">
+            <td style="white-space: nowrap; width: 85px" title="'edit'">
                 <!-- form -->
                 <form editable-form name="rowform"
                       onbeforesave="saveOperation($data, operation.id)"

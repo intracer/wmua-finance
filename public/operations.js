@@ -182,9 +182,13 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
         return selected.length ? selected[0].text : 'Not set';
     };
 
-    $scope.saveOperation = function (data, id) {
+    $scope.saveOperation = function (data, operation) {
         var dateStr = data.date.toISOString().slice(0, 10);
-        angular.extend(data, {id: id, date: dateStr});
+        angular.extend(data, {
+            id: operation.id,
+            op_id: operation.op_id,
+            date: dateStr
+        });
         return $http.post('/newoperation', data);
     };
 

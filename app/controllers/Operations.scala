@@ -275,7 +275,7 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   val insertForm = Form(
     mapping(
-      "id" -> optional(number),
+      "op_id" -> optional(number),
       "date" -> date("yyyy-MM-dd"),
       "project" -> number,
       "category" -> number,

@@ -203,7 +203,7 @@
                      data-e-ng-model="operation.project_id"
                      data-e-name="project" data-e-form="rowform"
                      data-e-style="min-width:150px;" theme="bootstrap">
-                    {{ operation.project_name }}
+                    {{ showProject(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
                     </editable-ui-select-match>
@@ -220,9 +220,9 @@
                      data-e-name="category" data-e-form="rowform"
                      data-e-style="min-width:250px;"
                      theme="bootstrap">
-                    <small> {{ operation.category_name.split('/')[0] }}</small>
+                    <small> {{ showCategory(operation).split('/')[0] }}</small>
                     <br>
-                    {{ operation.category_name.split('/').slice(-1)[0] }}
+                    {{ showCategory(operation).split('/').slice(-1)[0] }}
 
                     <editable-ui-select-match>
                         {{ $select.selected.text | ellipsis: 35 }}
@@ -240,7 +240,7 @@
                      data-e-form="rowform" data-e-style="min-width:150px;"
                      data-e-on-select="ctrl.grantUpdated($item, $model)"
                      data-e-name="grant" theme="bootstrap">
-                    {{ operation.grant_name.split('/').slice(-1)[0] }}
+                    {{ showGrant(operation).split('/').slice(-1)[0] }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text.split('/').slice(-1)[0]"></span>
                     </editable-ui-select-match>
@@ -257,7 +257,7 @@
                      data-e-ng-model="operation.grant_item_id"
                      data-e-form="rowform" data-e-style="min-width:350px;"
                      data-e-name="grantItem" theme="bootstrap">
-                    <div ng-bind-html="operation.grant_item_name"></div>
+                    <div ng-bind-html="showGrantItem(operation)"></div>
                     <editable-ui-select-match>
                         {{$select.selected.number + ' ' + $select.selected.description | ellipsis: 45 }}
                     </editable-ui-select-match>
@@ -281,7 +281,7 @@
                      data-e-ng-model="operation.account_id"
                      data-e-form="rowform" data-e-style="min-width:100px;"
                      data-e-name="account" theme="bootstrap">
-                    {{ operation.account_name }}
+                    {{ showAccount(operation) }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
                     </editable-ui-select-match>

@@ -1,4 +1,5 @@
-var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select", 'mwl.confirm', "ngSanitize", "ngTable"]);
+var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select",
+    'mwl.confirm', "ngSanitize", "ngTable", "daterangepicker"]);
 
 app.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
@@ -47,6 +48,7 @@ app.controller('UiSelectCtrl', function ($scope) {
     };
 });
 
+
 app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function ($scope, $filter, $http, NgTableParams) {
     var vm = this;
 
@@ -80,7 +82,24 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
         return groupName;
     };
 
+    $scope.dateRange = {startDate: moment().subtract(1, 'year').startOf('year'), endDate:  moment().subtract(1, 'year').endOf('year')};
+
+    $scope.opts = {
+        ranges: {
+            'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+            'This Year': [moment().startOf('year'), moment().endOf('year')]
+        }
+    };
+
+    $scope.$watch('dateRange', function(newDate) {
+        $scope.loadOperations();
+    }, false);
+
     $scope.loadOperations = function () {
+        if ($scope.dateRange.startDate && $scope.dateRange.endDate) {
+            var daterange = $scope.dateRange.startDate.format("MM/DD/YYYY") + ' - '
+                +  $scope.dateRange.endDate.format("MM/DD/YYYY")
+        }
         $http({
             url: '/operations_ws',
             method: "GET",
@@ -89,7 +108,8 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
                 categories: vm.filter_categories.join(),
                 grants: vm.filter_grants.join(),
                 grantItems: vm.filter_grant_items.join(),
-                accounts: vm.filter_accounts.join()
+                accounts: vm.filter_accounts.join(),
+                daterange: daterange
             }
         }).success(function (data) {
             $scope.operations = data;
@@ -124,7 +144,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.showProject = function (operation) {
         var selected = [];
-        if (operation.project_id) {
+        if (operation.project_id != null) {
             selected = $filter('filter')($scope.projects, {value: operation.project_id});
         }
         return selected.length ? selected[0].text : 'Not set';
@@ -132,7 +152,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.showCategory = function (operation) {
         var selected = [];
-        if (operation.category_id) {
+        if (operation.category_id != null) {
             selected = $filter('filter')($scope.categories, {value: operation.category_id});
         }
         return selected.length ? selected[0].text : 'Not set';
@@ -140,7 +160,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.showGrant = function (operation) {
         var selected = [];
-        if (operation.grant_id) {
+        if (operation.grant_id != null) {
             selected = $filter('filter')($scope.grants, {value: operation.grant_id});
         }
         return selected.length ? selected[0].text : 'Not set';
@@ -148,7 +168,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.showGrantItem = function (operation) {
         var selected = [];
-        if (operation.grant_item_id && $scope.grantItems2016.length) {
+        if (operation.grant_item_id != null && $scope.grantItems2016.length) {
             selected = $filter('filter')($scope.grantItems2016, {id: operation.grant_item_id});
         }
         return selected.length ? '<i>' + selected[0].number + '</i><br>' + selected[0].description : 'Not set';
@@ -156,7 +176,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.showAccount = function (operation) {
         var selected = [];
-        if (operation.account_id) {
+        if (operation.account_id != null) {
             selected = $filter('filter')($scope.accounts, {value: operation.account_id});
         }
         return selected.length ? selected[0].text : 'Not set';

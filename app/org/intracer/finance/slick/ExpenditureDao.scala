@@ -19,7 +19,7 @@ class ExpenditureDao extends BaseDao {
 
   val opIdQuery = TableQuery[OpIds]
 
-  def insertCmd(exp: Expenditure): Int = run {
+  def insertRev(exp: Expenditure): Int = run {
     query returning query.map(_.id) += exp
   }
 
@@ -92,8 +92,7 @@ class ExpenditureDao extends BaseDao {
 
     val opId = upd.pk.toInt
     val exp = findById(opId).get
-    val newId = insertCmd(exp.copy(id = None))
-    updateLastRevId(opId, newId)
+    val newId: Int = newRevision(exp)
 
     val opFilter = query.filter {
       e =>
@@ -139,10 +138,16 @@ class ExpenditureDao extends BaseDao {
     db.run(cmd)
   }
 
+  def newRevision(exp: Expenditure) = {
+    val newId = insertRev(exp.copy(id = None))
+    updateLastRevId(exp.opId.get, newId)
+    newId
+  }
+
   def insertWithOpId(exp: Expenditure): Int = {
     val opId = insertOpId()
     val withOpId = exp.copy(opId = Some(opId))
-    val expId = insertCmd(withOpId)
+    val expId = insertRev(withOpId)
     updateLastRevId(opId, expId)
   }
 }

@@ -24,6 +24,16 @@
 
     <link rel="stylesheet" href="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.css">
     <script src="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.js"></script>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css"/>
+
     <!-- app.js -->
     <script src="operations.js"></script>
     <link href="stylesheets/app.css" rel="stylesheet" media="screen">
@@ -179,11 +189,35 @@
                     </div>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Date range:</label>
+                <div class="col-sm-6">
+                    <span class="input-group">
+                      <!--  <span class="input-group-btn">
+                            <button type="button" ng-click="dateRange = {startDate: null, endDate: null}"
+                                    class="btn btn-default">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                        </button>
+                        </span> -->
+                    <input date-range-picker class="form-control date-picker" type="text"
+                           ng-model="dateRange" options="opts"/>
+                    <span class="input-group-btn">
+                            <button type="button" ng-click="dateRange = {startDate: null, endDate: null}"
+                                    class="btn btn-default">
+                             <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                         </span>
+                </div>
+            </div>
+
         </fieldset>
     </form>
 
+
     GI: {{ctrl.grantItems[0].text}}
-    <table ng-table="tableParams" show-filter="true" class="table table-bordered table-hover table-condensed table-striped">
+    <table ng-table="tableParams" show-filter="true"
+           class="table table-bordered table-hover table-condensed table-striped">
 
         <tr ng-repeat="operation in $data">
             <td width="100px" title="'Date'" sortable="'op_date'">

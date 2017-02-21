@@ -15,6 +15,7 @@
     "angular-xeditable": "~0.6.0",
     "angular-bootstrap": "~2.5.0",
     "angular-ui-select": "~0.19.6",
-    "angular-bootstrap-confirm": "~2.5.0"
+    "angular-bootstrap-confirm": "~2.5.0",
+    "angular-daterangepicker": "~0.2.2"
   }
 }

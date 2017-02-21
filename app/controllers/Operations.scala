@@ -202,6 +202,8 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   def update() = formAction(updateForm, expenditureDao.update)
 
+  def updateAll() = formAction(insertForm, updateCmd)
+
   def insert() = formAction(insertForm, insertCmd)
 
   def formAction[T](form: Form[T],
@@ -226,11 +228,20 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   def insertCmd(op: NewOp, user: User): Future[Int] = {
 
+    val exp = expFromDto(op, user)
+
+    val result = exp.opId.fold(expenditureDao.insertWithOpId(exp)) { _ =>
+      expenditureDao.newRevision(exp)
+    }
+    Future.successful(result) // TODO async
+  }
+
+  private def expFromDto(op: NewOp, user: User) = {
     val dictionary = dictionaries.dictionary()
 
     val exp = Expenditure(
       date = new Timestamp(op.date.getTime),
-      opId = None,
+      opId = op.id,
       amount = op.amount,
       account = op.account.flatMap(dictionary.accountMap.get).orNull,
       category = dictionary.categoryMap.get(op.category).orNull,
@@ -241,11 +252,16 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
       logDate = new Timestamp(DateTime.now().getMillis),
       user = user
     )
-
-    val result = expenditureDao.insertWithOpId(exp)
-    Future.successful(result) // TODO async
+    exp
   }
 
+  def updateCmd(op: NewOp, user: User): Future[Int] = {
+
+    val exp = expFromDto(op, user)
+
+    val result = expenditureDao.newRevision(exp)
+    Future.successful(result) // TODO async
+  }
 
   import play.api.data.format.Formats._
 
@@ -259,6 +275,7 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   val insertForm = Form(
     mapping(
+      "id" -> optional(number),
       "date" -> date("yyyy-MM-dd"),
       "project" -> number,
       "category" -> number,
@@ -282,7 +299,8 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
 case class Update(name: String, pk: Long, value: String)
 
-case class NewOp(date: Date,
+case class NewOp(id: Option[Int],
+                 date: Date,
                  project: Int,
                  category: Int,
                  grant: Option[Int],

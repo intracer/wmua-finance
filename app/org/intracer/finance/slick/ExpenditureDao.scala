@@ -50,7 +50,7 @@ class ExpenditureDao extends BaseDao {
     db.run {
       (opIdQuery
         join query on (_.revId === _.id)
-        sortBy { case (opId, exp) => opId.opId }
+        sortBy { case (opId, exp) => exp.date.desc }
         ).result
     }.map { r =>
       r.map { case (opId, exp) => exp }

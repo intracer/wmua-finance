@@ -58,9 +58,7 @@ case class OpFilter(projects: Set[Int] = Set.empty,
         interval.exists(_.contains(op.date))
     }
 
-    operations
-      .filter(filterOp)
-      .sortBy(_.date.toString())
+    operations.filter(filterOp)
   }
 }
 

@@ -189,7 +189,7 @@
             <td width="100px" title="'Date'" sortable="'op_date'">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
-                       data-e-name="op_date" data-e-form="rowform" data-e-required
+                       data-e-name="date" data-e-form="rowform" data-e-required data-e-format="yyyy-MM-dd"
                        data-e-style="min-width:100px;"
                        data-e-is-open="opened.$data"
                        data-e-ng-click="open($event,'$data')"
@@ -201,8 +201,8 @@
             <td width="150px" title="'Project'" filter="{ project_name: 'text'}" sortable="'project_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id"
                      data-e-ng-model="operation.project_id"
-                     data-e-form="rowform"
-                     data-e-style="min-width:150px;" data-name="project" theme="bootstrap">
+                     data-e-name="project" data-e-form="rowform"
+                     data-e-style="min-width:150px;" theme="bootstrap">
                     {{ operation.project_name }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text"></span>
@@ -217,8 +217,9 @@
                 <div class="category-select" ng-controller="UiSelectCtrl"
                      editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
-                     data-e-form="rowform" data-e-style="min-width:250px;"
-                     data-name="category" theme="bootstrap">
+                     data-e-name="category" data-e-form="rowform"
+                     data-e-style="min-width:250px;"
+                     theme="bootstrap">
                     <small> {{ operation.category_name.split('/')[0] }}</small>
                     <br>
                     {{ operation.category_name.split('/').slice(-1)[0] }}
@@ -238,7 +239,7 @@
                      data-e-ng-model="operation.grant_id"
                      data-e-form="rowform" data-e-style="min-width:150px;"
                      data-e-on-select="ctrl.grantUpdated($item, $model)"
-                     data-name="grant" theme="bootstrap">
+                     data-e-name="grant" theme="bootstrap">
                     {{ operation.grant_name.split('/').slice(-1)[0] }}
                     <editable-ui-select-match>
                         <span ng-bind="$select.selected.text.split('/').slice(-1)[0]"></span>
@@ -255,7 +256,7 @@
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_item_id"
                      data-e-ng-model="operation.grant_item_id"
                      data-e-form="rowform" data-e-style="min-width:350px;"
-                     data-name="grant_item" theme="bootstrap">
+                     data-e-name="grantItem" theme="bootstrap">
                     <div ng-bind-html="operation.grant_item_name"></div>
                     <editable-ui-select-match>
                         {{$select.selected.number + ' ' + $select.selected.description | ellipsis: 45 }}
@@ -292,7 +293,7 @@
             </td>
 
             <td width="350px" title="'Description'" filter="{ description: 'text'}" sortable="'description'">
-                <span data-editable-text="operation.description" data-e-name="description" data-e-form="rowform"
+                <span data-editable-text="operation.description" data-e-name="descr" data-e-form="rowform"
                       data-e-required
                       data-e-style="min-width:350px;">
                          {{ operation.description || 'empty' }}
@@ -346,5 +347,3 @@
 </div>
 </body>
 </html>
-
-

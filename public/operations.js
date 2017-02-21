@@ -163,25 +163,32 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
     };
 
     $scope.saveOperation = function (data, id) {
-        //$scope.user not updated yet
-        angular.extend(data, {id: id});
-        return $http.post('/saveOperation', data);
+        var dateStr = data.date.toISOString().slice(0, 10);
+        angular.extend(data, {id: id, date: dateStr});
+        return $http.post('/newoperation', data);
     };
 
-    // remove user
+    // remove operation
     $scope.removeOperation = function (index) {
         $scope.operations.splice(index, 1);
     };
 
-    // add user
+    // add operation
     $scope.addOperation = function () {
-        $scope.inserted = {
-            id: $scope.operations.length + 1,
-            name: '',
-            status: null,
-            group: null
-        };
-        $scope.operations.push($scope.inserted);
+        $scope.inserted = {};
+
+        $scope.operations.unshift($scope.inserted);
+
+        $scope.tableParams.sorting({});
+        $scope.tableParams.page(1);
+        $scope.tableParams = new NgTableParams({
+                page: 1,
+                count: 10
+            },
+            {dataset: $scope.operations}
+        );
+
+        // $scope.tableParams.reload();
     };
 
     $scope.descriptions = [

@@ -117,6 +117,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
              data.forEach(function(op) {
                  grantIdMap[op.id] = op.grant_id;
             });
+            grantIdMap['new'] = 17;
             $scope.grantIdMap = grantIdMap;
 
             $scope.operations = data;
@@ -203,6 +204,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
     // add operation
     $scope.addOperation = function () {
         $scope.inserted = {
+            id: 'new',
             category_id: 19,
             project_id: 0,
             grant_id: 17,
@@ -229,6 +231,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
     // add operation
     $scope.copyOperation = function (operation) {
         $scope.inserted = {
+            id: 'new',
             category_id: operation.category_id,
             project_id: operation.project_id,
             grant_id: operation.grant_id,

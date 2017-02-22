@@ -363,6 +363,9 @@
                 <div class="buttons" ng-show="!rowform.$visible">
                     <button class="btn btn-primary glyphicon glyphicon-pencil"
                             ng-click="rowform.$show()"></button>
+                    <button type="button" class="btn btn-default copy-btn" ng-click="copyOperation(operation)">
+                        <span class="fa fa-copy" aria-hidden="true"></span>
+                    </button>
                     <button class="btn btn-danger glyphicon glyphicon-remove"
                             mwl-confirm
                             title="Confirmation"

@@ -226,6 +226,34 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
         // $scope.tableParams.reload();
     };
 
+    // add operation
+    $scope.copyOperation = function (operation) {
+        $scope.inserted = {
+            category_id: operation.category_id,
+            project_id: operation.project_id,
+            grant_id: operation.grant_id,
+            grant_item_id: operation.grant_item_id,
+            account_id: operation.account_id,
+            amount: operation.amount,
+            description: operation.description
+        };
+
+        $scope.operations.unshift($scope.inserted);
+
+        $scope.tableParams.sorting({});
+        $scope.tableParams.page(1);
+        $scope.tableParams = new NgTableParams({
+                page: 1,
+                count: 10
+            },
+            {dataset: $scope.operations}
+        );
+
+        // $scope.tableParams.reload();
+    };
+
+
+
     $scope.descriptions = [
         "друк", "податки", "нотаріус"
     ];

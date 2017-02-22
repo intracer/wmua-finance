@@ -214,8 +214,11 @@
         </fieldset>
     </form>
 
-
-    GI: {{ctrl.grantItems[0].text}}
+    <div class="brn-group pull-right">
+        <button class="btn btn-default" ng-click="addOperation()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </div>
     <table ng-table="tableParams" show-filter="true"
            class="table table-bordered table-hover table-condensed table-striped">
 
@@ -376,8 +379,6 @@
             </td>
         </tr>
     </table>
-
-    <button class="btn btn-default" ng-click="addOperation()">Add row</button>
 </div>
 </body>
 </html>

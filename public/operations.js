@@ -202,7 +202,15 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     // add operation
     $scope.addOperation = function () {
-        $scope.inserted = {};
+        $scope.inserted = {
+            category_id: 19,
+            project_id: 0,
+            grant_id: 17,
+            grant_item_id: 74,
+            account_id: 1,
+            amount: "1.5",
+            description: "банківські"
+        };
 
         $scope.operations.unshift($scope.inserted);
 

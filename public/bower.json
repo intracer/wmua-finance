@@ -16,6 +16,7 @@
     "angular-bootstrap": "~2.5.0",
     "angular-ui-select": "~0.19.6",
     "angular-bootstrap-confirm": "~2.5.0",
-    "angular-daterangepicker": "~0.2.2"
+    "angular-daterangepicker": "~0.2.2",
+    "lodash": "~3.10.1"
   }
 }

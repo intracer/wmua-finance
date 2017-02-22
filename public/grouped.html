@@ -45,7 +45,6 @@
     <div class="navbar-inner">
         <div class="container-fluid">
 
-
             <div> <!-- class="nav-collapse collapse" -->
                 <ul class="nav navbar-nav">
                     <li><a class="brand" href="#">WMUA Finance 2</a></li>
@@ -241,9 +240,21 @@
     </div>
     <table ng-table="tableParams" show-filter="true"
            class="table table-bordered table-hover table-condensed table-striped">
-
-        <tr ng-repeat="operation in $data">
-            <td width="100px" title="'Date'" sortable="'op_date'">
+     <!--   <colgroup>
+            <col width="60%" />
+            <col width="20%" />
+            <col width="20%" />
+        </colgroup> -->
+        <tr class="ng-table-group" ng-repeat-start="group in $groups">
+            <td colspan="8">
+                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                    <strong>{{ group.value }}</strong>
+                </a>
+            </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="operation in group.data">
+            <td width="100px" title="'Date'" sortable="'op_date'" groupable="'op_date'">
                 <div ng-controller="BsdateCtrl">
                     <a href="#" editable-bsdate="operation.op_date"
                        data-e-name="date" data-e-form="rowform" data-e-required data-e-format="yyyy-MM-dd"
@@ -255,7 +266,8 @@
                     </a>
                 </div>
             </td>
-            <td width="150px" title="'Project'" filter="{ project_name: 'text'}" sortable="'project_name'">
+            <td width="150px" title="'Project'" filter="{ project_name: 'text'}"
+                sortable="'project_name'" groupable="'project_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.project_id"
                      data-e-ng-model="operation.project_id"
                      data-e-name="project" data-e-form="rowform"
@@ -270,7 +282,8 @@
                     </editable-ui-select-choices>
                 </div>
             </td>
-            <td width="250px" title="'Category'" filter="{ category_name: 'text'}" sortable="'category_name'">
+            <td width="250px" title="'Category'" filter="{ category_name: 'text'}"
+                sortable="'category_name'" groupable="'category_name'">
                 <div class="category-select" ng-controller="UiSelectCtrl"
                      editable-ui-select="operation.category_id"
                      data-e-ng-model="operation.category_id"
@@ -291,7 +304,8 @@
                     </editable-ui-select-choices>
                 </div>
             </td>
-            <td width="150px" title="'Grant'" filter="{ grant_name: 'text'}" sortable="'grant_name'">
+            <td width="150px" title="'Grant'" filter="{ grant_name: 'text'}"
+                sortable="'grant_name'" groupable="'grant_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id"
                      data-e-ng-model="operation.grant_id"
                      data-e-form="rowform" data-e-style="min-width:150px;"
@@ -309,7 +323,8 @@
                 </div>
             </td>
 
-            <td title="'Grant item'" filter="{ grant_item_name: 'text'}" sortable="'grant_item_name'">
+            <td title="'Grant item'" filter="{ grant_item_name: 'text'}"
+                sortable="'grant_item_name'" groupable="'grant_item_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_item_id"
                      data-e-ng-model="operation.grant_item_id"
                      data-e-form="rowform" data-e-style="min-width:350px;"
@@ -326,14 +341,16 @@
                 </div>
             </td>
 
-            <td width="90px" title="'Amount'" filter="{ amount: 'text'}" sortable="'amount'">
+            <td width="90px" title="'Amount'" filter="{ amount: 'text'}"
+                sortable="'amount'" groupable="'project_name'">
                 <span data-editable-text="operation.amount" data-e-name="amount" data-e-form="rowform" data-e-required
                       data-e-style="min-width:90px;">
                          {{ operation.amount || 'empty' }}
                 </span>
             </td>
 
-            <td width="90px" title="'Account'" filter="{ account_name: 'text'}" sortable="'account_name'">
+            <td width="90px" title="'Account'" filter="{ account_name: 'text'}"
+                sortable="'account_name'" groupable="'account_name'">
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.account_id"
                      data-e-ng-model="operation.account_id"
                      data-e-form="rowform" data-e-style="min-width:100px;"
@@ -349,7 +366,8 @@
                 </div>
             </td>
 
-            <td width="350px" title="'Description'" filter="{ description: 'text'}" sortable="'description'">
+            <td width="350px" title="'Description'" filter="{ description: 'text'}"
+                sortable="'description'" groupable="'description'">
                 <span data-editable-text="operation.description" data-e-name="descr" data-e-form="rowform"
                       data-e-required
                       onbeforesave="validateNotEmpty($data)"
@@ -359,49 +377,20 @@
             </td>
 
             <td style="white-space: nowrap; width: 85px" title="'edit'">
-                <!-- form -->
-                <form editable-form name="rowform"
-                      onbeforesave="saveOperation($data, operation)"
-                      ng-show="rowform.$visible"
-                      class="form-buttons form-inline"
-                      shown="inserted == operation">
-                    <button type="submit" ng-disabled="rowform.$waiting"
-                            class="btn btn-primary glyphicon glyphicon-floppy-disk"></button>
-                    <button type="button" ng-disabled="rowform.$waiting"
-                            class="btn btn-default fa fa-undo"
-                            mwl-confirm
-                            title="Confirmation"
-                            message="Do you want to cancel changes?"
-                            confirm-text="Yes"
-                            cancel-text="No"
-                            placement="left"
-                            on-confirm="rowform.$cancel()"
-                            on-cancel="cancelClicked = true"
-                            confirm-button-type="default"
-                            cancel-button-type="default">
-                    </button>
-                </form>
-                <div class="buttons" ng-show="!rowform.$visible">
-                    <button class="btn btn-primary glyphicon glyphicon-pencil"
-                            ng-click="rowform.$show()"></button>
-                    <button type="button" class="btn btn-default copy-btn" ng-click="copyOperation(operation)">
-                        <span class="fa fa-copy" aria-hidden="true"></span>
-                    </button>
-               <!--     <button class="btn btn-danger glyphicon glyphicon-remove"
-                            mwl-confirm
-                            title="Confirmation"
-                            message="Remove this row?"
-                            confirm-text="Yes"
-                            cancel-text="No"
-                            placement="left"
-                            on-confirm="removeOperation($index)"
-                            on-cancel="cancelClicked = true"
-                            confirm-button-type="danger"
-                            cancel-button-type="default">
-                    </button> -->
-                </div>
+
+
             </td>
         </tr>
+        <tr ng-repeat-end>
+            <td class="text-success text-right"><strong>Summary:</strong></td>
+            <td><em>{{ctrl.total(group.data, "amount")}}</em></td>
+        </tr>
+        <tfoot ng-if="ctrl.isLastPage()">
+        <tr>
+            <td class="text-success text-right"><strong>Grant Total:</strong></td>
+            <td><em>{{ctrl.totalAmount}}</em></td>
+        </tr>
+        </tfoot>
     </table>
 </div>
 </body>

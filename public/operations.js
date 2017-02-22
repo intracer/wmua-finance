@@ -36,7 +36,7 @@ app.controller('UiSelectCtrl', function ($scope) {
 
     $scope.grantItemNumber = function (item) {
         var parentNumber = item.number.split('.').slice(0, -1).join('.');
-        var parentItem = $scope.grantItems2016
+        var parentItem = $scope.grantItems[17]
             .filter(function (item) {
                 return item.number == parentNumber;
             })[0];
@@ -57,6 +57,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
     vm.filter_grants = [];
     vm.filter_grant_items = [];
     vm.filter_accounts = [];
+    $scope.grantIdMap = {};
 
     $scope.operations = [];
 
@@ -71,7 +72,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.grantItemNumber = function (item) {
         var parentNumber = item.number.split('.').slice(0, -1).join('.');
-        var parentItem = $scope.grantItems2016
+        var parentItem = $scope.grantItems[17]
             .filter(function (item) {
                 return item.number == parentNumber;
             })[0];
@@ -112,6 +113,12 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
                 daterange: daterange
             }
         }).success(function (data) {
+            var grantIdMap = {};
+             data.forEach(function(op) {
+                 grantIdMap[op.id] = op.grant_id;
+            });
+            $scope.grantIdMap = grantIdMap;
+
             $scope.operations = data;
             $scope.tableParams = new NgTableParams({
                     page: 1,
@@ -123,22 +130,18 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
     };
     $scope.loadOperations();
 
-    $scope.grantItems = [{
-        value: 0,
-        text: "Nothing"
-    }];
-    vm.grantItems = $scope.grantItems;
+    // $scope.grantItems = [{
+    //     value: 0,
+    //     text: "Nothing"
+    // }];
+    // vm.grantItems = $scope.grantItems;
 
     $scope.loadGrantItems = function (grant_id) {
-        $scope.grantItems = [{
-            value: grant_id,
-            text: "GrantItem of " + grant_id
-        }];
-        vm.grantItems = $scope.grantItems;
+       // $scope.tableParams.reload();
     };
 
-    $scope.grantUpdated = function (item, model) {
-        $scope.loadGrantItems(model);
+    $scope.grantUpdated = function (item, model, id) {
+        $scope.grantIdMap[id] = model;
     };
     vm.grantUpdated = $scope.grantUpdated;
 
@@ -168,8 +171,8 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
     $scope.showGrantItem = function (operation) {
         var selected = [];
-        if (operation.grant_item_id != null && $scope.grantItems2016.length) {
-            selected = $filter('filter')($scope.grantItems2016, {id: operation.grant_item_id});
+        if (operation.grant_item_id != null && $scope.grantItems[17].length) {
+            selected = $filter('filter')($scope.grantItems[17], {id: operation.grant_item_id});
         }
         return selected.length ? '<i>' + selected[0].number + '</i><br>' + selected[0].description : 'Not set';
     };
@@ -716,7 +719,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
         }
     ];
 
-    $scope.grantItems2016 = [
+    $scope.grantItems = { 17: [
         {
             id: 1,
             grant_id: 17,
@@ -1249,6 +1252,7 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
             description: "Staff",
             total_cost: 10032.00
         }
-    ];
+    ]
+    };
 
 }]);

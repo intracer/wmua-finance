@@ -149,7 +149,7 @@
                             </ui-select-match>
                             <ui-select-choices
                                     group-by="grantItemNumber"
-                                    repeat="grantItem.id as grantItem in (grantItems2016 | orderBy: 'number' | filter: $select.search)">
+                                    repeat="grantItem.id as grantItem in (grantItems[17] | orderBy: 'number' | filter: $select.search)">
                                 <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
@@ -272,7 +272,7 @@
                 <div ng-controller="UiSelectCtrl" editable-ui-select="operation.grant_id"
                      data-e-ng-model="operation.grant_id"
                      data-e-form="rowform" data-e-style="min-width:150px;"
-                     data-e-on-select="ctrl.grantUpdated($item, $model)"
+                     data-e-on-select="ctrl.grantUpdated($item, $model, operation.id)"
                      data-e-name="grant" theme="bootstrap">
                     {{ showGrant(operation).split('/').slice(-1)[0] }}
                     <editable-ui-select-match>
@@ -297,7 +297,7 @@
                     </editable-ui-select-match>
                     <editable-ui-select-choices
                             group-by="grantItemNumber"
-                            repeat="grantItem.id as grantItem in (grantItems2016 | orderBy: 'number' | filter: $select.search)">
+                            repeat="grantItem.id as grantItem in (grantItems[grantIdMap[operation.id]] | orderBy: 'number' | filter: $select.search)">
                         <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
                     </editable-ui-select-choices>
                 </div>

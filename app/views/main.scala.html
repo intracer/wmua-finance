@@ -398,11 +398,12 @@
         <nav class="navbar navbar-inverse" role="navigation">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="#">@Messages("application.name")</a>
+
                     @logged(user)
                     <div> <!-- class="nav-collapse collapse" -->
                         <ul class="nav navbar-nav">
-                            <li><a href="/operations">@Messages("operations")</a></li>
+                            <li><a class="brand" href="#">@Messages("application.name")</a></li>
+                            <li><a href="/assets/operations.html">@Messages("operations")</a></li>
                             <li><a href="/log">@Messages("Log")</a></li>
                             <li><a href="/bygrantrow">@Messages("bygrantrow.operations")</a></li>
                             <li><a href="/bygrantrowstat">@Messages("bygrantrow.statistics")</a></li>

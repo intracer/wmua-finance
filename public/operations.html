@@ -38,8 +38,26 @@
     <script src="operations.js"></script>
     <link href="stylesheets/app.css" rel="stylesheet" media="screen">
 </head>
-<body style="padding: 20px">
-<h4>WMUA Finance 2</h4>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+
+
+            <div> <!-- class="nav-collapse collapse" -->
+                <ul class="nav navbar-nav">
+                    <li><a class="brand" href="#">WMUA Finance 2</a></li>
+                    <li><a href="/assets/operations.html">Operations</a></li>
+                    <li><a href="/log">Log</a></li>
+                    <li><a href="/bygrantrow">Grouped</a></li>
+                    <li><a href="/bygrantrowstat">By grant row stat</a></li>
+                    <li><a href="/statistics">Stat</a></li>
+                    <li><a href="/dicts">Lookup</a></li>
+                </ul>
+            </div> <!--/.nav-collapse -->
+        </div>
+    </div>
+</nav>
 <div ng-app="app" ng-controller="Ctrl as ctrl">
 
     <form class="form-horizontal">

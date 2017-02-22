@@ -350,6 +350,7 @@
             <td width="350px" title="'Description'" filter="{ description: 'text'}" sortable="'description'">
                 <span data-editable-text="operation.description" data-e-name="descr" data-e-form="rowform"
                       data-e-required
+                      onbeforesave="validateNotEmpty($data)"
                       data-e-style="min-width:350px;">
                          {{ operation.description || 'empty' }}
                 </span>

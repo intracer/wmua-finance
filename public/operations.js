@@ -187,7 +187,13 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
     };
 
     $scope.saveOperation = function (data, operation) {
+        if (!moment(data.date).isValid()) {
+            return "Undefined date"
+        }
         var dateStr = data.date.toISOString().slice(0, 10);
+        if (operation.id == 'new') {
+            operation.id = null
+        }
         angular.extend(data, {
             id: operation.id,
             op_id: operation.op_id,
@@ -254,6 +260,16 @@ app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function 
 
         // $scope.tableParams.reload();
     };
+
+    $scope.validateNotEmpty = function(data) {
+        var retVal = null;
+
+        if (!data) {
+            retVal = "Undefined"
+        }
+        return retVal;
+    };
+
 
 
 

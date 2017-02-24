@@ -169,7 +169,7 @@
                             </ui-select-match>
                             <ui-select-choices
                                     group-by="grantItemNumber"
-                                    repeat="grantItem.id as grantItem in (grantItems[17] | orderBy: 'number' | filter: $select.search)">
+                                    repeat="grantItem.id as grantItem in ((grantItems[17].concat(grantItems[21])) | orderBy: 'number' | filter: $select.search)">
                                 <div ng-bind-html="'<i>'+ grantItem.number + '</i><br> ' + grantItem.description | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>

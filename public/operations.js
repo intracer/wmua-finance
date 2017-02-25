@@ -1,11 +1,11 @@
-var app = angular.module("app", ["xeditable", "ui.bootstrap", "ui.select",
+var financeApp = angular.module("financeApp", ["xeditable", "ui.bootstrap", "ui.select",
     'mwl.confirm', "ngSanitize", "ngTable", "daterangepicker"]);
 
-app.run(function (editableOptions) {
+financeApp.run(function (editableOptions) {
     editableOptions.theme = 'bs3';
 });
 
-app.filter('ellipsis', function () {
+financeApp.filter('ellipsis', function () {
     return function (text, length) {
         if (text && text.length && text.length > length) {
             return text.substr(0, length) + "...";
@@ -14,7 +14,7 @@ app.filter('ellipsis', function () {
     }
 });
 
-app.controller('BsdateCtrl', function ($scope) {
+financeApp.controller('BsdateCtrl', function ($scope) {
     $scope.operation = {
         op_date: new Date($scope.operation.op_date)
     };
@@ -29,7 +29,7 @@ app.controller('BsdateCtrl', function ($scope) {
     };
 });
 
-app.controller('UiSelectCtrl', function ($scope) {
+financeApp.controller('UiSelectCtrl', function ($scope) {
     $scope.beforeSlash = function (item) {
         return item.text.split("/")[0];
     };
@@ -49,7 +49,7 @@ app.controller('UiSelectCtrl', function ($scope) {
 });
 
 
-app.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function ($scope, $filter, $http, NgTableParams) {
+financeApp.controller('Ctrl', ['$scope', '$filter', '$http', 'NgTableParams', function ($scope, $filter, $http, NgTableParams) {
     var vm = this;
 
     vm.filter_projects = [];

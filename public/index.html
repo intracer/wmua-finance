@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="financeApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WMUA Finance 2</title>
+    <!-- Bootstrap 3 css -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <!-- Angular.js -->
+    <script src="bower_components/angular/angular.js"></script>
+    <!-- Angular-xeditable -->
+    <link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="bower_components/angular-ui-select/dist/select.js"></script>
+    <link href="bower_components/angular-ui-select/dist/select.css" rel="stylesheet" media="screen">
+
+    <script src="bower_components/angular-bootstrap-confirm/dist/angular-bootstrap-confirm.js"></script>
+
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.css">
+    <script src="https://unpkg.com/ng-table@4.0.0/bundles/ng-table.min.js"></script>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css"/>
+
+    <script src="bower_components/lodash/lodash.js"></script>
+
+    <!-- app.js -->
+    <script src="app.js"></script>
+    <script src="dictionary.service.js"></script>
+    <script src="operations.service.js"></script>
+    <script src="operations.js"></script>
+    <link href="stylesheets/app.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div ng-include="'navigation.template.html'"></div>
+
+<div ng-view></div>
+
+</body>
+</html>

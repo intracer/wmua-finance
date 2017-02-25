@@ -36,7 +36,7 @@ class Login @Inject()(val userDao: UserDao) extends Controller with Secured {
         value => {
           // binding success, you get the actual value
           val user = userDao.login(value._1, value._2).get
-          val result = Redirect("/assets/operations.html").withSession(Security.username -> value._1.trim)
+          val result = Redirect("/assets/index.html#!/operations").withSession(Security.username -> value._1.trim)
           user.lang.fold(result)(l => result.withLang(Lang(l)))
         }
       )

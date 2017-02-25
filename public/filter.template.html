@@ -6,7 +6,7 @@
             <div class="col-sm-6">
                 <div class="input-group">
 
-                    <ui-select multiple ng-model="ctrl.filter_projects"
+                    <ui-select multiple ng-model="ctrl.filter.projects"
                                on-select="loadOperations()"
                                on-remove="loadOperations()"
                                theme="bootstrap"
@@ -21,10 +21,10 @@
                     </ui-select>
 
                     <span class="input-group-btn">
-                            <button type="button" ng-click="ctrl.filter_projects = []" class="btn btn-default">
+                            <button type="button" ng-click="ctrl.filter.projects = []" class="btn btn-default">
                              <span class="glyphicon glyphicon-trash"></span>
                             </button>
-                         </span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
             <div class="col-sm-6">
                 <div class="input-group">
 
-                    <ui-select multiple ng-model="ctrl.filter_categories"
+                    <ui-select multiple ng-model="ctrl.filter.categories"
                                on-select="loadOperations()"
                                on-remove="loadOperations()"
                                theme="bootstrap"
@@ -50,7 +50,7 @@
                     </ui-select>
 
                     <span class="input-group-btn">
-                            <button type="button" ng-click="ctrl.filter_categories = []" class="btn btn-default">
+                            <button type="button" ng-click="ctrl.filter.categories = []" class="btn btn-default">
                              <span class="glyphicon glyphicon-trash"></span>
                             </button>
                          </span>
@@ -63,7 +63,7 @@
             <div class="col-sm-6">
                 <div class="input-group">
 
-                    <ui-select multiple ng-model="ctrl.filter_grants"
+                    <ui-select multiple ng-model="ctrl.filter.grants"
                                on-select="loadOperations()"
                                on-remove="loadOperations()"
                                theme="bootstrap"
@@ -80,7 +80,7 @@
                     </ui-select>
 
                     <span class="input-group-btn">
-                            <button type="button" ng-click="ctrl.filter_grants = []" class="btn btn-default">
+                            <button type="button" ng-click="ctrl.filter.grants = []" class="btn btn-default">
                              <span class="glyphicon glyphicon-trash"></span>
                             </button>
                          </span>
@@ -93,7 +93,7 @@
             <div class="col-sm-6">
                 <div class="input-group">
 
-                    <ui-select multiple ng-model="ctrl.filter_grant_items"
+                    <ui-select multiple ng-model="ctrl.filter.grant_items"
                                on-select="loadOperations()"
                                on-remove="loadOperations()"
                                theme="bootstrap"
@@ -111,7 +111,7 @@
                     </ui-select>
 
                     <span class="input-group-btn">
-                            <button type="button" ng-click="ctrl.filter_grant_items = []" class="btn btn-default">
+                            <button type="button" ng-click="ctrl.filter.grant_items = []" class="btn btn-default">
                              <span class="glyphicon glyphicon-trash"></span>
                             </button>
                          </span>
@@ -123,7 +123,7 @@
             <label class="col-sm-3 control-label">Accounts:</label>
             <div class="col-sm-6">
                 <div class="input-group">
-                    <ui-select multiple ng-model="ctrl.filter_accounts"
+                    <ui-select multiple ng-model="ctrl.filter.accounts"
                                on-select="loadOperations()"
                                on-remove="loadOperations()"
                                theme="bootstrap"
@@ -138,7 +138,7 @@
                     </ui-select>
 
                     <span class="input-group-btn">
-                            <button type="button" ng-click="ctrl.filter_accounts = []" class="btn btn-default">
+                            <button type="button" ng-click="ctrl.filter.accounts = []" class="btn btn-default">
                              <span class="glyphicon glyphicon-trash"></span>
                             </button>
                          </span>
@@ -149,21 +149,16 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">Date range:</label>
             <div class="col-sm-6">
-                    <span class="input-group">
-                      <!--  <span class="input-group-btn">
-                            <button type="button" ng-click="dateRange = {startDate: null, endDate: null}"
-                                    class="btn btn-default">
-                             <span class="glyphicon glyphicon-calendar"></span>
-                        </button>
-                        </span> -->
+                <div class="input-group">
                     <input date-range-picker class="form-control date-picker" type="text"
-                           ng-model="dateRange" options="opts"/>
+                           ng-model="ctrl.filter.dateRange" options="opts"/>
                     <span class="input-group-btn">
-                            <button type="button" ng-click="dateRange = {startDate: null, endDate: null}"
+                            <button type="button" ng-click="ctrl.filter.dateRange = {startDate: null, endDate: null}"
                                     class="btn btn-default">
-                             <span class="glyphicon glyphicon-trash"></span>
+                                <span class="glyphicon glyphicon-trash"></span>
                             </button>
-                         </span>
+                    </span>
+                </div>
             </div>
         </div>
 

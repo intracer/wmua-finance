@@ -1,4 +1,5 @@
-<div">
+<div class="container">
+    <div class="row">
     <a ui-sref="accounts" ui-sref-active="active">Accounts</a>
     <a ui-sref="categories" ui-sref-active="active">Categories</a>
     <a ui-sref="projects" ui-sref-active="active">Projects</a>
@@ -13,7 +14,7 @@
 
         <tr ng-repeat="dictionary in $data">
 
-            <td width="350px" title="'Name'" filter="{ text: 'text'}" sortable="'name'">
+            <td title="'Name'" filter="{ text: 'text'}" sortable="'text'">
                 <span data-editable-text="dictionary.text" data-e-name="text" data-e-form="rowform"
                       data-e-required
                       onbeforesave="validateNotEmpty($data)"
@@ -28,7 +29,7 @@
                       onbeforesave="saveLookup($data, dictionary)"
                       ng-show="rowform.$visible"
                       class="form-buttons form-inline"
-                      shown="inserted == operation">
+                      shown="inserted == dictionary">
                     <button type="submit" ng-disabled="rowform.$waiting"
                             class="btn btn-primary glyphicon glyphicon-floppy-disk"></button>
                     <button type="button" ng-disabled="rowform.$waiting"
@@ -55,4 +56,5 @@
             </td>
         </tr>
     </table>
+</div>
 </div>

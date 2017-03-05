@@ -3,7 +3,7 @@ angular.module("financeApp").controller('DictionaryController', ['data', '$scope
 
     $scope.tableParams = new NgTableParams({
         page: 1,
-        count: 30
+        count: 15
     }, {
         dataset: data
     });

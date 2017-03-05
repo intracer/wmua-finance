@@ -1,4 +1,7 @@
-<div ng-controller="LookupCtrl as ctrl">
+<div">
+    <a ui-sref="accounts" ui-sref-active="active">Accounts</a>
+    <a ui-sref="categories" ui-sref-active="active">Categories</a>
+    <a ui-sref="projects" ui-sref-active="active">Projects</a>
 
     <div class="brn-group pull-right">
         <button class="btn btn-default" ng-click="addLookup()">
@@ -10,19 +13,19 @@
 
         <tr ng-repeat="dictionary in $data">
 
-            <td width="350px" title="'Name'" filter="{ name: 'text'}" sortable="'name'">
-                <span data-editable-text="lookup.name" data-e-name="name" data-e-form="rowform"
+            <td width="350px" title="'Name'" filter="{ text: 'text'}" sortable="'name'">
+                <span data-editable-text="dictionary.text" data-e-name="text" data-e-form="rowform"
                       data-e-required
                       onbeforesave="validateNotEmpty($data)"
                       data-e-style="min-width:350px;">
-                         {{ dictionary.name || 'empty' }}
+                         {{ dictionary.text || 'empty' }}
                 </span>
             </td>
 
             <td style="white-space: nowrap; width: 85px" title="'edit'">
                 <!-- form -->
                 <form editable-form name="rowform"
-                      onbeforesave="saveLookup($data, lookup)"
+                      onbeforesave="saveLookup($data, dictionary)"
                       ng-show="rowform.$visible"
                       class="form-buttons form-inline"
                       shown="inserted == operation">
@@ -45,7 +48,7 @@
                 <div class="buttons" ng-show="!rowform.$visible">
                     <button class="btn btn-primary glyphicon glyphicon-pencil"
                             ng-click="rowform.$show()"></button>
-                    <button type="button" class="btn btn-default copy-btn" ng-click="copyLookup(lookup)">
+                    <button type="button" class="btn btn-default copy-btn" ng-click="copyLookup(dictionary)">
                         <span class="fa fa-copy" aria-hidden="true"></span>
                     </button>
                 </div>

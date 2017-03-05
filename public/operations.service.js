@@ -1,4 +1,4 @@
-financeApp.service('Operations', [ '$http', function($http) {
+angular.module("financeApp").service('Operations', [ '$http', function($http) {
     this.saveOperation = function (data, operation) {
         if (!moment(data.date).isValid()) {
             return "Undefined date"

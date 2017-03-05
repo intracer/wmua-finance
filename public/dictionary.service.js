@@ -1,4 +1,4 @@
-financeApp.service('Dictionary', function() {
+angular.module("financeApp").service('dictionaryService', function() {
     this.projects = [
         {
             value: 0,

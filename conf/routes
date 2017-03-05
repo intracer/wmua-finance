@@ -10,8 +10,6 @@ GET         /assets/*file          controllers.Assets.at(path="/public", file)
 
 GET         /operations            @controllers.Operations.list
 
-GET         /operations_ws         @controllers.Operations.listWs
-
 GET         /log                   @controllers.Operations.log
 
 GET         /revisions             @controllers.Operations.revisions(id: Int)
@@ -55,3 +53,11 @@ GET         /accounts              @controllers.Dictionaries.accounts()
 GET         /categories            @controllers.Dictionaries.categories()
 
 GET         /projects              @controllers.Dictionaries.projects()
+
+GET         /operations_ws         @controllers.Operations.listWs
+
+GET         /accounts_ws           @controllers.Dictionaries.accounts()
+
+GET         /categories_ws         @controllers.Dictionaries.categories()
+
+GET         /projects_ws           @controllers.Dictionaries.projects()

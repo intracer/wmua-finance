@@ -67,25 +67,25 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
 
   def accounts() = withAuth() { user =>
     implicit request =>
-
       val accounts = accountDao.list.sortBy(_.id)
+      Ok(views.html.dictionaries(user, "account", accounts))
+  }
 
+  def accountsWs() = withAuth() { user =>
+    implicit request =>
+      val accounts = accountDao.list.sortBy(_.id)
       Ok(views.html.dictionaries(user, "account", accounts))
   }
 
   def categories() = withAuth() { user =>
     implicit request =>
-
       val categories = categoryDao.list.sortBy(_.id)
-
       Ok(views.html.dictionaries(user, "category", categories))
   }
 
   def projects() = withAuth() { user =>
     implicit request =>
-
       val projects = projectDao.list.sortBy(_.id)
-
       Ok(views.html.dictionaries(user, "project", projects))
   }
 

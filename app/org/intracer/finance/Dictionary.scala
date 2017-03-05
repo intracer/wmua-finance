@@ -1,9 +1,10 @@
 package org.intracer.finance
 
 import client.finance.GrantItem
-import org.intracer.finance.slick.Expenditures
+import org.intracer.finance.Dictionary._
 
 import scala.collection.SortedSet
+
 
 case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
                       categoryMap: Map[Int, CategoryF] = Map.empty,
@@ -20,22 +21,6 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
   def grantItem(id: Int) = grantItemsById(id)
   def project(id: Int) = projectMap(id)
   def user(id: Int) = userMap(id)
-
-  def hasNameMapToJson(map: Map[Int, HasName]): String = hasNameSeqToJson(map.values)
-
-  def hasNameSeqToJson(hasNames: Iterable[HasName]): String = {
-    hasNames.toSeq.sortBy(_.name.toLowerCase).map { hasName =>
-      s"""{ value: "${hasName.id}", text: "${hasName.name}"}"""
-    }.mkString(", ")
-  }
-
-  def hasNameWithParentsToJson(map: Map[String, Seq[HasName]]) = {
-    map.map { case (parent, children) =>
-      s"""{text: "$parent", children: [""" +
-        hasNameSeqToJson(children) +
-        "]}"
-    }.mkString(", ")
-  }
 
   def accountsJson: String = hasNameMapToJson(accountMap)
 
@@ -79,3 +64,28 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
   }
 }
 
+object Dictionary {
+
+  def hasNameMapToJson(map: Map[Int, HasName]): String = hasNameSeqToJsonItems(map.values)
+
+  def hasNameSeqToJson(hasNames: Iterable[HasName]): String = {
+    hasNames.toSeq.sortBy(_.name.toLowerCase).map { hasName =>
+      s"""{ value: "${hasName.id}", text: "${hasName.name}"}"""
+    }.mkString(", ")
+  }
+
+  def hasNameSeqToJsonItems(hasNames: Iterable[HasName]): String = {
+    hasNames.toSeq.sortBy(_.name.toLowerCase).map { hasName =>
+      s"""{ value: "${hasName.id}", text: "${hasName.name}"}"""
+    }.mkString(", ")
+  }
+
+  def hasNameWithParentsToJson(map: Map[String, Seq[HasName]]) = {
+    map.map { case (parent, children) =>
+      s"""{text: "$parent", children: [""" +
+        hasNameSeqToJsonItems(children) +
+        "]}"
+    }.mkString(", ")
+  }
+
+}

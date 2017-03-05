@@ -4,10 +4,22 @@ var financeApp = angular.module("financeApp",
     function config($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');
 
-        $routeProvider.when('/operations', {
-            templateUrl: 'operations.template.html'
-        }).when('/grouped', {
-            templateUrl: 'grouped.template.html'
-        }).otherwise('/operations');
+        $routeProvider
+            .when('/operations', {
+                templateUrl: 'operations.template.html'
+            })
+            .when('/grouped', {
+                templateUrl: 'grouped.template.html'
+            })
+            .when('/accounts', {
+                templateUrl: 'dictionary.template.html'
+            })
+            .when('/categories', {
+                templateUrl: 'dictionary.template.html'
+            })
+            .when('/projects', {
+                templateUrl: 'dictionary.template.html'
+            })
+            .otherwise('/operations');
     }
 ]);

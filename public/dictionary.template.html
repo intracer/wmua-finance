@@ -1,0 +1,55 @@
+<div ng-controller="LookupCtrl as ctrl">
+
+    <div class="brn-group pull-right">
+        <button class="btn btn-default" ng-click="addLookup()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </div>
+    <table ng-table="tableParams" show-filter="true"
+           class="table table-bordered table-hover table-condensed table-striped">
+
+        <tr ng-repeat="dictionary in $data">
+
+            <td width="350px" title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+                <span data-editable-text="lookup.name" data-e-name="name" data-e-form="rowform"
+                      data-e-required
+                      onbeforesave="validateNotEmpty($data)"
+                      data-e-style="min-width:350px;">
+                         {{ dictionary.name || 'empty' }}
+                </span>
+            </td>
+
+            <td style="white-space: nowrap; width: 85px" title="'edit'">
+                <!-- form -->
+                <form editable-form name="rowform"
+                      onbeforesave="saveLookup($data, lookup)"
+                      ng-show="rowform.$visible"
+                      class="form-buttons form-inline"
+                      shown="inserted == operation">
+                    <button type="submit" ng-disabled="rowform.$waiting"
+                            class="btn btn-primary glyphicon glyphicon-floppy-disk"></button>
+                    <button type="button" ng-disabled="rowform.$waiting"
+                            class="btn btn-default fa fa-undo"
+                            mwl-confirm
+                            title="Confirmation"
+                            message="Do you want to cancel changes?"
+                            confirm-text="Yes"
+                            cancel-text="No"
+                            placement="left"
+                            on-confirm="rowform.$cancel()"
+                            on-cancel="cancelClicked = true"
+                            confirm-button-type="default"
+                            cancel-button-type="default">
+                    </button>
+                </form>
+                <div class="buttons" ng-show="!rowform.$visible">
+                    <button class="btn btn-primary glyphicon glyphicon-pencil"
+                            ng-click="rowform.$show()"></button>
+                    <button type="button" class="btn btn-default copy-btn" ng-click="copyLookup(lookup)">
+                        <span class="fa fa-copy" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -2,6 +2,7 @@ package org.intracer.finance
 
 import javax.mail.internet.InternetAddress
 
+import com.mohiva.play.silhouette.api.Identity
 import play.api.data.validation.{Constraints, Invalid, Valid}
 
 case class User(id: Option[Int],
@@ -10,7 +11,7 @@ case class User(id: Option[Int],
                 roles: String = "",
                 password: Option[String] = None,
                 lang: Option[String] = None,
-                wikiAccount: Option[String] = None) {
+                wikiAccount: Option[String] = None) extends Identity {
 
   def emailLo = email.trim.toLowerCase
 

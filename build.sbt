@@ -13,6 +13,11 @@ resolvers += Resolver.bintrayRepo("intracer", "maven")
 resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
+  "com.mohiva" %% "play-silhouette" % "4.0.0",
+  "com.mohiva" %% "play-silhouette-crypto-jca" % "4.0.0",
+  "com.iheart" %% "ficus" % "1.2.6",
+  "net.codingwell" %% "scala-guice" % "4.0.1",
+
   "com.github.nscala-time" %% "nscala-time" % "2.10.0",
   "com.squants" %% "squants" % "0.4.2",
   "org.sweble.wikitext" % "swc-engine" % "2.0.0",

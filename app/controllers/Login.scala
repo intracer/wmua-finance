@@ -1,6 +1,7 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
+import com.mohiva.play.silhouette.api.Silhouette
 import org.intracer.finance.User
 import org.intracer.finance.slick.UserDao
 import play.api.Play.current
@@ -13,7 +14,7 @@ import play.api.mvc._
 import slick.driver.H2Driver
 
 @Singleton
-class Login @Inject()(val userDao: UserDao) extends Controller with Secured {
+class Login @Inject()(val userDao: UserDao, silhouette: Silhouette[DefaultEnv]) extends Controller with Secured {
 
   def index = login
 

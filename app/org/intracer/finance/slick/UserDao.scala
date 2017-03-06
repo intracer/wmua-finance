@@ -1,9 +1,11 @@
 package org.intracer.finance.slick
 
+import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.api.services.IdentityService
 import org.intracer.finance.User
 import play.api.libs.Codecs
 
-class UserDao() extends BaseDao {
+class UserDao() extends BaseDao with IdentityService[User] {
 
   import driver.api._
 
@@ -46,4 +48,12 @@ class UserDao() extends BaseDao {
     sha1(password)
 
   def sha1(input: String) = Codecs.sha1(input.getBytes)
+
+  override def retrieve(loginInfo: LoginInfo) = {
+    db.run {
+      query
+        .filter(_.email === loginInfo.providerKey)
+        .result.headOption
+    }
+  }
 }

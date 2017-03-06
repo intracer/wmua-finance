@@ -22,7 +22,7 @@ var financeApp = angular.module("financeApp",
                     resolve: {
                         tableName: function(){return 'account'},
                         data: function (dictionaryService) {
-                            return dictionaryService.accounts;
+                            return dictionaryService.accounts();
                         }
                     }
                 })
@@ -33,7 +33,7 @@ var financeApp = angular.module("financeApp",
                     resolve: {
                         tableName: function(){return 'category'},
                         data: function (dictionaryService) {
-                            return dictionaryService.categories;
+                            return dictionaryService.categories();
                         }
                     }
                 })
@@ -44,7 +44,7 @@ var financeApp = angular.module("financeApp",
                     resolve: {
                         tableName: function(){return 'project'},
                         data: function (dictionaryService) {
-                            return dictionaryService.projects;
+                            return dictionaryService.projects();
                         }
                     }
                 })

@@ -56,8 +56,8 @@ GET         /projects              @controllers.Dictionaries.projects()
 
 GET         /operations_ws         @controllers.Operations.listWs
 
-GET         /accounts_ws           @controllers.Dictionaries.accounts()
+GET         /accounts_ws           @controllers.Dictionaries.accountsWs()
 
-GET         /categories_ws         @controllers.Dictionaries.categories()
+GET         /categories_ws         @controllers.Dictionaries.categoriesWs()
 
-GET         /projects_ws           @controllers.Dictionaries.projects()
+GET         /projects_ws           @controllers.Dictionaries.projectsWs()

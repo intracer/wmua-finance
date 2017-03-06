@@ -74,7 +74,7 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   def accountsWs() = withAuth() { user =>
     implicit request =>
       val accounts = accountDao.list.sortBy(_.id)
-      Ok(views.html.dictionaries(user, "account", accounts))
+      Ok(Dictionary.hasNameSeqToJson(accounts))
   }
 
   def categories() = withAuth() { user =>
@@ -83,10 +83,22 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
       Ok(views.html.dictionaries(user, "category", categories))
   }
 
+  def categoriesWs() = withAuth() { user =>
+    implicit request =>
+      val categories = categoryDao.list.sortBy(_.id)
+      Ok(Dictionary.hasNameSeqToJson(categories))
+  }
+
   def projects() = withAuth() { user =>
     implicit request =>
       val projects = projectDao.list.sortBy(_.id)
       Ok(views.html.dictionaries(user, "project", projects))
+  }
+
+  def projectsWs() = withAuth() { user =>
+    implicit request =>
+      val projects = projectDao.list.sortBy(_.id)
+      Ok(Dictionary.hasNameSeqToJson(projects))
   }
 
   def update() = Action.async {

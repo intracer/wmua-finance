@@ -12,21 +12,26 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
                       grantItemMap: Map[Int, Seq[GrantItem]] = Map.empty,
                       projectMap: Map[Int, Project] = Map.empty,
                       userMap: Map[Int, User] = Map.empty) {
-  
+
   val grantItemsById: Map[Int, GrantItem] = grantItemMap.values.flatten.groupBy(_.id.get).mapValues(_.head)
 
   def account(id: Int) = accountMap(id)
+
   def category(id: Int) = categoryMap(id)
+
   def grant(id: Int) = grantMap(id)
+
   def grantItem(id: Int) = grantItemsById(id)
+
   def project(id: Int) = projectMap(id)
+
   def user(id: Int) = userMap(id)
 
   def accountsJson: String = hasNameMapToJson(accountMap)
 
-  def grantsJson: String =  hasNameMapToJson(grantMap)
+  def grantsJson: String = hasNameMapToJson(grantMap)
 
-  def projectsJson: String =  hasNameMapToJson(projectMap)
+  def projectsJson: String = hasNameMapToJson(projectMap)
 
   def categoriesJson: String = {
     val elems = categoryMap.values.flatMap(_.name.split("/").headOption).toSeq
@@ -66,25 +71,17 @@ case class Dictionary(accountMap: Map[Int, Account] = Map.empty,
 
 object Dictionary {
 
-  def hasNameMapToJson(map: Map[Int, HasName]): String = hasNameSeqToJsonItems(map.values)
+  def hasNameMapToJson(map: Map[Int, HasName]): String = hasNameSeqToJson(map.values)
 
   def hasNameSeqToJson(hasNames: Iterable[HasName]): String = {
     hasNames.toSeq.sortBy(_.name.toLowerCase).map { hasName =>
-      s"""{ value: "${hasName.id}", text: "${hasName.name}"}"""
-    }.mkString(", ")
-  }
-
-  def hasNameSeqToJsonItems(hasNames: Iterable[HasName]): String = {
-    hasNames.toSeq.sortBy(_.name.toLowerCase).map { hasName =>
-      s"""{ value: "${hasName.id}", text: "${hasName.name}"}"""
-    }.mkString(", ")
+      s"""{ "value": ${hasName.id.get}, "text": "${hasName.name}"}"""
+    }.mkString("[", ", ", "]")
   }
 
   def hasNameWithParentsToJson(map: Map[String, Seq[HasName]]) = {
     map.map { case (parent, children) =>
-      s"""{text: "$parent", children: [""" +
-        hasNameSeqToJsonItems(children) +
-        "]}"
+      s"""{"text": "$parent", "children": """ + hasNameSeqToJson(children) + "}"
     }.mkString(", ")
   }
 

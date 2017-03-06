@@ -64,11 +64,17 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
 
         $scope.filter = vm.filter;
 
-        $scope.projects = dictionaryService.projects;
-        $scope.categories = dictionaryService.categories;
+        $scope.projects = [];
+        dictionaryService.projects().success(function (data) {$scope.projects = data});
+
+        $scope.categories = [];
+        dictionaryService.categories().success(function (data) {$scope.categories = data});
+
+        $scope.accounts = [];
+        dictionaryService.accounts().success(function (data) {$scope.accounts = data});
+
         $scope.grants = dictionaryService.grants;
         $scope.grantItems = dictionaryService.grantItems;
-        $scope.accounts = dictionaryService.accounts;
 
         $scope.grantIdMap = {};
 
@@ -166,7 +172,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showProject = function (operation) {
             var selected = [];
             if (operation.project_id != null) {
-                selected = $filter('filter')(dictionaryService.projects, {value: operation.project_id});
+                selected = $filter('filter')($scope.projects, {value: operation.project_id});
             }
             return selected.length ? selected[0].text : 'Not set';
         };
@@ -174,7 +180,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showCategory = function (operation) {
             var selected = [];
             if (operation.category_id != null) {
-                selected = $filter('filter')(dictionaryService.categories, {value: operation.category_id});
+                selected = $filter('filter')($scope.categories, {value: operation.category_id});
             }
             return selected.length ? selected[0].text : 'Not set';
         };
@@ -182,15 +188,15 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showGrant = function (operation) {
             var selected = [];
             if (operation.grant_id != null) {
-                selected = $filter('filter')(dictionaryService.grants, {value: operation.grant_id});
+                selected = $filter('filter')($scope.grants, {value: operation.grant_id});
             }
             return selected.length ? selected[0].text : 'Not set';
         };
 
         $scope.showGrantItem = function (operation) {
             var selected = [];
-            if (operation.grant_item_id != null && dictionaryService.grantItems[17].length) {
-                selected = $filter('filter')(dictionaryService.grantItems[17], {id: operation.grant_item_id});
+            if (operation.grant_item_id != null && $scope.grantItems[17].length) {
+                selected = $filter('filter')($scope.grantItems[17], {id: operation.grant_item_id});
             }
             return selected.length ? '<i>' + selected[0].number + '</i><br>' + selected[0].description : 'Not set';
         };
@@ -198,7 +204,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showAccount = function (operation) {
             var selected = [];
             if (operation.account_id != null) {
-                selected = $filter('filter')(dictionaryService.accounts, {value: operation.account_id});
+                selected = $filter('filter')($scope.accounts, {value: operation.account_id});
             }
             return selected.length ? selected[0].text : 'Not set';
         };

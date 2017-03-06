@@ -1,4 +1,13 @@
-angular.module("financeApp").service('dictionaryService', function() {
+angular.module("financeApp").service('dictionaryService', ['$http', function ($http) {
+
+    this.insert = function (data) {
+        return $http.post('/newdict', data);
+    };
+
+    this.update = function (data) {
+        return $http.post('/update_dict', data);
+    };
+
     this.projects = [
         {
             value: 0,
@@ -1533,4 +1542,4 @@ angular.module("financeApp").service('dictionaryService', function() {
         ]
     };
 
-});
+}]);

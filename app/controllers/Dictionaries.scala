@@ -134,7 +134,7 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
   val insertForm = Form(
     mapping(
       "table" -> text,
-      "name" -> text
+      "value" -> text
     )(Insert.apply)(Insert.unapply)
   )
 

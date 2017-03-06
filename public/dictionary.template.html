@@ -26,7 +26,7 @@
             <td style="white-space: nowrap; width: 85px" title="'edit'">
                 <!-- form -->
                 <form editable-form name="rowform"
-                      onbeforesave="saveLookup($data, dictionary)"
+                      onbeforesave="saveOrUpdateLookup($data, dictionary)"
                       ng-show="rowform.$visible"
                       class="form-buttons form-inline"
                       shown="inserted == dictionary">

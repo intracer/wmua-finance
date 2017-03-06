@@ -33,10 +33,6 @@
 
             <tbody id="operations_body">
 
-                @if(user.canContribute && url.contains("/operations")) {
-                    @newrow()
-                }
-
                 @for(operation <- operations) {
                     @defining(operation.to.id.getOrElse(0)) { id =>
                         <tr id="@id">

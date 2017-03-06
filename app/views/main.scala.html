@@ -13,18 +13,18 @@
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
-        <!-- ************** Bootstrap begin ************** -->
+            <!-- ************** Bootstrap begin ************** -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
         <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
-        <!-- ************** Bootstrap end ************** -->
+            <!-- ************** Bootstrap end ************** -->
 
-         <!-- ************** Bootstrap select begin ************** -->
+            <!-- ************** Bootstrap select begin ************** -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-        <!-- ************** Bootstrap select end ************** -->
+            <!-- ************** Bootstrap select end ************** -->
 
-        <!-- ************** Data tables begin ************** -->
+            <!-- ************** Data tables begin ************** -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" >
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.1/css/buttons.bootstrap.min.css" >
 
@@ -32,17 +32,7 @@
         <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.1.0/js/responsive.bootstrap.min.js"></script>
-        <!-- ************** Data tables end *************** -->
-
-
-        <!-- ************** X editable begin *************** -->
-        <link href="@routes.Assets.at("select2/select2.css")" rel="stylesheet" type="text/css">
-        <script src="@routes.Assets.at("select2/select2.js")"></script>
-
-        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>
-        <!-- ************** X editable end *************** -->
-
+            <!-- ************** Data tables end *************** -->
 
         <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 
@@ -51,21 +41,7 @@
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
         <script type="text/javascript">
-                var rowBackup = [];
-
             $(document).ready(function () {
-
-                @if(user != null && user.canContribute) {
-                if (document.getElementById("tr_new") != null) {
-                    var newRowInnerHtml = document.getElementById("tr_new").innerHTML;
-                }
-                }
-
-                $("tr").each(function() {
-                            var row  = $(this);
-                            rowBackup[row.attr("id")] = row.html();
-                        }
-                );
 
                 $('.selectpicker').selectpicker('show');
 
@@ -86,310 +62,10 @@
                     }
                 }, cb);
 
-                $('#operations').DataTable( {
-                    "paging":   false,
+                $('#operations').DataTable({
+                    "paging": false,
                     "ordering": false
-                } );
-
-                $.fn.editable.defaults.mode = 'popup';
-
-                var initDictEditableFunc = function() {
-                    $('.dict_editable.account_editable').editable({
-                        params: function(params) {
-                            params.table = "account";
-                            return params;
-                        }
-                    });
-                    $('.dict_editable.category_editable').editable({
-                        params: function(params) {
-                            params.table = "category";
-                            return params;
-                        }
-                    });
-                    $('.dict_editable.project_editable').editable({
-                        params: function(params) {
-                            params.table = "project";
-                            return params;
-                        }
-                    });
-                };
-
-                var initEditableFunc = function() {
-                    $('.editable').editable();
-
-                    $('.edit_date').editable({
-                        format: 'yyyy-mm-dd',
-                        viewformat: 'dd/mm/yyyy',
-                        mode: 'popup',
-                        datepicker: {
-                            weekStart: 1
-                        },
-                        combodate: { maxYear: 2016 }
-                    });
-
-                    $('.edit_project').editable({
-                        source: [
-                            @Html(dictionary.projectsJson)
-                        ],
-                        select2: {
-                            placeholder: 'Select a project',
-                            allowClear: true,
-                            width: '250px'
-                        },
-                        showbuttons: false
-                    });
-
-                    $('.edit_category').editable({
-                        source: [
-                            @Html(dictionary.categoriesJson)
-                        ],
-                        select2: {
-                            placeholder: 'Select a category',
-                            allowClear: true,
-                            width: '450px',
-                            id: function(o) {return o.value}
-                        },
-                        showbuttons: false
-                    });
-
-                    @for((grantId, itemsJson) <- dictionary.grantItemsJsonMap.toSeq) {
-                    $('.edit_grant_item_@grantId').editable({
-                        source: [
-                            @Html(itemsJson)
-                        ],
-                        select2: {
-                            placeholder: 'Select a grant item',
-                            allowClear: true,
-                            width: '450px',
-                            id: function(o) {return o.value}
-                        },
-                        showbuttons: false
-                    });
-                    }
-
-                    $('.edit_grant').editable({
-                        source: [
-                            @Html(dictionary.grantsJson)
-                        ],
-                        select2: {
-                            placeholder: 'Select a grant',
-                            allowClear: true,
-                            width: '400px'
-                        },
-                        showbuttons: false
-                    });
-
-                    $('.edit_account').editable({
-                        source: [
-                            @Html(dictionary.accountsJson)
-                        ],
-                        select2: {
-                            placeholder: 'Select an account',
-                            allowClear: true,
-                            width: '150px'
-                        },
-                        showbuttons: false
-                    });
-
-                    $('.newrow').on('save.newoperation', function(){
-                        var that = this;
-                        setTimeout(function() {
-                            $(that).closest('td').next().find('.newrow').editable('show');
-                        }, 200);
-                    });
-
-                    $('#new_required').editable('option', 'validate', function(v) {
-                        if(!v) return 'Required field!';
-                    });
-                };
-
-                @if(user != null && user.canContribute) {
-                    initEditableFunc();
-                    initDictEditableFunc();
-                } else {
-                    $('a.noteditable').contents().unwrap();
-                }
-
-                var saveBtnFunc = function() {
-                    var origin = document.querySelector("tr:hover");
-                    $(origin).find(".xeditable").editable('submit', {
-                        url: '/newoperation',
-                        ajaxOptions: {
-                            dataType: 'json' //assuming json response
-                        },
-                        success: function(data, config) {
-                            if(data && data.id) {  //record created, response like {"id": 2}
-                                //set pk
-                                $(this).editable('option', 'pk', data.id);
-                                //remove unsaved class
-                                $(this).removeClass('editable-unsaved');
-                                //show messages
-//                                var msg = 'Operation created! Now editables submit individually.';
-//                                $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
-
-                                $(this).off('save.newoperation');
-
-                                var buttons = $(origin).find('.newrow_buttons')[0];
-                                buttons.remove();
-
-                                var addNewRow = $(origin).hasClass("tr_new");
-
-                                origin.removeAttribute("id");
-                                origin.removeAttribute("class");
-
-                                if (addNewRow) {
-                                    $(origin).find(".newrow").removeClass("newrow");
-
-                                    var newRow = document.getElementById("operations").insertRow(1);
-                                    newRow.innerHTML = newRowInnerHtml;
-                                    newRow.setAttribute("id", "tr_new");
-                                    newRow.setAttribute("class", "tr_new");
-
-                                    $(newRow).find('.reset-btn').click(resetBtnFunc);
-                                    $(newRow).find('.save-btn').click(saveBtnFunc);
-
-                                    initEditableFunc();
-
-//                                    $(origin).find(".newrow").editable('setValue', null)
-//                                            .editable('option', 'pk', null)
-//                                            .removeClass('editable-unsaved');
-                                }
-
-
-                            } else if(data && data.errors){
-                                //server-side validation error, response like {"errors": {"username": "username already exist"} }
-                                config.error.call(this, data.errors);
-                            }
-                        },
-                        error: function(errors) {
-                            var msg = '';
-                            if(errors && errors.responseText) { //ajax error, errors = xhr object
-                                msg = errors.responseText;
-                            } else { //validation error (client-side or server-side)
-                                $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
-                            }
-                            $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
-                        }
-                    });
-                };
-
-                $('.save-btn').click(saveBtnFunc);
-
-                var dictSaveBtnFunc = function() {
-                    var origin = document.querySelector("tr:hover");
-                    $(origin).find(".dict_editable").editable('submit', {
-                        url: '/newdict',
-                        ajaxOptions: {
-                            dataType: 'json' //assuming json response
-                        },
-                        success: function(data, config) {
-                            if(data && data.id) {  //record created, response like {"id": 2}
-                                //set pk
-                                $(this).editable('option', 'pk', data.id);
-                                //remove unsaved class
-                                $(this).removeClass('editable-unsaved');
-                                //show messages
-//                                var msg = 'Operation created! Now editables submit individually.';
-//                                $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
-
-                                $(this).off('save.newoperation');
-
-                                var buttons = $(origin).find('.newrow_buttons')[0];
-                                buttons.remove();
-
-                                var addNewRow = $(origin).hasClass("tr_new");
-
-                                origin.removeAttribute("id");
-                                origin.removeAttribute("class");
-
-                                if (addNewRow) {
-                                    $(origin).find(".newrow").removeClass("newrow");
-
-                                    var newRow = document.getElementById("dictionary").insertRow(1);
-                                    newRow.innerHTML = newRowInnerHtml;
-                                    newRow.setAttribute("id", "tr_new");
-                                    newRow.setAttribute("class", "tr_new");
-
-                                    $(newRow).find('.reset-btn').click(resetBtnFunc);
-                                    $(newRow).find('.dict-save-btn').click(dictSaveBtnFunc);
-
-                                    initDictEditableFunc();
-
-//                                    $(origin).find(".newrow").editable('setValue', null)
-//                                            .editable('option', 'pk', null)
-//                                            .removeClass('editable-unsaved');
-                                }
-
-
-                            } else if(data && data.errors){
-                                //server-side validation error, response like {"errors": {"username": "username already exist"} }
-                                config.error.call(this, data.errors);
-                            }
-                        },
-                        error: function(errors) {
-                            var msg = '';
-                            if(errors && errors.responseText) { //ajax error, errors = xhr object
-                                msg = errors.responseText;
-                            } else { //validation error (client-side or server-side)
-                                $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
-                            }
-                            $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
-                        }
-                    });
-                };
-
-                $('.dict-save-btn').click(dictSaveBtnFunc);
-
-                var resetBtnFunc = function() {
-                    var origin = document.querySelector("tr:hover");
-                    $(origin).find('.newrow').editable('setValue', null)
-                            .editable('option', 'pk', null)
-                            .removeClass('editable-unsaved');
-
-                    $('.save-btn').show();
-                    $('#msg').hide();
-                };
-
-                var cloneFunc = function () {
-                    var origin = document.querySelector("tr:hover");
-                    var id = origin.getAttribute("id"); // find row to copy
-                    var html = rowBackup[id];
-
-                    var clone = document.createElement('tr');
-                    clone.innerHTML = html;
-                    $(clone).find("a").attr("data-pk", null);
-
-                    var editDate = $(clone).find("a.edit_date");
-                    editDate.attr("data-value", null);
-                    editDate.text("");
-
-                    var copyButton = $(clone).find(".btn-group")[0];
-
-                    var buttons = $(".newrow_buttons")[0];
-
-                    var buttonsClone = buttons.cloneNode(true);
-
-                    $(buttonsClone).attr("id", null);
-
-                    copyButton.parentNode.insertBefore(buttonsClone, copyButton);
-                    copyButton.remove();
-
-                    var newrow = document.getElementById("tr_new");
-
-                    var inserted = origin.parentNode.insertBefore(clone, newrow.nextSibling);
-
-                    initEditableFunc();
-
-                    $(clone).find('.reset-btn').click(resetBtnFunc);
-                    $(clone).find('.save-btn').click(saveBtnFunc);
-
-//                    $(inserted).editable('option', 'pk', null);
-
-                };
-
-                $('.reset-btn').click(resetBtnFunc);
-
-                $('.copy-btn').click(cloneFunc);
+                });
             });
         </script>
     </head>
@@ -400,18 +76,19 @@
                 <div class="container-fluid">
 
                     @logged(user)
-                    <div> <!-- class="nav-collapse collapse" -->
-                        <ul class="nav navbar-nav">
-                            <li><a class="brand" href="#">@Messages("application.name")</a></li>
-                            <li><a href="/assets/index.html#/operations">@Messages("operations")</a></li>
-                            <li><a href="/log">@Messages("Log")</a></li>
-                            <li><a href="/assets/index.html#/grouped">Grouped</a></li>
-                            <li><a href="/bygrantrowstat">@Messages("bygrantrow.statistics")</a></li>
-                            <li><a href="/resolutions">@Messages("resolutions")</a></li>
-                            <li><a href="/statistics">@Messages("statistics")</a></li>
-                            <li><a href="/assets/index.html#/accounts">@Messages("Lookup")</a></li>
-                        </ul>
-                    </div> <!--/.nav-collapse -->
+                <div> <!-- class="nav-collapse collapse" -->
+                    <ul class="nav navbar-nav">
+                        <li><a class="brand" href="#">@Messages("application.name")</a></li>
+                        <li><a href="/assets/index.html#/operations">@Messages("operations")</a></li>
+                        <li><a href="/log">@Messages("Log")</a></li>
+                        <li><a href="/assets/index.html#/grouped">Grouped</a></li>
+                        <li><a href="/bygrantrowstat">@Messages("bygrantrow.statistics")</a></li>
+                        <li><a href="/resolutions">@Messages("resolutions")</a></li>
+                        <li><a href="/statistics">@Messages("statistics")</a></li>
+                        <li><a href="/assets/index.html#/accounts">@Messages("Lookup")</a></li>
+                    </ul>
+                </div>
+                    <!--/.nav-collapse -->
                 </div>
             </div>
         </nav>

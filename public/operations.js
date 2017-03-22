@@ -172,7 +172,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showProject = function (operation) {
             var selected = [];
             if (operation.project_id != null) {
-                selected = $filter('filter')($scope.projects, {value: operation.project_id});
+                selected = $filter('filter')($scope.projects, {value: operation.project_id}, true);
             }
             return selected.length ? selected[0].text : 'Not set';
         };
@@ -180,7 +180,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showCategory = function (operation) {
             var selected = [];
             if (operation.category_id != null) {
-                selected = $filter('filter')($scope.categories, {value: operation.category_id});
+                selected = $filter('filter')($scope.categories, {value: operation.category_id}, true);
             }
             return selected.length ? selected[0].text : 'Not set';
         };
@@ -188,7 +188,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showGrant = function (operation) {
             var selected = [];
             if (operation.grant_id != null) {
-                selected = $filter('filter')($scope.grants, {value: operation.grant_id});
+                selected = $filter('filter')($scope.grants, {value: operation.grant_id}, true);
             }
             return selected.length ? selected[0].text : 'Not set';
         };
@@ -196,7 +196,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showGrantItem = function (operation) {
             var selected = [];
             if (operation.grant_item_id != null && $scope.grantItems[17].length) {
-                selected = $filter('filter')($scope.grantItems[17], {id: operation.grant_item_id});
+                selected = $filter('filter')($scope.grantItems[17], {id: operation.grant_item_id}, true);
             }
             return selected.length ? '<i>' + selected[0].number + '</i><br>' + selected[0].description : 'Not set';
         };
@@ -204,7 +204,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.showAccount = function (operation) {
             var selected = [];
             if (operation.account_id != null) {
-                selected = $filter('filter')($scope.accounts, {value: operation.account_id});
+                selected = $filter('filter')($scope.accounts, {value: operation.account_id}, true);
             }
             return selected.length ? selected[0].text : 'Not set';
         };

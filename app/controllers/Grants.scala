@@ -8,8 +8,12 @@ import play.api.mvc.Controller
 import javax.inject.Inject
 import javax.inject.Singleton
 
+import com.mohiva.play.silhouette.api.Silhouette
+
 @Singleton
-class Grants @Inject()(val userDao: UserDao, val grantDao: GrantDao) extends Controller with Secured {
+class Grants @Inject()(val userDao: UserDao,
+                       val grantDao: GrantDao,
+                       val silhouette: Silhouette[DefaultEnv]) extends Controller with Secured {
 
   def items(id: Int) = withAuth() {
     user =>

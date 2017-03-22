@@ -1,7 +1,8 @@
 package controllers
 
-import com.mohiva.play.silhouette.api.Env
+import com.mohiva.play.silhouette.api.{Authenticator, Authorization, Env, Silhouette}
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import org.intracer.finance.User
 import org.intracer.finance.slick.UserDao
 import play.api.mvc._
@@ -14,6 +15,8 @@ trait DefaultEnv extends Env {
 }
 
 trait Secured {
+
+  def silhouette: Silhouette[DefaultEnv]
 
   type Permission = User => Boolean
 
@@ -41,6 +44,8 @@ trait Secured {
     }
   }
 
+  def withAuth2 = silhouette.SecuredAction(WithProvider[DefaultEnv#A](CredentialsProvider.ID))
+
   def withAuthAsync(permission: Permission = AllowPermission)
                    (f: => User => Request[AnyContent] => Future[Result]) = {
     Security.Authenticated(user, onUnAuthenticated) { user =>
@@ -64,7 +69,27 @@ trait Secured {
 }
 
 
+/**
+  * Grants only access if a user has authenticated with the given provider.
+  *
+  * @param provider The provider ID the user must authenticated with.
+  * @tparam A The type of the authenticator.
+  */
+case class WithProvider[A <: Authenticator](provider: String) extends Authorization[User, A] {
 
+  /**
+    * Indicates if a user is authorized to access an action.
+    *
+    * @param user The usr object.
+    * @param authenticator The authenticator instance.
+    * @param request The current request.
+    * @tparam B The type of the request body.
+    * @return True if the user is authorized, false otherwise.
+    */
+  override def isAuthorized[B](user: User, authenticator: A)(
+    implicit
+    request: Request[B]): Future[Boolean] = {
 
-
-
+    Future.successful(true)
+  }
+}

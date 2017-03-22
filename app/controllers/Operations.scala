@@ -6,7 +6,8 @@ import javax.inject.{Inject, Singleton}
 
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
-import org.intracer.finance.slick.{ExpenditureDao, Expenditures, GrantItemsDao, UserDao}
+import com.mohiva.play.silhouette.api.Silhouette
+import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao, UserDao}
 import org.intracer.finance.{Dictionary, Expenditure, Operation, User}
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -65,7 +66,8 @@ case class OpFilter(projects: Set[Int] = Set.empty,
 @Singleton
 class Operations @Inject()(val expenditureDao: ExpenditureDao,
                            val userDao: UserDao,
-                           val dictionaries: Dictionaries)
+                           val dictionaries: Dictionaries,
+                           val silhouette: Silhouette[DefaultEnv])
   extends Controller with Secured {
 
   def allOperations: Seq[Operation] = {

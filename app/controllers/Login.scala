@@ -14,7 +14,7 @@ import play.api.mvc._
 import slick.driver.H2Driver
 
 @Singleton
-class Login @Inject()(val userDao: UserDao, silhouette: Silhouette[DefaultEnv]) extends Controller with Secured {
+class Login @Inject()(val userDao: UserDao, val silhouette: Silhouette[DefaultEnv]) extends Controller with Secured {
 
   def index = login
 

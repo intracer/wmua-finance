@@ -4,6 +4,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 import client.finance.GrantItem
+import com.mohiva.play.silhouette.api.Silhouette
 import slick.driver.JdbcProfile
 import org.intracer.finance._
 import org.intracer.finance.slick._
@@ -25,7 +26,8 @@ class Dictionaries @Inject()(val categoryDao: CategoryDao,
                              val grantItemDao: GrantItemsDao,
                              val expDao: ExpenditureDao,
                              val accountDao: AccountDao,
-                             val userDao: UserDao)
+                             val userDao: UserDao,
+                             val silhouette: Silhouette[DefaultEnv])
   extends Controller with Secured with HasDatabaseConfig[JdbcProfile] {
 
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)

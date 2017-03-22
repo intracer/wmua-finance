@@ -136,6 +136,7 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
                 $scope.grantIdMap = grantIdMap;
 
                 $scope.operations = data;
+                vm.totalAmount = total($scope.operations, "amount");
 
                 var params = {
                     page: 1,

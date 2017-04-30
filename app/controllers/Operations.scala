@@ -49,6 +49,9 @@ case class OpFilter(projects: Set[Int] = Set.empty,
       def bySet(set: Set[Int], id: Option[Int]) =
         set.isEmpty || id.exists(set.contains)
 
+      def containsWithInclusiveEnd(dt: DateTime) =
+        interval.exists(i => i.contains(dt) || i.getEnd.isEqual(dt))
+
       val to = op.to
       bySet(projects, to.project.id) &&
         bySet(categories, to.category.id) &&
@@ -56,7 +59,7 @@ case class OpFilter(projects: Set[Int] = Set.empty,
         bySet(grants, to.grant.flatMap(_.id)) &&
         bySet(grantItems, to.grantItem.flatMap(_.id)) &&
         bySet(users.flatMap(_.id).toSet, to.user.id) &&
-        interval.exists(_.contains(op.date))
+        containsWithInclusiveEnd(op.date)
     }
 
     operations.filter(filterOp)

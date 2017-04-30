@@ -38,8 +38,6 @@ GET         /grants                @controllers.Grants.list
 
 POST        /update_op             @controllers.Operations.update()
 
-POST        /update_all_op         @controllers.Operations.updateAll()
-
 POST        /update_dict           @controllers.Dictionaries.update()
 
 POST        /newoperation          @controllers.Operations.insert()

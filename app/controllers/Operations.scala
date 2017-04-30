@@ -204,8 +204,6 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   def update() = formAction(updateForm, expenditureDao.update)
 
-  def updateAll() = formAction(insertForm, updateCmd)
-
   def insert() = formAction(insertForm, insertCmd)
 
   def formAction[T](form: Form[T],

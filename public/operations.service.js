@@ -1,9 +1,10 @@
 angular.module("financeApp").service('Operations', [ '$http', function($http) {
     this.saveOperation = function (data, operation) {
-        if (!moment(data.date).isValid()) {
+        var momentDate = moment(data.date);
+        if (!momentDate.isValid()) {
             return "Undefined date"
         }
-        var dateStr = data.date.toISOString().slice(0, 10);
+        var dateStr = momentDate.format('YYYY-MM-DD[T]HH:mm:ss.SSSZZ').slice(0, 10);
         if (operation.id == 'new') {
             operation.id = null
         }

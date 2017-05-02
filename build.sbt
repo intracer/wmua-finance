@@ -5,21 +5,23 @@ version := "0.8"
 
 scalacOptions += "-target:jvm-1.8"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 val scalawikiVersion = "0.5-M5"
 
-resolvers += Resolver.bintrayRepo("intracer", "maven")
-resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
+resolvers ++= Seq(
+  Resolver.jcenterRepo,
+  Resolver.typesafeRepo("releases"),
+  Resolver.bintrayRepo("intracer", "maven")
+)
 
 libraryDependencies ++= Seq(
   "com.mohiva" %% "play-silhouette" % "4.0.0",
   "com.mohiva" %% "play-silhouette-crypto-jca" % "4.0.0",
-  "com.iheart" %% "ficus" % "1.2.6",
+  "com.iheart" %% "ficus" % "1.4.0",
   "net.codingwell" %% "scala-guice" % "4.0.1",
 
   "com.github.nscala-time" %% "nscala-time" % "2.10.0",
-  "com.squants" %% "squants" % "0.4.2",
   "org.sweble.wikitext" % "swc-engine" % "2.0.0",
   "com.typesafe.slick" %% "slick" % "3.1.1",
   "ch.qos.logback" % "logback-classic" % "1.1.3",
@@ -39,7 +41,8 @@ libraryDependencies ++= Seq(
 
   "com.google.jimfs" % "jimfs" % "1.0" % "test",
   "com.typesafe.play" %% "play-specs2" % "2.5.12" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test"
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test",
+  "com.mohiva" %% "play-silhouette-testkit" % "4.0.0" % "test"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)

@@ -4,6 +4,9 @@ import java.sql.Timestamp
 import java.util.Date
 import javax.inject.{Inject, Singleton}
 
+import akka.http.scaladsl.model.ContentTypes
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import client.finance.GrantItem
 import com.github.nscala_time.time.Imports._
 import com.mohiva.play.silhouette.api.Silhouette
@@ -14,6 +17,7 @@ import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
+import play.api.http.HttpEntity
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -203,6 +207,25 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
             ops.groupBy(o => o.to.project.name + "." + o.to.category.name)
           )
         )
+  }
+
+  def csv = withFilter() {
+    (_, _, operations) =>
+      implicit request =>
+        val data = Csv.exportOperations(operations)
+
+        csvStream(data, "wmua_fin")
+  }
+
+  def csvStream(lines: Seq[Seq[String]], filename: String): Result = {
+    val withBom = Csv.addBom(lines).toList
+    val source = Source[Seq[String]](withBom).map { line =>
+      ByteString(Csv.writeRow(line))
+    }
+    Result(
+      ResponseHeader(OK, Map("Content-Disposition" -> ("attachment; filename=\"" + filename + ".csv\""))),
+      HttpEntity.Streamed(source, None, Some(ContentTypes.`text/csv(UTF-8)`.value))
+    )
   }
 
   def update() = formAction(updateForm, expenditureDao.update)

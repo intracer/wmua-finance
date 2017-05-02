@@ -46,8 +46,9 @@ angular.module("financeApp").controller('UiSelectCtrl', ['dictionaryService', fu
 }]);
 
 
-angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTableParams', 'Operations', 'dictionaryService',
-    function ($scope, $filter, NgTableParams, Operations, dictionaryService) {
+angular.module("financeApp").controller('Ctrl',
+['$scope', '$filter', 'NgTableParams', 'Operations', 'dictionaryService', '$window', '$httpParamSerializer',
+    function ($scope, $filter, NgTableParams, Operations, dictionaryService, $window, $httpParamSerializer) {
         var vm = this;
 
         vm.filter = {
@@ -125,6 +126,27 @@ angular.module("financeApp").controller('Ctrl', ['$scope', '$filter', 'NgTablePa
         $scope.$watch('filter.dateRange', function (newDate) {
             $scope.loadOperations();
         }, false);
+
+        $scope.csvExport = function () {
+            var filter = $scope.filter;
+            if (filter.dateRange.startDate && filter.dateRange.endDate) {
+                var daterange = filter.dateRange.startDate.format("MM/DD/YYYY") + ' - '
+                    + filter.dateRange.endDate.format("MM/DD/YYYY")
+            }
+
+            var params = {
+                projects: filter.projects.join(),
+                categories: filter.categories.join(),
+                grants: filter.grants.join(),
+                grantItems: filter.grant_items.join(),
+                accounts: filter.accounts.join(),
+                daterange: daterange
+            };
+
+            var url = '/csv?' + $httpParamSerializer(params);
+
+            $window.open(url,'_blank')
+        };
 
         $scope.loadOperations = function () {
             Operations.loadOperations(vm.filter).success(function (data) {

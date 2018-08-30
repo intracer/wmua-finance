@@ -7,7 +7,7 @@ scalacOptions += "-target:jvm-1.8"
 
 scalaVersion := "2.11.11"
 
-val scalawikiVersion = "0.5"
+val scalawikiVersion = "0.5.0"
 
 resolvers ++= Seq(
   Resolver.jcenterRepo,

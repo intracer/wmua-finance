@@ -3,7 +3,7 @@ package org.intracer.finance
 import java.text.NumberFormat
 import java.util.Locale
 
-import com.github.nscala_time.time.Imports._
+import org.joda.time.DateTime
 
 trait HasName {
   def name: String

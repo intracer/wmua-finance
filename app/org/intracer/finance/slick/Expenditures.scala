@@ -4,8 +4,8 @@ import java.sql.Timestamp
 
 import client.finance.GrantItem
 import slick.driver.H2Driver.api._
-import slick.profile.SqlProfile.ColumnOption.SqlType
 import org.intracer.finance._
+import _root_.slick.sql.SqlProfile.ColumnOption.SqlType
 
 case class OpId(opId: Option[Int] = None,
                 lastRevId: Option[Int] = None)

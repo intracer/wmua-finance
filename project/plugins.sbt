@@ -9,8 +9,9 @@ resolvers ++= Seq(
   "Scalaz Bintray Repo"  at "http://dl.bintray.com/scalaz/releases"
 )
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.19")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.4")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.15")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.6")
 
 //addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.0.0")

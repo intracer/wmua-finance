@@ -2,13 +2,12 @@ package controllers
 
 import java.sql.Timestamp
 import java.util.Date
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import akka.http.scaladsl.model.ContentTypes
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import client.finance.GrantItem
-import com.github.nscala_time.time.Imports._
 import com.mohiva.play.silhouette.api.Silhouette
 import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao, UserDao}
 import org.intracer.finance.{Dictionary, Expenditure, Operation, User}

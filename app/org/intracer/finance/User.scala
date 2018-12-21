@@ -58,7 +58,7 @@ object UserObj {
     InternetAddress.parse(usersText.replaceAll("\n", ","), false).map { internetAddress =>
       val address = internetAddress.getAddress
 
-      Constraints.emailAddress(address) match {
+      Constraints.emailAddress()(address) match {
         case Valid => User(id = None, fullname = Option(internetAddress.getPersonal).getOrElse(""), email = internetAddress.getAddress)
         case Invalid(errors) => User(id = None, fullname = "", email = "", wikiAccount = Some(internetAddress.getAddress))
       }

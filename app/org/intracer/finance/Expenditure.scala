@@ -3,7 +3,8 @@ package org.intracer.finance
 import java.sql.Timestamp
 
 import client.finance.GrantItem
-import org.joda.time.DateTime
+import java.time.{Instant, ZonedDateTime}
+
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -18,7 +19,7 @@ case class Expenditure(id: Option[Int] = None,
                        grantItem: Option[GrantItem],
                        description: String,
                        user: User,
-                       logDate: Timestamp = new Timestamp(DateTime.now.getMillis)
+                       logDate: Timestamp = new Timestamp(ZonedDateTime.now.toEpochSecond)
                       ) extends OpPoint {
   override def name = description
 
@@ -34,12 +35,12 @@ case class Expenditure(id: Option[Int] = None,
 
 class ExpenditureJson(dictionary: Dictionary) {
 
-  def dtToTs(dt: DateTime): Timestamp = new Timestamp(dt.getMillis)
+  def dtToTs(dt: ZonedDateTime): Timestamp = new Timestamp(dt.toEpochSecond)
 
   implicit val ExpenditureFromJson: Reads[Expenditure] = (
     (__ \ "id").readNullable[Int] ~
       (__ \ "op_id").readNullable[Int] ~
-      (__ \ "op_date").read[DateTime].map(dtToTs) ~
+      (__ \ "op_date").read[ZonedDateTime].map(dtToTs) ~
       (__ \ "amount").readNullable[BigDecimal] ~
       (__ \ "account_id").read[Int].map(dictionary.account) ~
       (__ \ "category_id").read[Int].map(dictionary.category) ~
@@ -48,18 +49,22 @@ class ExpenditureJson(dictionary: Dictionary) {
       (__ \ "grant_item_id").readNullable[Int].map(_.map(dictionary.grantItem)) ~
       (__ \ "description").read[String] ~
       (__ \ "user_id").read[Int].map(dictionary.user) ~
-      (__ \ "log_data").read[DateTime].map(dtToTs)
+      (__ \ "log_data").read[ZonedDateTime].map(dtToTs)
     ) (Expenditure.apply _)
 }
 
 object ExpenditureJson {
 
-  def tsToDt(ts: Timestamp) = new DateTime(ts.getTime)
+  def tsToDt(ts: Timestamp) = {
+    import java.time.ZoneId
+    val instant = Instant.ofEpochMilli(ts.getTime)
+    instant.atZone(ZoneId.systemDefault)
+  }
 
   implicit val ExpenditureToJson: Writes[Expenditure] = (
     (__ \ "id").writeNullable[Int] ~
       (__ \ "op_id").writeNullable[Int] ~
-      (__ \ "op_date").write[DateTime] ~
+      (__ \ "op_date").write[ZonedDateTime] ~
       (__ \ "amount").writeNullable[BigDecimal] ~
       (__ \ "account_id").write[Int] ~
       (__ \ "account_name").write[String] ~
@@ -74,7 +79,7 @@ object ExpenditureJson {
       (__ \ "description").write[String] ~
       (__ \ "user_id").write[Int] ~
       (__ \ "user_name").write[String] ~
-      (__ \ "log_data").write[DateTime]
+      (__ \ "log_data").write[ZonedDateTime]
     ) ((e: Expenditure) => (
     e.id,
     e.opId,

@@ -6,16 +6,16 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "~1.5.0",
-    "angular-ui-router": "~0.4.2",
-    "angular-loader": "~1.5.0",
-    "angular-mocks": "~1.5.0",
-    "angular-sanitize": "~1.5.0",
+    "angular": "~1.7.5",
+    "angular-ui-router": "~1.0.7",
+    "angular-loader": "~1.7.5",
+    "angular-mocks": "~1.7.5",
+    "angular-sanitize": "~1.7.5",
     "html5-boilerplate": "^5.3.0",
     "angular-xeditable": "~0.6.0",
     "angular-bootstrap": "~2.5.0",
-    "angular-ui-select": "~0.19.6",
-    "angular-bootstrap-confirm": "~2.5.0",
+    "angular-ui-select": "~0.19.8",
+    "angular-bootstrap-confirm": "~2.5.1",
     "angular-daterangepicker": "~0.2.2",
     "lodash": "~3.10.1"
   }

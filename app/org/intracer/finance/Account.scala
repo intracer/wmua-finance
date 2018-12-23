@@ -1,9 +1,8 @@
 package org.intracer.finance
 
 import java.text.NumberFormat
+import java.time.ZonedDateTime
 import java.util.Locale
-
-import org.joda.time.DateTime
 
 trait HasName {
   def name: String
@@ -40,7 +39,7 @@ case class Account(id: Option[Int] = None, name: String) extends OpPoint
 class Operation(val from: OpPoint,
                 val to: Expenditure,
                 val amount: Option[BigDecimal],
-                val date: DateTime) {
+                val date: ZonedDateTime) {
 
   override def toString: String =
     s"${date.toString().substring(0, 10)}: $from -> $to, amount: $amount"

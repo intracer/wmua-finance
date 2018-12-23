@@ -37,7 +37,7 @@
 
                 @for(m <- 1 to 12) {
                     <td>
-                    @fmt.format(groupedOperations(groupId).filter(_.date.getMonthOfYear == m).map(_.toDouble).sum).replaceFirst("^0$", "-")
+                    @fmt.format(groupedOperations(groupId).filter(_.date.getMonthValue == m).map(_.toDouble).sum).replaceFirst("^0$", "-")
                     </td>
                 }
             </tr>

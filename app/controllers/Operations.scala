@@ -1,6 +1,8 @@
 package controllers
 
 import java.sql.Timestamp
+import java.time.{Instant, ZoneId, ZoneOffset, ZonedDateTime}
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 import javax.inject.{Inject, Singleton}
@@ -9,10 +11,10 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import client.finance.GrantItem
 import com.mohiva.play.silhouette.api.Silhouette
+import jp.ne.opt.chronoscala.Interval
 import org.intracer.finance.slick.{ExpenditureDao, GrantItemsDao, UserDao}
 import org.intracer.finance.{Dictionary, Expenditure, Operation, User}
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
@@ -34,10 +36,10 @@ case class OpFilter(projects: Set[Int] = Set.empty,
                     operations: Seq[Operation] = Seq.empty,
                     dictionary: Dictionary = Dictionary()) {
 
-  val pattern = DateTimeFormat.forPattern("MM/dd/yyyy")
+  val df = DateTimeFormatter.ofPattern("MM/dd/yyyy").withZone(ZoneOffset.UTC)
 
   val dates = dateRange.split("-").map { entry =>
-    DateTime.parse(entry.trim, pattern)
+    ZonedDateTime.parse(entry, df).toInstant
   }
 
   val interval = if (dates.length >= 2)
@@ -52,8 +54,8 @@ case class OpFilter(projects: Set[Int] = Set.empty,
       def bySet(set: Set[Int], id: Option[Int]) =
         set.isEmpty || id.exists(set.contains)
 
-      def containsWithInclusiveEnd(dt: DateTime) =
-        interval.exists(i => i.contains(dt) || i.getEnd.isEqual(dt))
+      def containsWithInclusiveEnd(dt: ZonedDateTime) =
+        interval.exists(i => i.contains(dt) || i.end.isEqual(dt))
 
       val to = op.to
       bySet(projects, to.project.id) &&
@@ -86,7 +88,8 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
 
   def expToOps(exps: Seq[Expenditure]): Seq[Operation] = {
     exps.map { e =>
-      new Operation(e.account, e, e.amount, new DateTime(e.date.getTime))
+      new Operation(e.account, e, e.amount,
+        Instant.ofEpochMilli(e.date.getTime).atZone(ZoneId.systemDefault))
     }
   }
 
@@ -113,7 +116,6 @@ class Operations @Inject()(val expenditureDao: ExpenditureDao,
     val dictionary = dictionaries.dictionary()
     OpFilter(projects, categories, grants, grantItems, accounts, dateRange, users, operations, dictionary)
   }
-
 
   def withFilter(loader: => Seq[Operation] = allOperations)
                 (f: (User, OpFilter, Seq[Operation]) => Request[AnyContent] => Result) = {

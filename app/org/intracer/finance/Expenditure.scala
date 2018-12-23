@@ -4,6 +4,7 @@ import java.sql.Timestamp
 
 import client.finance.GrantItem
 import java.time.{Instant, ZonedDateTime}
+import java.time.ZoneId
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -56,9 +57,7 @@ class ExpenditureJson(dictionary: Dictionary) {
 object ExpenditureJson {
 
   def tsToDt(ts: Timestamp) = {
-    import java.time.ZoneId
-    val instant = Instant.ofEpochMilli(ts.getTime)
-    instant.atZone(ZoneId.systemDefault)
+    Instant.ofEpochMilli(ts.getTime).atZone(ZoneId.systemDefault)
   }
 
   implicit val ExpenditureToJson: Writes[Expenditure] = (

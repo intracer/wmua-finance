@@ -41,6 +41,7 @@ libraryDependencies ++= Seq(
 
   "io.spray" % "spray-util_2.11" % "1.3.3",
   "joda-time" % "joda-time" % "2.7",
+  "jp.ne.opt" %% "chronoscala" % "0.2.1",
   "mysql" % "mysql-connector-java" % "5.1.35",
 
   "com.google.jimfs" % "jimfs" % "1.0" % "test",
